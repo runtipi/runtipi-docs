@@ -1,0 +1,61 @@
+# Start on system boot
+
+These steps assume a `systemd` distro (the majority of common Linux distributions use `systemd` as the init manager). To determine whether your system uses `systemd`, run the command `sudo systemctl status` - if it displays a tree of daemons, you have `systemd`.
+
+### Add Tipi to systemd
+
+1. Create a service configuration file in `/etc/systemd/system`:
+    ```
+    # sudo touch /etc/systemd/system/tipi.service
+    ```
+
+    > This path may vary according to your distribution.
+
+2. Edit the file with, e.g., `sudo nano /etc/systemd/system/tipi.service`, and paste in this config:
+    ```
+    [Unit]
+    Description=tipi
+    Requires=docker.service multi-user.target
+    After=docker.service network-online.target dhcpd.service
+
+    [Service]
+    Restart=always
+    RemainAfterExit=yes
+    WorkingDirectory=/usr/bin/runtipi
+    ExecStart=/usr/bin/runtipi/scripts/start.sh
+    ExecStop=/usr/bin/runtipi/scripts/stop.sh
+
+    [Install]
+    WantedBy=multi-user.target
+    ```
+
+    > Replace `/usr/bin/runtipi` with the full path to wherever you installed Tipi.
+
+3. Update the systemd configuration:
+    ```
+    # sudo systemctl daemon-reload
+    ```
+
+4. Test the service configuration:
+    ```
+    # sudo systemctl status tipi
+
+    ● foo.service - foo
+         Loaded: loaded (/etc/systemd/system/tipi.service; disabled; vendor preset: enabled)
+         Active: inactive (dead)
+    ```
+
+5. Reboot your system to test that Tipi starts up. If this all worked, you should now be able to manage tipi with `systemctl`:
+    ```
+    # sudo systemctl status tipi
+
+    ● tipi.service - tipi
+         Loaded: loaded (/etc/systemd/system/tipi.service; enabled; vendor preset: enabled)
+         Active: active (exited) since Wed 2023-02-22 00:43:34 GMT; 4 days ago
+       Main PID: 11537 (code=exited, status=0/SUCCESS)
+          Tasks: 1 (limit: 4915)
+            CPU: 4d 11h 24min 33.300s
+         CGroup: /system.slice/tipi.service
+                 └─11647 fswatch -0 /usr/bin/runtipi/state/events
+    ```
+

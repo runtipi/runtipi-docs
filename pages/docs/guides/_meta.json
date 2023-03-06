@@ -1,0 +1,11 @@
+{
+  "customize-app-config": {
+    "title": "Customize App Config"
+  },
+  "expose-your-apps": {
+    "title": "Expose Your Apps"
+  },
+  "start-on-system-boot": {
+    "title": "Start on System Boot"
+  }
+}

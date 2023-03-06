@@ -1,0 +1,17 @@
+{
+  "introduction": {
+    "title": "Introduction"
+  },
+  "apps-available": {
+    "title": "Apps Available"
+  },
+  "getting-started": {
+    "title": "Getting Started"
+  },
+  "guides": {
+    "title": "Guides"
+  },
+  "contributing": {
+    "title": "Contributing"
+  }
+}

@@ -1,0 +1,39 @@
+### Prerequisites
+- Docker desktop up to date and running. Instructions: [Install Docker Engine](https://docs.docker.com/engine/install/)
+- Docker-compose
+- Node version 16+
+
+### Prepare
+Once you have forked the repo and cloned it on your local machine you can start to prepare the environment.
+
+### Install dependencies
+Tipi uses `pnpm` as a package manager and monorepo orchestrator. Install it with
+`npm i -g pnpm`
+
+Install the project dependencies
+`pnpm i`
+
+### Run Tipi
+1. Start the app with `npm run start:dev` from the root folder
+2. Visit `localhost:3000/dashboard` in your browser
+
+### Stopping
+When you have finished developing and stopped the server, the apps you've installed will still be running in their containers. To stop them and remove the images run:
+`sudo ./scripts/stop.sh`
+
+### Using your own appstore repo
+You can change the repository Tipi is using to retrieve the appstore in order to test new apps you added.
+
+Create a `settings.json` file in the `state` folder (`runtipi/state/settings.json`) containing the URL of your repo
+
+```settings.json
+{
+  "appsRepoUrl": "https://github.com/meienberger/runtipi-appstore.git",
+}
+```
+
+If you need to be on a different branch than the main one in your repo, go in the repository directory `cd ./repos/<generated-id>` and checkout your branch.
+
+```bash
+git checkout mybranch
+```
