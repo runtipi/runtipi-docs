@@ -1,0 +1,44 @@
+# Installation
+
+## Requirements
+
+Ubuntu 18.04 LTS or higher is recommended. However other major Linux distribution are supported but may lead to installation issues. Please file an issue if you encounter one.
+
+## Download and install Tipi
+
+Download the latest version of Tipi:
+
+```bash
+curl -L https://setup.runtipi.com | bash
+```
+
+The script will prompt you the ip address of the dashboard once configured.
+
+## Commands
+
+If you already installed Tipi, you can start it manually by running the `start.sh` script in the `runtipi` folder.
+
+```bash
+cd runtipi
+sudo ./scripts/start.sh
+```
+
+Tipi will run by default on port 80. To select another port you can run the start script with the `--port` argument
+
+```bash
+sudo ./scripts/start.sh --port 7000
+```
+
+To stop Tipi, run the stop script.
+
+```bash
+sudo ./scripts/stop.sh
+```
+
+## Update Tipi
+
+To update Tipi to the latest version, run the update script.
+
+```bash
+sudo ./scripts/system.sh update
+```

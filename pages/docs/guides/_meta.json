@@ -2,10 +2,16 @@
   "customize-app-config": {
     "title": "Customize App Config"
   },
+  "linking-a-domain-to-your-dashboard": {
+    "title": "Linking a Domain to Your Dashboard"
+  },
   "expose-your-apps": {
     "title": "Expose Your Apps"
   },
   "start-on-system-boot": {
     "title": "Start on System Boot"
+  },
+  "uninstalling": {
+    "title": "Uninstalling"
   }
 }

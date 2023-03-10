@@ -19,6 +19,8 @@
   "homepage": "https://github.com/shuding/nextra-docs-template#readme",
   "dependencies": {
     "@heroicons/react": "^2.0.16",
+    "@next/font": "13.0.6",
+    "clsx": "^1.2.1",
     "next": "^13.0.6",
     "nextra": "latest",
     "nextra-theme-docs": "latest",
@@ -27,11 +29,18 @@
     "react-compare-slider": "^2.2.0",
     "react-dom": "^18.2.0",
     "react-hot-toast": "^2.4.0",
-    "react-image-comparison-slider": "^1.8.4"
+    "react-image-comparison-slider": "^1.8.4",
+    "sass": "^1.58.3",
+    "sharp": "^0.31.3"
   },
   "devDependencies": {
     "@types/node": "18.11.10",
+    "@typescript-eslint/eslint-plugin": "^5.54.1",
+    "@typescript-eslint/parser": "^5.54.1",
     "autoprefixer": "^10.4.13",
+    "eslint": "^8.35.0",
+    "eslint-plugin-react": "^7.32.2",
+    "eslint-plugin-tailwindcss": "^3.10.1",
     "postcss": "^8.4.21",
     "prettier": "^2.8.4",
     "tailwindcss": "^3.2.7",

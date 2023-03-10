@@ -1,0 +1,18 @@
+import { AppsList, getStaticProps as gsp } from '../../components/AppsList';
+import { useSSG } from 'nextra/ssg';
+
+export const getStaticProps = gsp;
+
+export const Apps = () => {
+  // Get the data from SSG, and render it as a component.
+  const { apps } = useSSG();
+  return <AppsList apps={apps} />;
+};
+
+# Apps available
+
+Tipi has a wide range of selfhosted apps you can install on your server. You can find them all in the [app store repo](https://github.com/meienberger/runtipi-appstore) and make requests for new apps there.
+
+Here is a list of all available apps sorted alphabetically:
+
+<Apps />

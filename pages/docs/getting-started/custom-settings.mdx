@@ -1,0 +1,28 @@
+import { Callout } from 'nextra-theme-docs'
+
+# Custom settings
+
+You can change the default settings by creating a `settings.json` file. The file should be located in the `runtipi/state` directory. This file will make your changes persist across restarts. Example file:
+
+```json
+{
+  "dnsIp": "9.9.9.9",
+  "domain": "mydomain.com"
+}
+```
+
+<Callout type="warning">
+  Be sure that the content is a valid JSON format. You can easily check for validity in an online tool like [JSONLint](https://jsonlint.com/)
+</Callout>
+
+## Available settings:
+
+| Parameter   | Description                                                 | Default value     |
+|-------------|-------------------------------------------------------------|-------------------|
+| `dnsIp`      | The IP address of the DNS server to use                    | `9.9.9.9`         |
+| `domain`     | The domain name to use for the dashboard                    | `localhost`       |
+| `port`       | The port to use for the dashboard                           | `80`              |
+| `sslPort`    | The port to use for the dashboard with SSL                  | `443`             |
+| `listenIp`   | The IP address to listen on                                 | `automatically detected` |
+| `storagePath`| The path to use for storing data                            | `runtipi/app-data`|
+
