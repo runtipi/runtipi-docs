@@ -12,7 +12,6 @@ const config: DocsThemeConfig = {
     const title = asPath === '/' ? 'Runtipi - Homeserver management made easy' : 'Runtipi - %s';
 
     return {
-      title: 'Runtipi - Homeserver management made easy',
       titleTemplate: title,
       description: 'Homeserver management made easy',
       canonical: 'https://runtipi.io',
@@ -25,14 +24,14 @@ const config: DocsThemeConfig = {
             url: 'https://runtipi.io/images/screenshot.png',
             width: 800,
             height: 600,
-            alt: 'Og Image Alt',
+            alt: 'Runtipi usage screenshot',
             type: 'image/png',
           },
         ],
-        siteName: 'SiteName',
+        siteName: 'Runtipi',
       },
       twitter: {
-        handle: '@twitter',
+        handle: '@runtipi',
         cardType: 'summary_large_image',
       },
     };
@@ -53,6 +52,17 @@ const config: DocsThemeConfig = {
   footer: {
     text: 'Runtipi - Homeserver management made easy',
   },
+  head: (
+    <>
+      <meta httpEquiv="Content-Language" content="en" />
+      <meta name="description" content="Runtipi: Homeserver management made simple" />
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:site" content="@runtipi" />
+      <meta property="og:title" content="Runtipi: Homeserver management made easy" />
+      <meta property="og:description" content="Runtipi: Homeserver management made easy" />
+      <meta name="apple-mobile-web-app-title" content="Runtipi" />
+    </>
+  ),
 };
 
 export default config;
