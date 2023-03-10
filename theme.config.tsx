@@ -12,6 +12,7 @@ const config: DocsThemeConfig = {
     const title = asPath === '/' ? 'Runtipi - Homeserver management made easy' : 'Runtipi - %s';
 
     return {
+      title: 'Runtipi - Homeserver management made easy',
       titleTemplate: title,
       description: 'Homeserver management made easy',
       canonical: 'https://runtipi.io',
