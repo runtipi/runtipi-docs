@@ -9,10 +9,15 @@ export const Apps = () => {
   return <AppsList apps={apps} />;
 };
 
+export const AppsCount = () => {
+  const { apps } = useSSG();
+  const length = Object.keys(apps).length;
+  return <><br />Here is a list of all <b>{length}</b> available apps sorted alphabetically:</>;
+};
+
 # Apps available
 
 Tipi has a wide range of selfhosted apps you can install on your server. You can find them all in the [app store repo](https://github.com/meienberger/runtipi-appstore) and make requests for new apps there.
 
-Here is a list of all available apps sorted alphabetically:
-
+<AppsCount />
 <Apps />
