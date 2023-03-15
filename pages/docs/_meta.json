@@ -11,6 +11,9 @@
   "guides": {
     "title": "Guides"
   },
+  "reference": {
+    "title": "Reference"
+  },
   "contributing": {
     "title": "Contributing"
   }

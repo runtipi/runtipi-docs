@@ -1,0 +1,69 @@
+import { Callout, FileTree } from 'nextra-theme-docs'
+
+# Folder Structure
+
+In this section, we will describe the folder structure of the project.
+Here is a look at the folder structure after installation:
+
+<FileTree>
+    <FileTree.Folder name="runtipi" defaultOpen>
+        <FileTree.Folder name="apps" />
+        <FileTree.Folder name="app-data" />
+        <FileTree.Folder name="logs" />
+        <FileTree.Folder name="media" />
+        <FileTree.Folder name="repos" />
+        <FileTree.Folder name="scripts" />
+        <FileTree.Folder name="state" />
+    </FileTree.Folder>
+</FileTree>
+
+## Apps
+
+The `apps` folder contains all the apps that are installed on the device.
+Each app is a folder with the app name. The app folder contains the app's config file and it's `docker-compose.yml` file.
+
+You can edit the config file to change the app's settings. However, those changes will be overwritten when the app is updated.
+If you want to make permanent changes to the app, look at the [Customize app config](/docs/guides/customize-app-config) section.
+
+## App Data
+
+The `app-data` folder contains all the data of the apps.
+It is the default location if there is no `storagePath` defined in the `settings.json` file (see [Custom settings](/docs/getting-started/custom-settings))
+Each app has it's own folder with the app name. And all the data of the app is stored in this folder. (e.g. `app-data/nextcloud/data`)
+
+## Logs
+
+The `logs` folder contains all the logs of the apps. The logs are seperated into 3 files
+
+<FileTree>
+    <FileTree.Folder name="logs" defaultOpen>
+        <FileTree.File name="error.log" />
+        <FileTree.File name="app.log" />
+        <FileTree.File name="script.log" />
+    </FileTree.Folder>
+</FileTree>
+
+The `error.log` file contains all the errors that are thrown by the app. The `app.log` file contains all the logs that are printed by the app.
+And the `script.log` file contains all the logs that are printed by the app's scripts (like `app.sh`) file.
+
+## Media
+
+The `media` folder contains all the media files that are uploaded to the device. (e.g. images, videos, etc.)
+`media` folder is an exception to the rule that all the data is stored in the `app-data` folder.
+This is because the media files are not app specific and can be used by multiple apps.
+For example the `*arrs` apps use the media folder to store the downloaded media files.
+
+## Repos
+
+The `repos` folder contains the app store repositories. Each repository is a folder with the repository id.
+If add a custom repository in your `settings.json` file, it will be downloaded to this folder and consumed by the dashboard.
+
+## Scripts
+
+The `scripts` folder contains all the scripts that are used by Tipi. If you need to execute a script, you can do it by running `scripts/<script-name>.sh`.
+
+## State
+
+The `state` folder contains the state of your instance. It contains the `settings.json` file which contains the custom settings of the installation alongside some other files necessary for Tipi to run.
+
+

@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import React from 'react';
 import {
   ArrowDownTrayIcon,
@@ -6,6 +7,10 @@ import {
   LockClosedIcon,
 } from '@heroicons/react/24/outline';
 import { ReactCompareSlider } from 'react-compare-slider';
+
+import screenshot from '../../public/images/screenshot.png';
+import before from '../../public/images/before.png';
+import after from '../../public/images/after.png';
 
 import Link from 'next/link';
 import { toast, Toaster } from 'react-hot-toast';
@@ -110,10 +115,10 @@ export default function Home() {
             </div>
           </div>
           <div className="-mt-12 -ml-12 p-12 lg:sticky lg:top-4 lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:overflow-hidden">
-            <img
+            <Image
               className="w-[48rem] max-w-none rounded-xl bg-gray-900 shadow-xl ring-1 ring-gray-400/10 sm:w-[57rem]"
-              src="/images/screenshot.png"
-              alt=""
+              src={screenshot}
+              alt="Screenshot of the Runtipi dashboard"
             />
           </div>
           <div className="lg:col-span-2 lg:col-start-1 lg:row-start-2 lg:mx-auto lg:grid lg:w-full lg:max-w-7xl lg:grid-cols-2 lg:gap-x-8 lg:px-8">
@@ -178,12 +183,8 @@ export default function Home() {
           <div className="my-4 flex justify-center">
             <div className="overflow-hidden rounded-md shadow lg:w-7/12">
               <ReactCompareSlider
-                itemOne={
-                  <img src="/images/before.png" alt="Image two" className=" w-full object-cover" />
-                }
-                itemTwo={
-                  <img src="/images/after.png" alt="Image one" className="w-full object-cover" />
-                }
+                itemOne={<Image src={before} alt="Image two" className="w-full object-cover" />}
+                itemTwo={<Image src={after} alt="Image one" className="w-full object-cover" />}
               />
             </div>
           </div>

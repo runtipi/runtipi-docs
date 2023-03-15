@@ -1,4 +1,4 @@
-import { Callout } from 'nextra-theme-docs'
+import { Callout, FileTree } from 'nextra-theme-docs'
 
 # Adding a new app
 
@@ -163,17 +163,23 @@ services:
 ## Default data folder
 If your app requires default files or configuration, you can easily provide those by creating a `data` folder beside the app config.
 
-```
-├── apps
-    |-- my-app
-        |-- config.json
-        |-- data
-        |   |-- anything.conf
-        |-- docker-compose.yml
-        |-- metadata
-            |-- description.md
-            |-- logo.jpg
-```
+<FileTree>
+    <FileTree.Folder name="runtipi" defaultOpen>
+      <FileTree.Folder name="apps" defaultOpen>
+        <FileTree.Folder name="my-app" defaultOpen>
+          <FileTree.File name="config.json" />
+          <FileTree.File name="docker-compose.yml" />
+          <FileTree.Folder name="data" defaultOpen>
+            <FileTree.File name="anything.conf" />
+          </FileTree.Folder>
+          <FileTree.Folder name="metadata" defaultOpen>
+            <FileTree.File name="description.md" />
+            <FileTree.File name="logo.jpg" />
+          </FileTree.Folder>
+        </FileTree.Folder>
+      </FileTree.Folder>
+    </FileTree.Folder>
+</FileTree>
 
 Anything placed under data will be copied over `app-data/<app-id>/data` before installation. Then you can mount those files inside your compose file.
 
