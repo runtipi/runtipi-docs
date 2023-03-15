@@ -36,8 +36,8 @@ export default function Home() {
               Runtipi is a homeserver management tool made for humans.
             </p>
             <p className="mt-6 max-w-2xl text-xl font-medium leading-tight text-gray-400">
-              Free and Open-Source, it lets you run your favorite self-hosted services without the
-              hassle of managing it. One-click installs and updates
+              Free and open-source, it lets you run your favorite self-hosted services without the
+              hassle of managing it. One-click installs and updates for more than 80 popular apps.
             </p>
           </div>
           <div className="mt-4 mb-6 flex h-32 flex-col gap-3 md:my-0 md:flex-row md:items-center xl:flex-row">
@@ -174,11 +174,11 @@ export default function Home() {
       <div className="relative from-gray-50 to-gray-100">
         <div className="mx-auto px-4 py-16 sm:pt-20 sm:pb-24 lg:max-w-7xl lg:pt-24">
           <h2 className="text-4xl font-extrabold tracking-tight dark:text-white lg:text-center">
-            Don&apos;t think about configuration
+            Easy to use and to customize
           </h2>
           <p className="mx-auto mt-4 text-lg font-medium text-gray-400 lg:max-w-3xl lg:text-center lg:text-xl">
-            Runtipi takes care of all the configuration for you. Just pick your services and
-            we&apos;ll do the rest.
+            Each app comes with a pre-configured state that works out of the box. You can customize
+            it as you want to fit your needs.
           </p>
           <div className="my-4 flex justify-center">
             <div className="overflow-hidden rounded-md shadow lg:w-7/12">

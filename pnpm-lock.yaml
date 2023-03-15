@@ -6,6 +6,7 @@ specifiers:
   '@types/node': 18.11.10
   '@typescript-eslint/eslint-plugin': ^5.54.1
   '@typescript-eslint/parser': ^5.54.1
+  '@vercel/analytics': ^0.1.11
   autoprefixer: ^10.4.13
   clsx: ^1.2.1
   eslint: ^8.35.0
@@ -30,6 +31,7 @@ specifiers:
 dependencies:
   '@heroicons/react': 2.0.16_react@18.2.0
   '@next/font': 13.0.6
+  '@vercel/analytics': 0.1.11_react@18.2.0
   clsx: 1.2.1
   next: 13.0.6_wiv434v7erz4aedd5whhdwmpv4
   nextra: 2.2.19_6jx7hpii6hgsrmhxgqrmo3277u
@@ -53,7 +55,7 @@ devDependencies:
   eslint-plugin-tailwindcss: 3.10.1_tailwindcss@3.2.7
   postcss: 8.4.21
   prettier: 2.8.4
-  tailwindcss: 3.2.7
+  tailwindcss: 3.2.7_postcss@8.4.21
   typescript: 4.9.3
 
 packages:
@@ -644,6 +646,14 @@ packages:
       '@typescript-eslint/types': 5.54.1
       eslint-visitor-keys: 3.3.0
     dev: true
+
+  /@vercel/analytics/0.1.11_react@18.2.0:
+    resolution: {integrity: sha512-mj5CPR02y0BRs1tN3oZcBNAX9a8NxsIUl9vElDPcqxnMfP0RbRc9fI9Ud7+QDg/1Izvt5uMumsr+6YsmVHcyuw==}
+    peerDependencies:
+      react: ^16.8||^17||^18
+    dependencies:
+      react: 18.2.0
+    dev: false
 
   /acorn-jsx/5.3.2_acorn@8.8.1:
     resolution: {integrity: sha512-rq9s+JNhf0IChjtDXxllJ7g41oZk5SlXtp0LHwyA5cejwn7vKmKp4pPri6YEePv2PU65sAsegbXtIinmDFDXgQ==}
@@ -1251,7 +1261,7 @@ packages:
     dependencies:
       fast-glob: 3.2.12
       postcss: 8.4.21
-      tailwindcss: 3.2.7
+      tailwindcss: 3.2.7_postcss@8.4.21
     dev: true
 
   /eslint-scope/5.1.1:
@@ -3820,10 +3830,12 @@ packages:
     engines: {node: '>= 0.4'}
     dev: true
 
-  /tailwindcss/3.2.7:
+  /tailwindcss/3.2.7_postcss@8.4.21:
     resolution: {integrity: sha512-B6DLqJzc21x7wntlH/GsZwEXTBttVSl1FtCzC8WP4oBc/NKef7kaax5jeihkkCEWc831/5NDJ9gRNDK6NEioQQ==}
     engines: {node: '>=12.13.0'}
     hasBin: true
+    peerDependencies:
+      postcss: ^8.0.9
     dependencies:
       arg: 5.0.2
       chokidar: 3.5.3
