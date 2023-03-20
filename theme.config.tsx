@@ -16,14 +16,14 @@ const config: DocsThemeConfig = {
       description: 'Homeserver management made easy',
       canonical: 'https://runtipi.io',
       openGraph: {
-        url: 'https://www.url.ie/a',
-        title: 'Open Graph Title',
-        description: 'Open Graph Description',
+        url: 'https://runtipi.io',
+        title: 'Runtipi Docs',
+        description: 'Homeserver management made easy',
         images: [
           {
-            url: 'https://runtipi.io/images/screenshot.png',
-            width: 800,
-            height: 600,
+            url: 'https://runtipi.io/images/tipi-og.png',
+            width: 1200,
+            height: 630,
             alt: 'Runtipi usage screenshot',
             type: 'image/png',
           },
