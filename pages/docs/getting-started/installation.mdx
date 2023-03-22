@@ -1,8 +1,18 @@
+import { Callout } from 'nextra-theme-docs'
+
 # Installation
 
 ## Requirements
 
 Ubuntu 18.04 LTS or higher is recommended. However other major Linux distribution are supported but may lead to installation issues. Please file an issue if you encounter one.
+
+If Docker is already installed on your machine, Tipi will use it to run the dashboard. Otherwise, it will install Docker for you.
+
+<Callout type="warning">
+If you already have docker installed make sure to have the docker compose plugin installed.<br/>
+Run `docker compose version` to check if it is installed. Instructions to install it can be found [here](https://docs.docker.com/compose/install/linux/).
+</Callout>
+
 
 ## Download and install Tipi
 
