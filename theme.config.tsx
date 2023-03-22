@@ -17,8 +17,9 @@ const config: DocsThemeConfig = {
       canonical: 'https://runtipi.io',
       openGraph: {
         url: 'https://runtipi.io',
-        title: 'Runtipi Docs',
-        description: 'Homeserver management made easy',
+        title: 'Runtipi - Homeserver management made easy',
+        description:
+          'Free and open-source, Runtipi lets you install all your favorite self-hosted apps without the hassle of configuring and managing each service. One-click installs and updates for more than 80 popular apps.',
         images: [
           {
             url: 'https://runtipi.io/images/tipi-og.png',
@@ -42,6 +43,7 @@ const config: DocsThemeConfig = {
       <span className="ml-2 font-bold">Runtipi</span>
     </div>
   ),
+  darkMode: false,
   project: {
     link: 'https://github.com/meienberger/runtipi',
   },

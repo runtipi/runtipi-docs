@@ -33,11 +33,9 @@ export default function Home() {
               management made easy.
             </h1>
             <p className="mt-6 max-w-2xl text-xl font-medium leading-tight text-gray-400">
-              Runtipi is a homeserver management tool made for humans.
-            </p>
-            <p className="mt-6 max-w-2xl text-xl font-medium leading-tight text-gray-400">
-              Free and open-source, it lets you run your favorite self-hosted services without the
-              hassle of managing it. One-click installs and updates for more than 80 popular apps.
+              Free and open-source, Runtipi lets you install all your favorite self-hosted apps
+              without the hassle of configuring and managing each service. One-click installs and
+              updates for more than 80 popular apps.
             </p>
           </div>
           <div className="mt-4 mb-6 flex h-32 flex-col gap-3 md:my-0 md:flex-row md:items-center xl:flex-row">
