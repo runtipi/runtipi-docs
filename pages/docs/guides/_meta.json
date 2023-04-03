@@ -1,15 +1,18 @@
 {
   "customize-app-config": {
-    "title": "Customize App Config"
+    "title": "Customize app config"
   },
   "linking-a-domain-to-your-dashboard": {
-    "title": "Linking a Domain to Your Dashboard"
+    "title": "Linking a domain to your dashboard"
   },
   "expose-your-apps": {
-    "title": "Expose Your Apps"
+    "title": "Expose your apps"
+  },
+  "expose-apps-with-cloudflare-tunnels": {
+    "title": "Expose apps with cloudflare tunnels"
   },
   "start-on-system-boot": {
-    "title": "Start on System Boot"
+    "title": "Start on system boot"
   },
   "updating": {
     "title": "Updating"
