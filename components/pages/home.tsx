@@ -49,10 +49,10 @@ export default function Home() {
             </div>
             <div className="relative rounded-md xl:w-auto">
               <button
-                onClick={() => onClick('curl -L https://setup.runtipi.com | bash')}
+                onClick={() => onClick('curl -L https://setup.runtipi.io | bash')}
                 className="flex w-full items-center justify-center rounded-md border border-gray-200 bg-black/10 px-8 py-3 font-mono text-sm font-medium text-gray-600 dark:border-gray-700 dark:bg-white/10 dark:text-gray-300 md:py-3 md:px-10 md:text-base md:leading-6 betterhover:hover:bg-gray-50 betterhover:dark:hover:bg-gray-900"
               >
-                curl -L https://setup.runtipi.com | bash
+                curl -L https://setup.runtipi.io | bash
                 <DocumentDuplicateIcon className="ml-2 -mr-3 h-6 w-6 text-gray-400" />
               </button>
             </div>
