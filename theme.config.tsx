@@ -5,6 +5,27 @@ import { DocsThemeConfig } from 'nextra-theme-docs';
 import logo from './public/tipi.png';
 import { useRouter } from 'next/router';
 
+const footer = () => {
+  return (
+    <div className="flex w-full items-center justify-between">
+      <div className="flex-1">Runtipi - Homeserver management made easy</div>
+      <div className="flex-1">
+        <a
+          rel="noopener noreferrer"
+          target="_blank"
+          href="https://vercel.com/?utm_source=runtipi&utm_campaign=oss"
+        >
+          <img
+            height="34px"
+            src="https://www.datocms-assets.com/31049/1618983297-powered-by-vercel.svg"
+            alt="Powered by vercel"
+          />
+        </a>
+      </div>
+    </div>
+  );
+};
+
 const config: DocsThemeConfig = {
   useNextSeoProps() {
     const { asPath } = useRouter();
@@ -37,6 +58,9 @@ const config: DocsThemeConfig = {
       },
     };
   },
+  nextThemes: {
+    forcedTheme: 'light',
+  },
   logo: (
     <div className="flex">
       <Image src={logo} alt="Tipi logo" className="h-6 w-6" />
@@ -52,7 +76,7 @@ const config: DocsThemeConfig = {
   },
   docsRepositoryBase: 'https://github.com/meienberger/runtipi-docs',
   footer: {
-    text: 'Runtipi - Homeserver management made easy',
+    text: footer(),
   },
   head: (
     <>
