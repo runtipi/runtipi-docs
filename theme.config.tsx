@@ -17,7 +17,7 @@ const footer = () => {
         >
           <img
             height="34px"
-            src="https://www.datocms-assets.com/31049/1618983297-powered-by-vercel.svg"
+            src="https://images.ctfassets.net/e5382hct74si/78Olo8EZRdUlcDUFQvnzG7/fa4cdb6dc04c40fceac194134788a0e2/1618983297-powered-by-vercel.svg"
             alt="Powered by vercel"
           />
         </a>
