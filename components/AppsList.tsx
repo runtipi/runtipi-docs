@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import React from 'react';
 import { AppLogo } from './AppLogo';
 
@@ -5,6 +6,7 @@ type App = {
   name: string;
   description: string;
   logo: string;
+  link: string;
 };
 
 export const getStaticProps = async () => {
@@ -29,6 +31,7 @@ export const getStaticProps = async () => {
         name: appConfigJson.name,
         description: appConfigJson.short_desc,
         logo: `https://raw.githubusercontent.com/meienberger/runtipi-appstore/master/apps/${app}/metadata/logo.jpg`,
+        link: appConfigJson.source,
       };
     } catch (e) {
       console.error(`Error parsing config for ${app}`);
@@ -44,13 +47,21 @@ export const AppsList = (props: { apps: App[] }) => {
     <div>
       <ul className="divide-y">
         {Object.keys(apps).map((app) => (
-          <li className="flex py-5" key={app}>
-            <AppLogo className="w-16 h-16 rounded-md mr-5" url={apps[app].logo} />
-            <div className="flex flex-col justify-center">
-              <h3 className="text-lg font-bold">{apps[app].name}</h3>
-              <p>{apps[app].description.substring(0, 1000)}</p>
-            </div>
-          </li>
+          <Link
+            className="hover:underline"
+            href={apps[app].link}
+            key={app}
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            <li className="flex py-5" key={app}>
+              <AppLogo className="mr-5 h-16 w-16 rounded-md" url={apps[app].logo} />
+              <div className="flex flex-col justify-center">
+                <h3 className="text-lg font-bold">{apps[app].name}</h3>
+                <p>{apps[app].description.substring(0, 1000)}</p>
+              </div>
+            </li>
+          </Link>
         ))}
       </ul>
     </div>
