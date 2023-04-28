@@ -56,6 +56,7 @@ Create a new `config.json` file inside the newly create folder
   "name": "My super app",
   "available": true,
   "port": 8100,
+  "exposable": true,
   "id": "my-app", # This should be the same name as the folder
   "description": "", # Long description of the app
   "tipi_version": 1, # Always 1 if you are adding a new app
@@ -64,6 +65,7 @@ Create a new `config.json` file inside the newly create folder
   "short_desc": "", # Short description of the app
   "author": "", # Link or name of the author 
   "source": "", # Link for git repo
+  "website": "", # Link to the official website
   "form_fields": [] # Used to ask for more info to the user before installing. Will be explained further
 }
 ```
@@ -74,6 +76,17 @@ Create a new `config.json` file inside the newly create folder
 
 
 Available categories : `utilities`, `network`, `media`, `development`, `automation`, `social`, `utilities`, `photography`, `security`, `featured`, `books`, `data`, `music`, `finance`, `ai`
+
+Other options for the `config.json` file are:
+
+| Option         | Description     | Example value |
+|--------------|-----------------|------------|
+| **force_expose** | If set to true, the app will require a domain name. | true |
+| **generate_vapid_keys** | If set to true, the app will generate VAPID keys for web push notifications. `VAPID_PUBLIC_KEY` and `VAPID_PRIVATE_KEY` will be available as environment variables | true |
+| **url_suffix** | If set, the app will be accessible at `https://<your-domain>/<url_suffix>` | my-app |
+| **https** | If set to true, the app will be accessible via https only. | true |
+| **no_gui** | Set to true for apps with no GUI. Open button will be hidden | true |
+| **supported_architectures** | If the app is only available for a specific architecture, you can specify it here. | ["arm64", "amd64"] |
 
 If you want to add a new category, please open a new issue.
 
@@ -142,6 +155,7 @@ You can choose between different types of fields. The app will automatically val
 | **ip** | Any valid ipv4 address | 192.168.2.100 |
 | **fqdnip** | Combination between ip and fqdn | 192.168.2.100 or example.org |
 | **random** | Generate a random value for the user | 2m3ffc0923rk93df9023f9 |
+| **boolean** | A checkbox | true or false |
 
 You can also define a min and max length of input with the corresponding properties.
 The `env_variable` property is the name of the variable you'll use in your `docker-compose.yml` file. Be sure to have a unique name.
@@ -166,6 +180,41 @@ services:
 ```
 
 `NEXTCLOUD_ADMIN_USER` and `NEXTCLOUD_ADMIN_PASSWORD` are coming from the user inputs.
+
+### Regex validation
+
+You can validate a user input against a regex:
+
+```json
+{
+   "env_variable": "version",
+   "label": "Version",
+   "pattern_error": "Version must be in the format x.y.z",
+   "regex": "^[0-9]+.[0-9]+.[0-9]+$",
+   "required": true,
+   "type": "text"
+}
+```
+
+The regex will be tested against the user input. If it doesn't match, the user will see the error message defined in `pattern_error`.
+
+### Multi select
+
+You can also define a multi select field. This will be rendered as a dropdown in the UI.
+
+```json
+{
+  "label": "Select your favorite fruits",
+  "type": "text",
+  "required": true,
+  "options": [
+    { "label": "Apple", "value": "apple" },
+    { "label": "Banana", "value": "banana" },
+    { "label": "Orange", "value": "orange" },
+  ],
+  "env_variable": "fruits",
+}
+```
 
 ## Default data folder
 If your app requires default files or configuration, you can easily provide those by creating a `data` folder beside the app config.
