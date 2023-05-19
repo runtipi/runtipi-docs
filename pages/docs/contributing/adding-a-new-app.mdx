@@ -159,6 +159,10 @@ You can choose between different types of fields. The app will automatically val
 You can also define a min and max length of input with the corresponding properties.
 The `env_variable` property is the name of the variable you'll use in your `docker-compose.yml` file. Be sure to have a unique name.
 
+<Callout type="info">
+  When using the field type random for a password or secret, the min value will be used to determine the length of the string. If the min value is omitted the default length is 32 characters.
+</Callout>
+
 So if we take the Nextcloud example again, this is how you would use the `form_fields` inside your compose file.
 
 ```yml
