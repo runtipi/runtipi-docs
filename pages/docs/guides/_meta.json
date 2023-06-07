@@ -5,6 +5,9 @@
   "linking-a-domain-to-your-dashboard": {
     "title": "Linking a domain to your dashboard"
   },
+  "local-certificate": {
+    "title": "Local SSL certificate"
+  },
   "expose-your-apps": {
     "title": "Expose your apps"
   },

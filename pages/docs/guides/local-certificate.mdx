@@ -1,0 +1,83 @@
+import Image from 'next/image'
+import { Callout } from 'nextra-theme-docs'
+
+# Local SSL certificate
+
+Requried Tipi version: `>= 1.5.0`
+
+## Introduction
+
+With Tipi you can access your dashboard and apps locally using a secure connection. When installing Tipi, a self-signed SSL certificate is generated for you.
+
+The default domain for the certificate is `tipi.lan`. You can change this domain in the settings page of the dashboard. Or by giving the `localDomain` value in your `settings.json` file.
+See the [custom-settings](/docs/getting-started/custom-settings) section for more information.
+
+## Trusting the certificate
+
+To be able to use the certificate, you need to trust it. This is done by adding the certificate to your operating system's trust store.
+First you need to export the certificate from the Tipi dashboard. You can do this by clicking the `Download certificate` button in the settings page of the dashboard. (below the `Local domain` input field)
+
+### Windows
+
+1. Open the `Start` menu and type `certmgr.msc` and press `Enter`.
+2. In the left pane, click `Trusted Root Certification Authorities`.
+3. In the right pane, click `Certificates`.
+4. On the `Action` menu, point to `All Tasks`, and then click `Import`.
+5. Follow the instructions in the `Certificate Import Wizard` to import the certificate.
+
+### macOS
+
+1. Open the `Keychain Access` app.
+2. Click `File` > `Import Items`.
+3. Select the certificate file and click `Open`.
+4. Double-click the certificate file.
+5. Expand the `Trust` section.
+6. Change the `When using this certificate` option to `Always Trust`.
+
+### Linux
+
+1. Copy the certificate file to `/usr/local/share/ca-certificates/`.
+2. Run `sudo update-ca-certificates`.
+
+## DNS resolution
+
+To be able to access your dashboard and apps using the local domain, you need to make sure that the domain resolves to the IP address of your Tipi server.
+
+The easiest way to do this is by running a DNS server on your network and adding the domain to it.
+You can use **Pi-hole** or **AdGuard Home** for this. Both are available as apps in the Tipi App store.
+
+For example using AdGuard Home you can add the domain to the `DNS rewrites` section of the app.
+
+<Callout>
+  Don't forget to add the wildcard domain `*.tipi.lan` to the `DNS rewrites` section in order to be able to access your apps as well.
+</Callout>
+
+<br />
+<Image src="/images/local-certificate/dns-rewrite.png" width={879} height={187} />
+
+If you don't have a DNS server running on your network, you can add the domain to the `hosts` file on your computer.
+
+<Callout emoji='⚠️' type='warning'>
+  By using this method you need to do this on every device you want to access your dashboard and apps from and for every domain you want to use. (e.g. `tipi.lan`, `app1.tipi.lan`, `app2.tipi.lan`)
+</Callout>
+
+### Windows
+
+1. Open the `Start` menu and type `Notepad` and press `Enter`.
+2. Click `File` > `Open`.
+3. Navigate to `C:\Windows\System32\drivers\etc`.
+4. Change the file filter to `All Files (*.*)`.
+5. Select `hosts` and click `Open`.
+6. Add the following line to the end of the file: `
+    <ip-address> <domain>`.
+7. Save the file.
+
+### macOS / Linux
+
+1. Open the `Terminal` app.
+2. Run `sudo nano /etc/hosts`.
+3. Add the following line to the end of the file: `<ip-address> <domain>`.
+4. Press `Ctrl + X` to exit.
+5. Press `Y` to save the file.
+6. Press `Enter` to confirm the file name.
+
