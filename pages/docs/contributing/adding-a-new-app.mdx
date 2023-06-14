@@ -230,6 +230,7 @@ If your app requires default files or configuration, you can easily provide thos
           <FileTree.File name="docker-compose.yml" />
           <FileTree.Folder name="data" defaultOpen>
             <FileTree.File name="anything.conf" />
+            <FileTree.File name="config.ini.template" />
           </FileTree.Folder>
           <FileTree.Folder name="metadata" defaultOpen>
             <FileTree.File name="description.md" />
@@ -249,6 +250,19 @@ my-app:
     volumes:
       - ${APP_DATA_DIR}/data:/var/lib/config # Will mount the folder with `anything.conf` inside
 ```
+
+### Using a template in your data folder
+
+If one of your files requires some dynamic values, you can use a template file. Let's take the example of a `config.ini` file that requires the `APP_PORT` variable.
+
+```ini
+[my-app]
+port = {{APP_PORT}}
+```
+
+If you name your file `config.ini.template`, it will automatically replace the variables with the values defined in the environment variables.
+
+For example if you put the previous example in `data/config.ini.template`, it will be copied over to `app-data/<app-id>/data/config.ini` with the `APP_PORT` variable replaced.
 
 ## Commit your changes
 
