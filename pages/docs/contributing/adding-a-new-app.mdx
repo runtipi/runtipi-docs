@@ -56,7 +56,7 @@ Create a new `config.json` file inside the newly create folder
   "name": "My super app",
   "available": true,
   "port": 8100,
-  "exposable": true,
+  "exposable": true, # Wether the app can be exposed via a domain name
   "id": "my-app", # This should be the same name as the folder
   "description": "", # Long description of the app
   "tipi_version": 1, # Always 1 if you are adding a new app
@@ -76,16 +76,30 @@ Create a new `config.json` file inside the newly create folder
 
 Available categories : `utilities`, `network`, `media`, `development`, `automation`, `social`, `utilities`, `photography`, `security`, `featured`, `books`, `data`, `music`, `finance`, `ai`
 
-Other options for the `config.json` file are:
+Details for all the options of the `config.json` file:
 
 | Option         | Description     | Example value |
 |--------------|-----------------|------------|
+| **name** | Name of the app | Nextcloud |
+| **id** | This should be the same name as the folder | nextcloud |
+| **available** | If set to false, the app will not be available in the app store | true |
+| **short_desc** | Short description of the app | Nextcloud is a suite of client-server software for creating and using file hosting services. |
+| **author** | Link or name of the original author of the app | https://nextcloud.com |
+| **port** | Port used by the app. This port will be exposed to the host. | 8100 |
+| **categories** | One or more categories for the app | ["utilities", "network"] |
+| **description** | Long description of the app | Nextcloud is a suite of client-server software for creating and using file hosting services. Nextcloud is free and open-source, which means that anyone is allowed to install and operate it on their own private server devices. |
+| **tipi_version** | Always 1 if you are adding a new app. Increment this number if you are updating an existing app | 1 |
+| **version** | The actual version of the app (not the tipi version) | 1.25.1 |
+| **source** | Link for git repo | https://github.com/nextcloud/docker |
+| **website** | Link to the official website | https://nextcloud.com |
+| **exposable** | If set to true, the app will allow the user to expose it via a domain name. | true |
 | **force_expose** | If set to true, the app will require a domain name. | true |
 | **generate_vapid_keys** | If set to true, the app will generate VAPID keys for web push notifications. `VAPID_PUBLIC_KEY` and `VAPID_PRIVATE_KEY` will be available as environment variables | true |
 | **url_suffix** | If set, the app will be accessible at `https://<your-domain>/<url_suffix>` | my-app |
 | **https** | If set to true, the app will be accessible via https only. | true |
 | **no_gui** | Set to true for apps with no GUI. Open button will be hidden | true |
-| **supported_architectures** | If the app is only available for a specific architecture, you can specify it here. | ["arm64", "amd64"] |
+| **supported_architectures** | If the app is only available for a specific architecture, you can specify it here. If not given, app will be available for all architectures | ["arm64", "amd64"] |
+| **uid**, **gid** | These parameters allow you to give a specific set of permission for the app's data folder. Runtipi will automatically chown the data directory with the provided gid and uid. Both options need to be specified in order to apply | 1000 |
 
 If you want to add a new category, please open a new issue.
 
@@ -263,6 +277,16 @@ port = {{APP_PORT}}
 If you name your file `config.ini.template`, it will automatically replace the variables with the values defined in the environment variables.
 
 For example if you put the previous example in `data/config.ini.template`, it will be copied over to `app-data/<app-id>/data/config.ini` with the `APP_PORT` variable replaced.
+
+### Per-architecture docker-compose files
+
+If your app requires different docker-compose files for different architectures, you can use the following naming convention:
+
+```bash
+docker-compose.arm64.yml
+```
+
+If the user is running on an arm64 architecture, this file will be used instead of the default `docker-compose.yml`.
 
 ## Commit your changes
 
