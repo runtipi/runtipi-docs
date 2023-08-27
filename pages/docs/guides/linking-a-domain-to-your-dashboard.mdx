@@ -3,17 +3,11 @@
 import { Callout } from 'nextra-theme-docs'
 
 <Callout emoji='⚠️' type='warning'>
-  This guide explains you how to link a domain to your dashboard. If you want to expose other apps, you need to configure them individually. You cannot use the `--domain` option to expose individual apps.
+  This guide explains you how to link a domain to your dashboard. If you want to expose other apps, you need to configure them individually. You cannot use this guide to expose individual apps.
 </Callout>
 
 
-If you want to link a domain to your dashboard, you can do so by providing the `--domain` option in the start script.
-
-```bash
-sudo ./scripts/start.sh --domain mydomain.com
-```
-
-You can also specify it in the `settings.json` file as shown in the previous section to keep the setting saved across restarts.
+If you want to link a domain to your dashboard, you can do so by providing the `domain` option in your dashboard settings or with the `settings.json` file.
 
 ```json
 {
@@ -21,8 +15,10 @@ You can also specify it in the `settings.json` file as shown in the previous sec
 }
 ```
 
-A Let's Encrypt certificate will be generated and installed automatically. Make sure to have ports 80 and 443 open on your firewall and that your domain has an **A** record pointing to your server IP.
+A Let's Encrypt certificate will be generated and installed automatically.
+Make sure to have ports 80 and 443 open on your firewall and that your domain has an **A** record pointing to your server IP.
 
-Please note that this setting will only expose the dashboard. If you want to expose other apps, you need to configure them individually. You cannot use the `--domain` option to expose apps.
+Please note that this setting will only expose the dashboard.
+If you want to expose other apps, you need to configure them individually.
 
 This option will only work if you keep the default port 80 and 443 for the dashboard.

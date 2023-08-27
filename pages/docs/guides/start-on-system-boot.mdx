@@ -33,16 +33,16 @@ After=docker.service network-online.target dhcpd.service
 [Service]
 Restart=always
 RemainAfterExit=yes
-WorkingDirectory=/usr/bin/runtipi
-ExecStart=/usr/bin/runtipi/scripts/start.sh
-ExecStop=/usr/bin/runtipi/scripts/stop.sh
+WorkingDirectory=/path/to/runtipi
+ExecStart=/path/to/runtipi/runtipi-cli start
+ExecStop=/path/to/runtipi/runtipi-cli stop
 
 [Install]
 WantedBy=multi-user.target
 ```
 
 <Callout>
-Replace `/usr/bin/runtipi` with the full path to wherever you installed Tipi.
+Replace `/path/to/runtipi` with the full path to wherever you installed Tipi.
 </Callout>
 
 ### Update the systemd configuration:
