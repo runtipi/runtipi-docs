@@ -2,7 +2,28 @@ import { Callout } from 'nextra-theme-docs'
 
 # Installation
 
-## Requirements
+## Hardware Requirements
+
+Our software uses containerization and has the same hardware requirements as Docker:
+
+### Minimum Requirements
+
+- A 64-bit processor
+- 4GB of RAM
+- 10GB free disk space
+
+### Recommended Requirements
+
+- A modern multi-core processor
+- 8GB of RAM or more
+- 20GB free SSD disk space
+
+### Supported Architectures
+
+- x86_64/amd64
+- arm64
+
+## OS Requirements
 
 Ubuntu 18.04 LTS or higher is recommended. However other major Linux distribution are supported but may lead to installation issues.
 Please file an issue if you encounter one.
@@ -38,6 +59,13 @@ If you already installed Tipi, you can start it manually by running the `runtipi
 ```bash
 cd runtipi
 ./runtipi-cli start
+```
+
+Tipi is asking for the sudo password in order to give certain file permissions to the user running the dashboard.
+If for some reason you don't want to give the sudo password, you can run the script with the `--no-permissions` flag.
+
+```bash
+./runtipi-cli start --no-permissions
 ```
 
 Tipi will run by default on port 80. To select another port you can create a `settings.json` file in the `state` folder.
