@@ -69,12 +69,12 @@ const config: DocsThemeConfig = {
   ),
   darkMode: false,
   project: {
-    link: 'https://github.com/meienberger/runtipi',
+    link: 'https://github.com/runtipi/runtipi',
   },
   chat: {
     link: 'https://discord.gg/Bu9qEPnHsc',
   },
-  docsRepositoryBase: 'https://github.com/meienberger/runtipi-docs',
+  docsRepositoryBase: 'https://github.com/runtipi/runtipi-docs',
   footer: {
     text: footer(),
   },

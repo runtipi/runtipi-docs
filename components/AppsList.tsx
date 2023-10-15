@@ -12,16 +12,14 @@ type App = {
 export const getStaticProps = async () => {
   const apps: Record<string, App> = {};
   // fetch apps from app store repo
-  const res = await fetch(
-    'https://api.github.com/repos/meienberger/runtipi-appstore/contents/apps',
-  );
+  const res = await fetch('https://api.github.com/repos/runtipi/runtipi-appstore/contents/apps');
 
   const data = await res.json();
   const appNames = data.map((app) => app.name);
 
   for (const app of appNames) {
     const config = await fetch(
-      `https://raw.githubusercontent.com/meienberger/runtipi-appstore/master/apps/${app}/config.json`,
+      `https://raw.githubusercontent.com/runtipi/runtipi-appstore/master/apps/${app}/config.json`,
     );
     const appConfig = await config.text();
     try {
@@ -30,7 +28,7 @@ export const getStaticProps = async () => {
       apps[app] = {
         name: appConfigJson.name,
         description: appConfigJson.short_desc,
-        logo: `https://raw.githubusercontent.com/meienberger/runtipi-appstore/master/apps/${app}/metadata/logo.jpg`,
+        logo: `https://raw.githubusercontent.com/runtipi/runtipi-appstore/master/apps/${app}/metadata/logo.jpg`,
         link: appConfigJson.source,
       };
     } catch (e) {
