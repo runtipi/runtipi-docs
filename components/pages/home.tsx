@@ -35,7 +35,7 @@ export default function Home() {
             <p className="mt-6 max-w-2xl text-xl font-medium leading-tight text-gray-400">
               Free and open-source, Runtipi lets you install all your favorite self-hosted apps
               without the hassle of configuring and managing each service. One-click installs and
-              updates for more than 140 popular apps.
+              updates for more than 180 popular apps.
             </p>
           </div>
           <div className="mt-4 mb-6 flex h-32 flex-col gap-3 md:my-0 md:flex-row md:items-center xl:flex-row">
