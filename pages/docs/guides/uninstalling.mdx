@@ -8,3 +8,11 @@ cd ..
 sudo rm -rf runtipi
 ```
 
+If you want to purge every docker image/volume/network created too you can run this command:
+
+```bash
+docker volume prune
+docker stop $(docker ps -a -q)
+docker rm $(docker ps -a -q)
+docker rmi $(docker images -a -q)
+```

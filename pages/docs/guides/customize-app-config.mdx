@@ -94,10 +94,10 @@ NETWORK_INTERFACE=10.20.0.53
 5. Restart the apps and test:
 
 ```bash
-./scripts/app.sh stop jellyfin
-./scripts/app.sh stop pihole
-./scripts/app.sh start jellyfin
-./scripts/app.sh start pihole
+./runtipi-cli app stop jellyfin
+./runtipi-cli app stop pihole
+./runtipi-cli app start jellyfin
+./runtipi-cli app start pihole
 ```
 
 - Test Jellyfin by opening the app and configuring a library. You should now see your mounted volume.
