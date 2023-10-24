@@ -1,6 +1,6 @@
 import { Callout } from 'nextra-theme-docs'
 
-## Runtipi CLI Reference
+# Using the CLI
 
 If you are running a version above 1.6.0 the ```scripts``` folder is deprecated and no longer working and the recommended way
 to interact with tipi from the command line is the all new utility ```runtipi-cli```. The cli is a powerfull tool added to tipi
@@ -19,7 +19,7 @@ This command starts the tipi watcher script and displayes the live output of it.
 To use it run the command:
 
 ```bash
-./runtipi-cli watch
+sudo ./runtipi-cli watch
 ```
 
 <Callout type="info">
@@ -35,7 +35,7 @@ The start command starts tipi through the command line.
 To start tipi run the following command:
 
 ```bash
-./runtipi-cli start
+sudo ./runtipi-cli start
 ```
 
 <Callout type="info">
@@ -60,7 +60,7 @@ The stop command stop tipi through the command line.
 To stop tipi run the following command:
 
 ```bash
-./runtipi-cli stop
+sudo ./runtipi-cli stop
 ```
 
 ## Restart Command
@@ -68,7 +68,7 @@ To stop tipi run the following command:
 To restart tipi from the command line run this command:
 
 ```bash
-./runtipi-cli restart
+sudo ./runtipi-cli restart
 ```
 
 ## Update 
@@ -78,14 +78,14 @@ This command updates tipi to the latest version available.
 You can update to the latest version with this command:
 
 ```bash
-./runtipi-cli update
+sudo ./runtipi-cli update
 ```
 
 If you want to specify a specific version to update or downgrade to you can use the command 
 like this:
 
 ```bash
-./runtipi-cli update v2.0.7
+sudo ./runtipi-cli update v2.0.7
 ```
 
 <Callout type="warning">
@@ -115,17 +115,21 @@ To clean the logs run this command:
 ./runtipi-cli clean-logs
 ```
 
-## App managment command
+## App management command
 
 This command can be used to start and stop apps from the cli.
 
-To start an app you can use this command:
+```
+./runtipi-cli app [command] <app>
+```
+
+**Example**: Start the code-server app
 
 ```bash
 ./runtipi-cli app start code-server
 ```
 
-To stop an app you can use this command:
+**Example**: Stop the code-server app
 
 ```bash
 ./runtipi-cli app stop code-server
