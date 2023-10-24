@@ -4,5 +4,8 @@
   },
   "custom-settings": {
     "title": "Custom Settings"
+  },
+  "using-the-cli": {
+    "title": "Using the CLI"
   }
 }

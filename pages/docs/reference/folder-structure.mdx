@@ -38,7 +38,6 @@ Here is a look at the folder structure after installation:
             </FileTree.Folder>
         </FileTree.Folder>
         <FileTree.Folder name="repos" />
-        <FileTree.Folder name="scripts" />
         <FileTree.Folder name="state" />
     </FileTree.Folder>
 </FileTree>
@@ -65,12 +64,10 @@ The `logs` folder contains all the logs of the apps. The logs are seperated into
     <FileTree.Folder name="logs" defaultOpen>
         <FileTree.File name="error.log" />
         <FileTree.File name="app.log" />
-        <FileTree.File name="script.log" />
     </FileTree.Folder>
 </FileTree>
 
 The `error.log` file contains all the errors that are thrown by the app. The `app.log` file contains all the logs that are printed by the app.
-And the `script.log` file contains all the logs that are printed by the app's scripts (like `app.sh`) file.
 
 ## Media
 
@@ -83,10 +80,6 @@ For example the `*arrs` apps use the media folder to store the downloaded media 
 
 The `repos` folder contains the app store repositories. Each repository is a folder with the repository id.
 If add a custom repository in your `settings.json` file, it will be downloaded to this folder and consumed by the dashboard.
-
-## Scripts
-
-The `scripts` folder contains all the scripts that are used by Tipi. If you need to execute a script, you can do it by running `scripts/<script-name>.sh`.
 
 ## State
 

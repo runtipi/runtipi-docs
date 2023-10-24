@@ -35,6 +35,11 @@ If you already have docker installed make sure to have the docker compose plugin
 Run `docker compose version` to check if it is installed. Instructions to install it can be found [here](https://docs.docker.com/compose/install/linux/).
 </Callout>
 
+<Callout type="warning">
+If you already have docker installed make sure you used the official docker install script from [here](https://get.docker.sh) as this 
+guarantees that you have the latest build. If you used a command like ```sudo apt install docker.io``` you may have an outdated version and
+issues may occur.
+</Callout>
 
 ## Download and install Tipi
 
@@ -50,49 +55,24 @@ If you have some issue with the command above, you can also download the script 
 curl -L https://raw.githubusercontent.com/runtipi/runtipi/master/scripts/install.sh | bash
 ```
 
-The script will prompt you the ip address of the dashboard once configured.
+## Update 
 
-## Commands
+This command updates tipi to the latest version available.
 
-If you already installed Tipi, you can start it manually by running the `runtipi-cli` located in the `runtipi` folder.
+You can update to the latest version with this command:
 
 ```bash
-cd runtipi
-./runtipi-cli start
+sudo ./runtipi-cli update
 ```
 
-Tipi is asking for the sudo password in order to give certain file permissions to the user running the dashboard.
-If for some reason you don't want to give the sudo password, you can run the script with the `--no-permissions` flag.
+If you want to specify a specific version to update or downgrade to you can use the command 
+like this:
 
 ```bash
-./runtipi-cli start --no-permissions
-```
-
-Tipi will run by default on port 80. To select another port you can create a `settings.json` file in the `state` folder.
-See the [Custom Settings](/docs/getting-started/custom-settings) section for more information.
-
-To stop Tipi, run the stop script.
-
-```bash
-./runtipi-cli stop
-```
-
-## Update Tipi
-
-To update Tipi to the latest version, run the update script.
-
-```bash
-./runtipi-cli update
-```
-
-Or you can specify a version to update to:
-
-```bash
-./runtipi-cli update v1.6.0
+sudo ./runtipi-cli update v2.0.7
 ```
 
 <Callout type="warning">
-You can downgrade Tipi to a previous version by running the update script with the version you want to downgrade to.
-However, this is highly discouraged as it may lead to break your install
+You can downgrade Tipi to a previous version by running the update command with the version you want to downgrade to.
+However, this is highly discouraged as it may lead to breaking your install.
 </Callout>
-

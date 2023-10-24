@@ -26,9 +26,9 @@ sudo touch /etc/systemd/system/tipi.service
 
 ```
 [Unit]
-Description=tipi
+Description=Runtipi service
 Requires=docker.service multi-user.target
-After=docker.service network-online.target dhcpd.service
+After=docker.service network-online.target
 
 [Service]
 Restart=always
@@ -64,7 +64,7 @@ sudo systemctl status tipi
 ```
 
 ```
-● foo.service - foo
+● tipi.service - tipi
      Loaded: loaded (/etc/systemd/system/tipi.service; disabled; vendor preset: enabled)
      Active: inactive (dead)
 ```

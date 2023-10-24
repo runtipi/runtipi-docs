@@ -17,13 +17,14 @@ You can change the default settings by creating a `settings.json` file. The file
 
 ## Available settings:
 
-| Parameter   | Description                                                 | Default value     |
-|-------------|-------------------------------------------------------------|-------------------|
-| `dnsIp`      | The IP address of the DNS server to use                    | `9.9.9.9`         |
-| `domain`     | The domain name to use for the dashboard                    | `localhost`       |
-| `port`       | The port to use for the dashboard                           | `80`              |
-| `sslPort`    | The port to use for the dashboard with SSL                  | `443`             |
-| `listenIp`   | The IP address to listen on                                 | `automatically detected` |
-| `storagePath`| The path to use for storing data                            | `runtipi/app-data`|
-| `localDomain`    | The domain name to use for local services                    | `tipi.lan`           |
+| Parameter    | Description                                                 | Type       | Default value            |
+|--------------|-------------------------------------------------------------|------------|--------------------------|
+| `dnsIp`      | The IP address of the DNS server to use                     | `string`   | `9.9.9.9`                |
+| `domain`     | The domain name to use for the dashboard                    | `string`   | `localhost`              |
+| `port`       | The port to use for the dashboard                           | `interger` | `80`                     |
+| `sslPort`    | The port to use for the dashboard with SSL                  | `interger` | `443`                    |
+| `listenIp`   | The IP address to listen on                                 | `string`   | `automatically detected` |
+| `storagePath`| The path to use for storing data                            | `string`   | `runtipi/app-data`       |
+| `localDomain`| The domain name to use for local services                   | `string`   | `tipi.lan`               |
+| `demoMode`   | Start tipi in demo mode                                     | `boolean`  | `false`                  |
 
