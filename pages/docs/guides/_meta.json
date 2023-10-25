@@ -17,9 +17,6 @@
   "start-on-system-boot": {
     "title": "Start on system boot"
   },
-  "updating": {
-    "title": "Updating"
-  },
   "uninstalling": {
     "title": "Uninstalling"
   }
