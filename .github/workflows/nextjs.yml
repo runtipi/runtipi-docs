@@ -61,7 +61,7 @@ jobs:
             ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json', '**/yarn.lock') }}-
             
       - name: Install dependencies
-        run: pnpm ci
+        run: pnpm install
         
       - name: Build with Next.js
         run: pnpm next build
