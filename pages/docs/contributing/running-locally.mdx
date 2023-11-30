@@ -39,7 +39,15 @@ Create a `settings.json` file in the `state` folder (`runtipi/state/settings.jso
 }
 ```
 
-If you need to be on a different branch than the main one in your repo, go in the repository directory `cd ./repos/<generated-id>` and checkout your branch.
+If you need to be on a different branch than the main one in your repo, write your repo URL using the following notation :
+
+```json
+{
+  "appsRepoUrl": "https://github.com/runtipi/runtipi-appstore/tree/mybranch"
+}
+```
+
+Alternatively, you can go in the repository directory `cd ./repos/<generated-id>` and checkout your branch.
 
 ```bash
 git checkout mybranch
