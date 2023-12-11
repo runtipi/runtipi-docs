@@ -2,20 +2,23 @@
   "customize-app-config": {
     "title": "Customize app config"
   },
-  "linking-a-domain-to-your-dashboard": {
-    "title": "Linking a domain to your dashboard"
-  },
-  "local-certificate": {
-    "title": "Local SSL certificate"
-  },
   "expose-your-apps": {
     "title": "Expose your apps"
   },
   "expose-apps-with-cloudflare-tunnels": {
     "title": "Expose apps with cloudflare tunnels"
   },
+  "linking-a-domain-to-your-dashboard": {
+    "title": "Linking a domain to your dashboard"
+  },
+  "local-certificate": {
+    "title": "Local SSL certificate"
+  },
   "start-on-system-boot": {
     "title": "Start on system boot"
+  },
+  "updating": {
+    "title": "Updating"
   },
   "uninstalling": {
     "title": "Uninstalling"
