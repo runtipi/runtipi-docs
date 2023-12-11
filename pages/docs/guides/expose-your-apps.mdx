@@ -1,5 +1,48 @@
+import Image from 'next/image'
 import { Callout } from 'nextra-theme-docs'
 
-<Callout emoji="🚨">
-This page is a stub. Help us expand it by contributing!
+# Expose your apps
+
+Tipi allows you to expose your apps to the internet through a public domain that you own. Automatic HTTPS is provided by Let's Encrypt and Tipi will automatically renew your certificates.
+
+<Callout type="warning">
+Exposing your apps will make them accessible from the internet. Make sure you understand the security implications of doing so. Tipi is not responsible for any security breach that could happen on your server resulting from exposing your apps.
 </Callout>
+
+## Prerequisites
+
+- You have a running Tipi instance on your server
+- You have a running app on your server that you want to expose
+- You own a domain name and have access to its DNS configuration
+- You have access to your router configuration and know how to forward ports
+
+## Configure your router
+
+Tipi needs to be able to receive requests from the internet in order to generate the SSL certificates. To do so, you need to forward the port 80 and 443 of your router to the port 80 and 443 of your server.
+This is a common operation and you can find a lot of tutorials on the internet on how to do it.
+
+## Configure your DNS
+
+Tipi needs to be able to verify that you own the domain name you want to expose your app on. To do so, you need to add an **A** record to your DNS configuration pointing to the public IP address of your server.
+
+For example, if you want to expose the `nextcloud` app on the `cloud.my-domain.io` domain, you need to add an **A** record for `cloud.my-domain.io` pointing to the public IP address of your server.
+
+## Expose your app from the dashboard
+
+Once your router and DNS are configured, you can expose your app from the dashboard. Go to the details page of the app you want to expose and click on the `Settings` button.
+Enable the `Expose app` switch and enter the domain name you want to expose your app on. Click on the `Save` button to save your changes.
+
+<br />
+<Image src="/images/expose-your-apps/expose-settings.png" width={704} height={200} />
+
+## Restart your app
+
+In order to take into account the changes you just made, you need to restart your app. Go to the details page of your app and click on the `Stop` button then on the `Start` button.
+
+## Profit!
+
+The rest is automatic. Tipi will automatically renew your certificates and expose your app on the domain name you entered.
+
+
+
+

@@ -99,7 +99,7 @@ export default function Home() {
               <div className="lg:max-w-lg">
                 <p className="text-base font-semibold leading-7 text-blue-700">Deploy faster</p>
                 <h1 className="light:text-gray-900 mt-2 text-3xl font-bold tracking-tight sm:text-4xl">
-                  Don&apos;t waste time on configuration
+                  From zero to deployed in minutes
                 </h1>
                 <p className="light:text-gray-700 mt-6 text-xl leading-8">
                   Chose any app from our{' '}
