@@ -22,5 +22,8 @@
   },
   "uninstalling": {
     "title": "Uninstalling"
+  },
+  "backup-and-restore": {
+    "title": "Backup and restore"
   }
 }
