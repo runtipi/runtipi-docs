@@ -1,0 +1,12 @@
+# Running the CLI locally
+
+While the CLI is not meant to run during development, when developing new features for the CLI, it is useful to run it locally to test your changes.
+
+You can do so by navigating to the `packages/cli` folder and executing the following command:
+
+```bash
+npx tsx ./src/index.ts <command>
+```
+
+This will run the CLI using the TypeScript compiler and execute the `index.ts` file with the given command.
+This command is the equivalent of running `./runtipi-cli <command>` on a production instance.
