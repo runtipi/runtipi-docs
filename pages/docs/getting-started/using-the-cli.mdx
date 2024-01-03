@@ -23,18 +23,7 @@ sudo ./runtipi-cli start
 ```
 
 <Callout type="info">
-The ```start``` command can also be used to restart tipi although the ```restart``` command that is referenced bellow is the 
-recommended way.
-</Callout>
-
-<Callout type="info">
-Tipi requires root to run in order to create some file permissions so thats why ```sudo``` is being used. If you are the root account you 
-can skip the ```sudo``` command.
-</Callout>
-
-<Callout type="warning">
-If you don't want to provide root access to tipi you can use the ```--no-sudo``` switch to run in a fully rootless mode. However this 
-is still in development and you may face permission issues with some apps.
+Tipi is run as root in the examples because during the start process it needs to check and eventually change the permissions of some files in the `runtipi` folder. You can run the command without sudo but it is not guaranteed to work.
 </Callout>
 
 ## Stop Command
@@ -62,7 +51,7 @@ This command updates tipi to the latest version available.
 You can update to the latest version with this command:
 
 ```bash
-sudo ./runtipi-cli update
+sudo ./runtipi-cli update latest
 ```
 
 If you want to specify a specific version to update or downgrade to you can use the command 
@@ -74,7 +63,7 @@ sudo ./runtipi-cli update v2.0.7
 
 <Callout type="warning">
 You can downgrade Tipi to a previous version by running the update command with the version you want to downgrade to.
-However, this is highly discouraged as it may lead to breaking your install.
+However, this is highly discouraged as it may lead to breaking your install. Make sure you know what you are doing.
 </Callout>
 
 
