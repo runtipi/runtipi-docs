@@ -2,11 +2,15 @@
 
 This is a quick script and cronjob setup that will try to keep Tipi auto updated once per day at midnight.
 For this example, the path to our runtipi directory will be /root/runtipi. If your install location is different, please adjust the below commands to reflect that path.
+This has been tested with Ubuntu
 
-##Tested with Ubuntu
+##Install requirements for the script
 
 ```sudo apt install python3-pip 
 sudo pip install lastversion```
+
+
+##Create the script that will check for updates
 
 In your runtipi directory, create the file "check-update.sh" and add the following contents:
 
@@ -32,7 +36,6 @@ else
   ./runtipi-cli update "${update_version}"
 fi
 ```
-
 
 Now, we need to set the file to be executable with"
 ```chmod 755 /root/runtipi/check-update.sh```
