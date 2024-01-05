@@ -1,0 +1,65 @@
+import { Callout } from 'nextra-theme-docs'
+
+# Auto Updating Tipi
+
+This is a quick script and cronjob setup that will try to keep Tipi auto updated once per day at midnight.
+For this example, the path to our runtipi directory will be /root/runtipi. If your install location is different, please adjust the below commands to reflect that path.
+This has been tested with Ubuntu
+
+## Install requirements for the script
+
+```bash
+sudo apt install python3-pip 
+sudo pip install lastversion
+```
+
+
+## Create the script that will check for updates
+
+In your runtipi directory, create the file "check-update.sh" and add the following contents:
+
+```bash
+#!/bin/bash
+
+# Edit this to reflect your path to your runtipi directory
+Tipi_path="/root/runtipi"
+
+cd $Tipi_path
+
+# Get the current version installed
+current_version=$(./runtipi-cli --version | grep -v Welcome )
+
+# Get the current version on Github
+latest_version=$(lastversion https://github.com/runtipi)
+
+if [[ "$(printf '%s\n' "$current_version" "$latest_version" | sort -V | tail -n1)" == "$current_version" ]]; then
+
+  echo "Current version is up to date."
+
+else
+  update_version="v${latest_version}"
+  ./runtipi-cli update "${update_version}"
+fi
+```
+
+Now, we need to set the file to be executable with"
+```bash
+chmod 755 /root/runtipi/check-update.sh
+```
+
+## Cron Script for daily update checks
+
+Run 
+```bash
+sudo crontab -e
+```
+
+If prompted, pick your desired editor and insert the following:
+```bash
+0 0 * * * /root/runtipi/check-update.sh
+```
+
+Next, we will restart cron to make sure the changes get picked up right away.
+```bash
+sudo systemctl restart cron
+```
