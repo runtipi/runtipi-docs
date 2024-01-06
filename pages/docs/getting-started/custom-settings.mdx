@@ -19,12 +19,17 @@ You can change the default settings by creating a `settings.json` file. The file
 
 | Parameter    | Description                                                 | Type       | Default value            |
 |--------------|-------------------------------------------------------------|------------|--------------------------|
-| `dnsIp`      | The IP address of the DNS server to use                     | `string`   | `9.9.9.9`                |
+| `dnsIp`      | The IP address of the DNS server to use. Legacy, kept for compatibility                     | `string`   | `9.9.9.9`                |
 | `domain`     | The domain name to use for the dashboard                    | `string`   | `localhost`              |
 | `port`       | The port to use for the dashboard                           | `interger` | `80`                     |
 | `sslPort`    | The port to use for the dashboard with SSL                  | `interger` | `443`                    |
 | `listenIp`   | The IP address to listen on                                 | `string`   | `automatically detected` |
 | `storagePath`| The path to use for storing data                            | `string`   | `runtipi/app-data`       |
 | `localDomain`| The domain name to use for local services                   | `string`   | `tipi.lan`               |
+| `appsRepoUrl`| The URL to the apps repository                              | `string`   | `https://github.com/runtipi/runtipi-appstore` |
+| `postgresPort`| The port to use for the postgres database                   | `interger` | `5432`                   |
 | `demoMode`   | Start tipi in demo mode                                     | `boolean`  | `false`                  |
+| `guestDashboard`| Allow guest access to the dashboard                      | `boolean`  | `false`                  |
+| `allowErrorMonitoring`| Whether the app will send anonymous crash reports to the runtipi developers             | `boolean`  | `true`                  |
+| `allowAutoTheme` | Enables thematically changing the dashboard based on the time of the year | `boolean`  | `true`                  |
 

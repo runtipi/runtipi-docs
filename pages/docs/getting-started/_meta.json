@@ -2,10 +2,13 @@
   "installation": {
     "title": "Installation"
   },
+  "using-the-cli": {
+    "title": "Using the CLI"
+  },
   "custom-settings": {
     "title": "Custom Settings"
   },
-  "using-the-cli": {
-    "title": "Using the CLI"
+  "custom-environment-variables": {
+    "title": "Custom Environment Variables"
   }
 }

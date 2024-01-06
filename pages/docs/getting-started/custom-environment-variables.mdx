@@ -1,0 +1,16 @@
+# Custom environment variables
+
+When running CLI commands, you can override any environment variable by providing a custom .env file.
+It can be useful on certain complex setups.
+
+To do so, create a file named `.env.local` in your server. You can then use the `--env-file` option when running CLI commands. The path can be relative to the runtipi-cli or absolute.
+
+```bash
+sudo ./runtipi-cli start --env-file ./.env.local
+```
+
+```bash
+sudo ./runtipi-cli start --env-file /home/pi/.env.local
+```
+
+See [Environment variables](/docs/reference/environment-variables) for a list of all environment variables used by runtipi.
