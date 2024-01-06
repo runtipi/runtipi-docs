@@ -22,5 +22,8 @@
   },
   "backup-and-restore": {
     "title": "Backup and restore"
+  },
+  "auto-update-with-cron": {
+    "title": "Auto update with cron"
   }
 }
