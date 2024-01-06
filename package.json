@@ -19,7 +19,7 @@
   },
   "homepage": "https://github.com/shuding/nextra-docs-template#readme",
   "dependencies": {
-    "@heroicons/react": "^2.0.18",
+    "@heroicons/react": "^2.1.1",
     "@vercel/analytics": "^1.1.1",
     "clsx": "^2.0.0",
     "next": "^13.5.6",
