@@ -9,6 +9,14 @@ const footer = () => {
   return (
     <div className="flex w-full items-center justify-between">
       <div className="flex-1">Runtipi - Homeserver management made easy</div>
+      <a
+        href="https://www.flaticon.com/free-icons/tipi"
+        title="tipi icons"
+        target="_blank"
+        rel="noreferrer"
+      >
+        Tipi logo created by Freepik - Flaticon
+      </a>
       {/* <div className="flex-1"> */}
       {/*   <a */}
       {/*     rel="noopener noreferrer" */}
