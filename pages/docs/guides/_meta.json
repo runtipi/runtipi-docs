@@ -2,6 +2,9 @@
   "customize-app-config": {
     "title": "Customize app config"
   },
+  "customize-compose-and-traefik": {
+    "title": "Customize tipi compose and traefik config"
+  },
   "expose-your-apps": {
     "title": "Expose your apps"
   },
