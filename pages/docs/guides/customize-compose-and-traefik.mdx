@@ -23,27 +23,10 @@ Firstly we need to figure out what port traefik dashboard uses (which is 8080) a
   of tipi.
 </Callout>
 
-1. Create the file `tipi-compose.yml` in the `user-config` directory withing the `runtipi` folder.
+1. Create the file `tipi-compose.yml` in the `user-config` directory within the `runtipi` folder.
 
 ```bash
-nano user-config/tipi-config.yml
-```
-
-2. Add your changes
-
-In this case we will change the traefik ports so here is an example custom compose file.
-
-```yaml
-version: '3.9'
-services:
-  tipi-reverse-proxy:
-    ports:
-      - 8080:8080
-```
-
-In this example we expose the port 8080 from the traefik container to the host.
-
-Then save and exit with `Ctrl` and `x` then `y` then `Enter`
+nano user-config/tipi-compose.yml
 
 3. You should have this file structure:
 
