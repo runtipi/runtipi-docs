@@ -1,0 +1,180 @@
+import { Callout, FileTree } from 'nextra-theme-docs';
+
+# Customize main docker compose and traefik config
+
+## Overview
+
+In this guide, we'll show you how to customize the default docker compose file of tipi and the traefik config.
+
+## Example use cases
+
+- Enable the traefik dashboard
+- Add an extra volume to the worker/dashboard containers
+- Use a dns challenge with traefik
+
+## Create a custom docker compose file
+
+In this example we will expose the traefik dashboard by editing the main tipi compose file.
+
+Firstly we need to figure out what port traefik dashboard uses (which is 8080) and what is the name of the docker container of traefik (which we can learn from the `docker-compose.yml`) which is `tipi-reverse-proxy` in this case.
+
+<Callout>
+  Don't edit the `docker-compose.yml` file directly because it will be overwritten in every restart
+  of tipi.
+</Callout>
+
+1. Create the file `tipi-compose.yml` in the `user-config` directory withing the `runtipi` folder.
+
+```bash
+nano user-config/tipi-config.yml
+```
+
+2. Add your changes
+
+In this case we will change the traefik ports so here is an example custom compose file.
+
+```yaml
+version: '3.9'
+services:
+  tipi-reverse-proxy:
+    ports:
+      - 8080:8080
+```
+
+In this example we expose the port 8080 from the traefik container to the host.
+
+Then save and exit with `Ctrl` and `x` then `y` then `Enter`
+
+3. You should have this file structure:
+
+<FileTree>
+  <FileTree.Folder name="runtipi" defaultOpen>
+    <FileTree.Folder name="user-config" defaultOpen>
+      <FileTree.File name="tipi-compose.yml" />
+    </FileTree.Folder>
+  </FileTree.Folder>
+</FileTree>
+
+4. Restart tipi and test the changes
+
+```bash
+./runtipi-cli restart
+```
+
+After restarting you should be able to see the traefik dashboard by visiting [localhost](http://127.0.0.1:8080) (in your tipi server)
+
+## Edit the traefik config file
+
+In this example we will use a dns challenge in traefik using cloudflare.
+
+Firstly we need to figure out what changes we should do. Very helpful can be the docs of traefik [here](https://doc.traefik.io/traefik/),
+specifically we are interested in [this](https://doc.traefik.io/traefik/https/acme/#dnschallenge) section and in [this](https://go-acme.github.io/lego/dns/cloudflare/) config.
+
+The default traefik config is this:
+
+```yaml
+api:
+  dashboard: true
+  insecure: true
+
+providers:
+  docker:
+    endpoint: 'unix:///var/run/docker.sock'
+    watch: true
+    exposedByDefault: false
+  file:
+    directory: /root/.config/dynamic
+    watch: true
+
+entryPoints:
+  web:
+    address: ':80'
+  websecure:
+    address: ':443'
+    http:
+      tls:
+        certResolver: myresolver
+
+certificatesResolvers:
+  myresolver:
+    acme:
+      email: acme@thisprops.com
+      storage: /shared/acme.json
+      httpChallenge:
+        entryPoint: web
+
+log:
+  level: ERROR
+```
+
+So according to traefik we need to change the `certificatesResolvers` and include the cloudflare config. So after editing we should have something like this:
+
+```yaml
+api:
+  dashboard: true
+  insecure: true
+
+providers:
+  docker:
+    endpoint: 'unix:///var/run/docker.sock'
+    watch: true
+    exposedByDefault: false
+  file:
+    directory: /root/.config/dynamic
+    watch: true
+
+entryPoints:
+  web:
+    address: ':80'
+  websecure:
+    address: ':443'
+    http:
+      tls:
+        certResolver: myresolver
+
+certificatesResolvers:
+  myresolver:
+    acme:
+      email: acme@thisprops.com
+      storage: /shared/acme.json
+      dnsChallenge:
+        provider: cloudflare
+        delayBeforeCheck: 0
+        resolvers:
+          - '1.1.1.1:53'
+          - '8.8.8.8:53'
+
+log:
+  level: ERROR
+```
+
+Also we will need to use the previous step [here](#create-a-custom-docker-compose-file) and add this:
+
+```yaml
+version: '3.9'
+services:
+  tipi-reverse-proxy:
+    environment:
+      - CF_DNS_API_TOKEN=sometoken
+```
+
+<Callout>
+  Make sure to replace the previous content of the `tipi-compose.yml` or add the extra changes in
+  one yaml scheme else docker won't work.
+</Callout>
+
+1. Now we can edit the traefik file
+
+```bash
+nano traefik/traefik.yml
+```
+
+2. Add your changes
+
+So in this case we can either replace either everything or just the `certificatesResolvers` part.
+
+3. Restart your tipi and the traefik config should be persisted
+
+```bash
+./runtipi-cli restart
+```
