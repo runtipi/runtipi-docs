@@ -1,0 +1,86 @@
+import { Steps, Callout, FileTree } from 'nextra-theme-docs'
+
+# Breaking updates
+
+## Introduction
+
+This page is dedicated to describe breaking updates and guide you through the process of updating your instance to the newer versions.
+
+## Update from 2.x.x to 3.0.0
+
+In the version **3.0.0** we completely re-wrote the `runtipi-cli` tool.
+The new CLI is written in Rust and it is much more stable, faster and smaller than the previous version.
+You won't be able to update to the version **3.0.0** using the old node CLI. In order to update to the version **3.0.0** you will need to manually download the new CLI and 
+replace the old one.
+
+We have prepared a script that will do the update for you. You can run it by executing the following command in your `runtipi` directory:
+
+```bash
+curl -sSL https://raw.githubusercontent.com/runtipi/cli/master/scripts/update-2.0.0-to-3.0.0.sh | bash
+```
+
+Or you can do it manually by following these steps:
+
+<Steps>
+### Stop your instance
+
+```bash
+cd /path/to/runtipi
+./runtipi-cli stop
+```
+
+### Determine the architecture of your system
+
+```bash
+uname -m
+```
+
+The output should be either `x86_64`, `arm64` or `aarch64`
+
+If you are running `x86_64` architecture, the asset you need to download is `runtipi-cli-linux-x86_64.tar.gz`
+otherwise you need to download `runtipi-cli-linux-aarch64.tar.gz`.
+
+### Download the new CLI in your `runtipi` directory
+
+```bash
+curl -sSL https://github.com/runtipi/runtipi/releases/download/v3.0.0/<asset-name> | tar -xz
+```
+
+### Remove the old CLI
+
+```bash
+rm runtipi-cli
+```
+
+### Rename the new CLI
+
+```bash
+mv runtipi-cli-linux-<arch> runtipi-cli
+```
+
+### Start your instance
+
+```bash
+./runtipi-cli start
+```
+
+</Steps>
+
+## Update from 1.x.x to 2.0.0
+
+In the previous release (**v1.6.0**) we introduced the new rootless mode. After some reports from our users, we realized that the rootless mode is not working as expected.
+This version messes up the permissions of the files and folders in the `runtipi` directory.
+
+Updating to **2.0.0** requires you to manually run the update script with `sudo` privileges in order to fix the permissions.
+
+```bash
+sudo ./runtipi-cli update v2.0.0
+```
+
+## Update from 0.x.x to 1.0.0
+
+In the version 1.0.0 we officially dropped support for 32-bit systems. If you are running 32-bit system, you will need to upgrade to 64-bit system. If you are running 64-bit system, you can safely upgrade to the version 1.0.0 without any manual steps
+
+```bash
+sudo ./scripts/system.sh update
+```
