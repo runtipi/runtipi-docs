@@ -23,7 +23,7 @@ export default function Home() {
 
   return (
     <>
-      <div className="mx-auto flex w-auto flex-col justify-between px-4 pt-16 pb-8 sm:pt-24 md:flex-row lg:max-w-7xl lg:px-8">
+      <div className="mx-auto flex w-auto flex-col justify-between px-4 pb-8 pt-16 sm:pt-24 md:flex-row lg:max-w-7xl lg:px-8">
         <div className="flex w-full flex-col justify-between md:mr-4 md:w-10/12 lg:w-9/12 xl:w-7/12">
           <div>
             <h1 className="mx-auto max-w-5xl text-6xl font-extrabold leading-[1.1] tracking-tighter sm:text-7xl">
@@ -35,14 +35,14 @@ export default function Home() {
             <p className="mt-6 max-w-2xl text-xl font-medium leading-tight text-gray-400">
               Free and open-source, Runtipi lets you install all your favorite self-hosted apps
               without the hassle of configuring and managing each service. One-click installs and
-              updates for more than 180 popular apps.
+              updates for more than 200 popular apps.
             </p>
           </div>
-          <div className="mt-4 mb-6 flex h-32 flex-col gap-3 md:my-0 md:flex-row md:items-center xl:flex-row">
+          <div className="mb-6 mt-4 flex h-32 flex-col gap-3 md:my-0 md:flex-row md:items-center xl:flex-row">
             <div className="rounded-md xl:w-auto">
               <Link
                 href="/docs/introduction"
-                className="flex w-full items-center justify-center rounded-md border border-transparent bg-black px-8 py-3 text-base font-medium text-white no-underline dark:bg-white dark:text-black md:py-3 md:px-10 md:text-lg md:leading-6 betterhover:hover:bg-gray-700 betterhover:dark:hover:bg-gray-300"
+                className="flex w-full items-center justify-center rounded-md border border-transparent bg-black px-8 py-3 text-base font-medium text-white no-underline dark:bg-white dark:text-black md:px-10 md:py-3 md:text-lg md:leading-6 betterhover:hover:bg-gray-700 betterhover:dark:hover:bg-gray-300"
               >
                 Get Started →
               </Link>
@@ -50,10 +50,10 @@ export default function Home() {
             <div className="relative rounded-md xl:w-auto">
               <button
                 onClick={() => onClick('curl -L https://setup.runtipi.io | bash')}
-                className="flex w-full items-center justify-center rounded-md border border-gray-200 bg-black/10 px-8 py-3 font-mono text-sm font-medium text-gray-600 dark:border-gray-700 dark:bg-white/10 dark:text-gray-300 md:py-3 md:px-10 md:text-base md:leading-6 betterhover:hover:bg-gray-50 betterhover:dark:hover:bg-gray-900"
+                className="flex w-full items-center justify-center rounded-md border border-gray-200 bg-black/10 px-8 py-3 font-mono text-sm font-medium text-gray-600 dark:border-gray-700 dark:bg-white/10 dark:text-gray-300 md:px-10 md:py-3 md:text-base md:leading-6 betterhover:hover:bg-gray-50 betterhover:dark:hover:bg-gray-900"
               >
                 curl -L https://setup.runtipi.io | bash
-                <DocumentDuplicateIcon className="ml-2 -mr-3 h-6 w-6 text-gray-400" />
+                <DocumentDuplicateIcon className="-mr-3 ml-2 h-6 w-6 text-gray-400" />
               </button>
             </div>
           </div>
@@ -64,7 +64,7 @@ export default function Home() {
       <div className="relative isolate overflow-hidden border-t px-6 py-24 dark:border-gray-900 sm:py-32 lg:overflow-visible lg:px-0">
         <div className="absolute inset-0 -z-10 overflow-hidden">
           <svg
-            className="absolute top-0 left-[max(50%,25rem)] h-[64rem] w-[128rem] -translate-x-1/2 stroke-gray-200 [mask-image:radial-gradient(64rem_64rem_at_top,white,transparent)] dark:stroke-gray-800"
+            className="absolute left-[max(50%,25rem)] top-0 h-[64rem] w-[128rem] -translate-x-1/2 stroke-gray-200 [mask-image:radial-gradient(64rem_64rem_at_top,white,transparent)] dark:stroke-gray-800"
             aria-hidden="true"
           >
             <defs>
@@ -93,7 +93,7 @@ export default function Home() {
             />
           </svg>
         </div>
-        <div className="mx-auto grid max-w-2xl grid-cols-1 gap-y-16 gap-x-8 lg:mx-0 lg:max-w-none lg:grid-cols-2 lg:items-start lg:gap-y-10">
+        <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 lg:mx-0 lg:max-w-none lg:grid-cols-2 lg:items-start lg:gap-y-10">
           <div className="lg:col-span-2 lg:col-start-1 lg:row-start-1 lg:mx-auto lg:grid lg:w-full lg:max-w-7xl lg:grid-cols-2 lg:gap-x-8 lg:px-8">
             <div className="lg:pr-4">
               <div className="lg:max-w-lg">
@@ -112,7 +112,7 @@ export default function Home() {
               </div>
             </div>
           </div>
-          <div className="-mt-12 -ml-12 p-12 lg:sticky lg:top-4 lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:overflow-hidden">
+          <div className="-ml-12 -mt-12 p-12 lg:sticky lg:top-4 lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:overflow-hidden">
             <Image
               className="w-[48rem] max-w-none rounded-xl bg-gray-900 shadow-xl ring-1 ring-gray-400/10 sm:w-[57rem]"
               src={screenshot}
@@ -170,7 +170,7 @@ export default function Home() {
       </div>
 
       <div className="relative from-gray-50 to-gray-100">
-        <div className="mx-auto px-4 py-16 sm:pt-20 sm:pb-24 lg:max-w-7xl lg:pt-24">
+        <div className="mx-auto px-4 py-16 sm:pb-24 sm:pt-20 lg:max-w-7xl lg:pt-24">
           <h2 className="text-4xl font-extrabold tracking-tight dark:text-white lg:text-center">
             Easy to use and to customize
           </h2>

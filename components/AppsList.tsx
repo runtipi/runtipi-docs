@@ -15,7 +15,7 @@ export const getStaticProps = async () => {
   const res = await fetch('https://api.github.com/repos/runtipi/runtipi-appstore/contents/apps');
 
   const data = await res.json();
-  const appNames = data.map((app) => app.name);
+  const appNames = data.filter((app) => app.type === 'dir').map((app) => app.name);
 
   for (const app of appNames) {
     const config = await fetch(

@@ -25,7 +25,7 @@ export const AppLogo: React.FC<{
           <path
             fillRule="evenodd"
             clipRule="evenodd"
-            d="M0 100C0 0 0 0 100 0S200 0 200 100 200 200 100 200 0 200 0 100"
+            d="M-2 100C0 0 0 0 100 0S200 0 200 100 200 200 100 200 0 200 0 100"
             fill="white"
           />
         </mask>

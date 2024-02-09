@@ -1,18 +1,11 @@
-import "../styles.css";
-import { Analytics } from '@vercel/analytics/react';
-import "nextra-theme-docs/style.css";
-import { Inter } from "next/font/google";
-
-export const inter = Inter({
-  subsets: ['latin'],
-  variable: '--font-inter',
-})
+import '../styles.css';
+import 'nextra-theme-docs/style.css';
+import { GeistSans } from 'geist/font/sans';
 
 export default function App({ Component, pageProps }) {
   return (
-    <main className={`${inter.variable} font-sans`}>
+    <main className={GeistSans.className}>
       <Component {...pageProps} />
-      <Analytics />
     </main>
-  )
+  );
 }

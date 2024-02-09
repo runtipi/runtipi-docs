@@ -1,4 +1,4 @@
-import { AppsList, getStaticProps as gsp } from '../../components/AppsList';
+import { AppsList, getStaticProps as gsp } from '@/components/AppsList';
 import { useSSG } from 'nextra/ssg';
 
 export const getStaticProps = gsp;
@@ -12,7 +12,12 @@ export const Apps = () => {
 export const AppsCount = () => {
   const { apps } = useSSG();
   const length = Object.keys(apps).length;
-  return <><br />Here is a list of all <b>{length}</b> available apps sorted alphabetically:</>;
+  return (
+    <>
+      <br />
+      Here is a list of all <b>{length}</b> available apps sorted alphabetically:
+    </>
+  );
 };
 
 # Apps available

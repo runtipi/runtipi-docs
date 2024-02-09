@@ -4,6 +4,7 @@ const withNextra = require('nextra')({
 });
 
 module.exports = withNextra({
+  transpilePackages: ['geist'],
   images: {
     unoptimized: true,
     remotePatterns: [

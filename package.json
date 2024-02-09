@@ -1,7 +1,7 @@
 {
   "name": "nextra-docs-template",
   "version": "0.0.1",
-  "description": "Nextra docs template",
+  "description": "Runtipi documentation website",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -20,11 +20,13 @@
   "homepage": "https://github.com/shuding/nextra-docs-template#readme",
   "dependencies": {
     "@heroicons/react": "^2.1.1",
+    "@types/react-dom": "18",
     "@vercel/analytics": "^1.1.1",
     "clsx": "^2.0.0",
-    "next": "^13.5.6",
-    "nextra": "latest",
-    "nextra-theme-docs": "latest",
+    "geist": "^1.2.2",
+    "next": "^14.1.0",
+    "nextra": "^2.13.2",
+    "nextra-theme-docs": "^2.13.2",
     "react": "^18.2.0",
     "react-compare-image": "^3.4.0",
     "react-compare-slider": "^2.2.0",
@@ -36,6 +38,7 @@
   },
   "devDependencies": {
     "@types/node": "20.8.8",
+    "@types/react": "^18.2.55",
     "@typescript-eslint/eslint-plugin": "^6.9.0",
     "@typescript-eslint/parser": "^6.9.0",
     "autoprefixer": "^10.4.16",
@@ -45,6 +48,6 @@
     "postcss": "^8.4.31",
     "prettier": "^3.0.3",
     "tailwindcss": "^3.3.4",
-    "typescript": "^5.2.2"
+    "typescript": "^5.3.3"
   }
 }
