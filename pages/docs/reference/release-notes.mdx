@@ -1,0 +1,337 @@
+# Release notes
+
+In this document, we will keep track of all release notes of Runtipi.
+
+## 3.0.0
+
+This is a breaking change release. Please read the [migration guide](https://runtipi.io/docs/reference/breaking-updates#update-from-2xx-to-300) before updating
+as you will need to perform some manual steps.
+
+**New features**
+
+- New custom link feature. You can now add custom links to your dashboard. This is useful to link to other services or to add a link to your app's admin panel. @MontejoJorge
+
+**Improvements**
+
+- The CLI has been rewritten in Rust. This will make the CLI faster, smaller and more reliable. You can see the new CLI [repository here](https://github.com/runtipi/cli) @meienberger @steveiliop56
+- Release assets are now distributed as a compressed tarball. This will make the download faster and smaller @meienberger
+- The worker now exposes an authenticated REST API @steveiliop56
+- Added support for Manjaro in the install script @iajrz
+- Move the "Forgot password" link under the login button for better UX @I-Need-C8H10N4O2
+
+**Technical**
+
+- Refactored the docker ignore file to an exclude first approach. This will make the docker build faster and smaller during development @meienberger
+- New nightly release pipeline to test the latest changes before releasing a new version @meienberger
+- Flattened the translation files to make it easier to add new keys @meienberger
+- Bump all dependencies
+
+## 2.5.0
+
+**New features**
+
+- Users can now update all apps in one go with a new "Update all" button on the dashboard #1067 @MontejoJorge #1100
+- New setting to stop `traefik.yml` from being overwritten on start #1106 @steveiliop56
+
+**Improvements**
+
+- Fall back to store image if an app image is not found @steveiliop56 #1104
+- Added a new welcome screen and made the error monitoring option opt-in @meienberger #1107
+- Add an in-memory cache to avoid repeatedly reading and parsing the `settings.json` file @meienberger #1107
+- The dashboard now displays the system info in real-time #1121 @steveiliop56 @meienberger
+
+**Fixes**
+
+- The reset function is now working properly @steveiliop56 #1101
+- Fix the loading button when logging in and registering @meienberger #1107
+
+## 2.4.0
+
+**New features**
+
+- Users can now start Tipi with a custom env file to override any environment variable. `./runtipi-cli start --env-file ./.env.custom` #1073 @meienberger
+- Allow the main compose file to be changed from user-config #1069 @steveiliop56
+
+**Improvements**
+
+- Apps can now be deprecated in the app store. Users who installed the app will still see it with a warning to migrate to a more recent version #1075 @meienberger
+- Add support for rocky OS #1076 @DansNewLegs
+
+**Fixes**
+
+- Fix the worker socket not working when the dashboard is exposed through domain #1074 @meienberger
+- The web app was crashing when visiting an incorrect URL under `/apps`
+
+## 2.3.1
+
+**Improvements**
+
+- Strip out hostname from fetch errors sent to sentry #1059 @meienberger
+
+**Fixes**
+
+- The app was crashing without any actionable insight for the user when the repo was not correctly cloned. Tipi now returns an empty list of apps and logs a helpful error #1060 @meienberger
+- Previously when stopping tipi, if any folder or file that wasn't an actual app was present in the apps folder (eg: `.DS_Store`) tipi was trying to stop this app. This was fixed in #1053 @MontejoJorge
+- Prevent worker from crashing by adding a try-catch around the emit event
+- Fix the bug preventing users from resetting their password
+
+## 2.3.0
+
+**Improvements**
+
+- The worker now exposes a WebSocket allowing real-time synchronization of app status #994 @meienberger
+- Added Sentry for anonymous crash reports. This is an opt-out feature that will help the team resolve issues more efficiently #1003 @meienberger
+- The font was changed to [Geist](https://vercel.com/font) (previously Inter) #991 @steveiliop56
+- Increased security in server actions by checking the user role #1005 @meienberger
+
+**Fixes**
+
+- A bug was making updates impossible if the CLI wasn't able to stop tipi. This could have caused issues if we released a bugged version making users unable to update. Now an update will still be performed even if tipi fails to stop. @meienberger
+- Fix the wrong title in the app details page #975 @MontejoJorge
+- Fix a bug preventing users from downloading the self-signed certificate
+
+## 2.2.0
+
+**New features**
+
+- You can now specify a different port for Postgres #918 @steveiliop56
+- You can now reset an app directly from its settings. No need to stop, uninstall, and re-install again. #922 @cchalop1
+- Tipi now automatically starts on system boot. No need to setup a systemd service anymore. #919 @meienberger
+
+**Improvements**
+
+- Tipi works now fully rootless thanks to work done to dockerize the worker previously running on the host system. Tipi is now fully Docker-based and can be run in any environment that can run Docker. #919 @meienberger @steveiliop56
+- After an update, apps are now restarting again if it was running before update. @cchalop1 closes #906
+- (DEV) - When testing an app store repo, it is now possible to directly include the URL with the branch name in the settings and that branch will be checked out. @0livier
+
+**Fixes**
+
+- A bug was making app installs fail silently and mark the app as "running" while it was not. #919 @meienberger
+
+## 2.1.0
+
+**New features**
+
+- You can now enable the Guest Dashboard in your settings. A simple page listing the available apps will be displayed to logged-out users.
+- You can now change your account email from the settings
+
+**Improvements**
+
+- Move from Docker hub to [GitHub container registry](https://github.com/runtipi/runtipi/pkgs/container/runtipi)
+- Improved CLI messages for app commands
+- Bump dependencies
+
+**Fixes**
+
+- Make the install app form scrollable when there are too many fields
+- Add missing empty page state when app store search results are empty
+
+## 2.0.7
+
+**Improvements**
+
+- feat(cli): add commands for starting and stopping apps #796
+- chore: make theme cookie expire after 365 days
+- Bump dependencies
+
+**fixes**
+
+- fix(theme): detect system theme when theme cookie is not present #791
+- chore(cli): generate APP_PROTOCOL env var even for http #797
+
+## 2.0.6
+
+mprovements\*\*
+
+- Migrated repos from a personal account to a new organization account
+- Refactored all pages to use Next's implementation of React Server Components
+
+**Fixes**
+
+- Fix a bug that was causing the start script to run for multiple minutes in certain cases
+- Always pull image on app start @DireMunchkin
+
+## 2.0.4
+
+**Improvements**
+
+- Added more logs to the CLI in order to debug properly
+
+**Fixes**
+
+- Fix a bug in which the app store would not pull the latest app updates
+
+## 2.0.3
+
+⚠️ This update fixes a problem where updating automatically with the "Update" button would not work. Please update manually with the CLI using the instructions below.
+
+**Improvements**
+
+- Added more logs to the CLI in order to debug properly
+
+**Fixes**
+
+- Disables the ability to update Tipi via the "Update" button in the settings. This removal is because multiple users have had issues with the app crashing after updating this way.
+- Fix a bug in how the app store repo is pulled
+
+## 2.0.2
+
+**New features**
+
+- You can now specify a different port for Postgres #918 @steveiliop56
+- You can now reset an app directly from its settings. No need to stop, uninstall, and re-install again. #922 @cchalop1
+- Tipi now automatically starts on system boot. No need to setup a systemd service anymore. #919 @meienberger
+
+**Improvements**
+
+- Tipi works now fully rootless thanks to work done to dockerize the worker previously running on the host system. Tipi is now fully Docker-based and can be run in any environment that can run Docker. #919 @meienberger @steveiliop56
+- After an update, apps are now restarting again if it was running before update. @cchalop1 closes #906
+- (DEV) - When testing an app store repo, it is now possible to directly include the URL with the branch name in the settings and that branch will be checked out. #949 @0livier
+
+**Fixes**
+
+- A bug was making app installs fail silently and mark the app as "running" while it was not. #919 @meienberger
+
+## 2.0.1
+
+**New features**
+
+- New language: Italian. Thanks to @FabioCingottini! Help us translate to more languages via [Crowdin](https://crowdin.com/project/runtipi/invite?h=ae594e86cd807bc075310cab20a4aa921693663)
+
+**Improvements**
+
+- Move db migrations in CLI start command #659
+- Move back to next.js managed server #662
+- Expose env vars `TIPI_UID` and `TIPI_GID` for apps to use
+- Allow html in app's `description.md`
+- Start all previously running apps on launch
+- Offer the option to start with `--no-sudo` with warnings about it
+- Only allow 6 apps max in demo mode
+
+**Fixes**
+
+- Panel width too small on mobile #661
+- Mark the app store repo as a git safe folder before pulling
+- Reset hard on origin/current_branch before pulling
+- Display issue in the CLI when stopping Tipi
+- Delete .gitkeep files after copying the data folder
+- Fix issue with traefik requesting permission `600` on file `acme.json`
+
+## 2.0.0
+
+**Fixes**
+
+- We tried to release a rootless experience with this new version, unfortunately, users are still facing many issues with permissions on different app folders. We are rolling back this feature and will work more on it for a next release.
+
+## 1.6.0
+
+**New features**
+
+- New language Greek, Turkish and Spanish thanks to @steveiliop56 @M1n-4d316e @loxiry help us translate to more languages via [Crowdin](https://crowdin.com/project/runtipi/invite?h=ae594e86cd807bc075310cab20a4aa921693663)
+
+**Improvements**
+
+- A huge amount of work has been done to refactor the core of the app entirely in order to be future-proof. Now, we have a fully featured message queue on top of Redis to handle failures, logs, retires, etc. In the past, Tipi relied heavily on a dozen bash scripts hard to test and maintain. Now the whole core has been rewritten in node and is compiled to a single binary file which is the CLI.
+- Enable TLS and Attach to Traefik CertResolver @HeyOsco
+
+## 1.5.2
+
+**Fixes**
+
+- Fix incorrect condition in `install.sh` causing the certificate to not be correctly carried on when updating
+
+## 1.5.3
+
+**New features**
+
+- New language Vietnamese and Spanish thanks to @**[nghialele](https://github.com/nghialele)** for translations
+
+**Fixes**
+
+- Hide option to open through local ip if `force_expose` is set to `true` for the app
+- Keep local certificate when updating
+- Don't delete `port` and `sslPort` when updating settings through the app
+
+## 1.5.0
+
+**New features**
+
+- Introducing the local domain setting! You can now configure a local domain (eg: `tipi.lan`) to have automatic HTTPS and self-signed certs for all your apps and your dashboard when you are in local network. Read more in the [documentation](https://www.runtipi.io/docs/guides/local-certificate)
+- New language German and Hungarian thanks to @m-lab-0 @Schmanko help us translate to more languages via [Crowdin](https://crowdin.com/project/runtipi/invite?h=ae594e86cd807bc075310cab20a4aa921693663)
+
+**Fixes**
+
+- Make the required boolean field pass with a false value
+- The locale was not read correctly in the browser resulting in incorrect values displayed in the language selector
+
+**Improvements**
+
+- Added loading state to the dashboard page
+
+**Deprecated**
+
+- Deprecated usage of start script arguments like `--domain` users now have to switch to the `settings.json` file.
+
+**Technical**
+
+- App variables replacement in the data folder. We can now have extended app configurations by having variables replaced in any file located in the apps' `data` folder.
+- New automated E2E test suite using playwright in order to test core features before new releases
+
+## 1.4.2
+
+**New features**
+
+- Add new languages to the app Swedish thanks the translators @NoisyFridge help us translate to more languages via [Crowdin](https://crowdin.com/project/runtipi/invite?h=ae594e86cd807bc075310cab20a4aa921693663)
+
+**Fixes**
+
+- Boolean field in Install form could not be set to false
+- Corrected visual regression in installed apps. Name was not aligned with status
+
+## 1.4.0
+
+**New features**
+
+- Add new languages to the app (English, French, Japanese, Polish, Romanian, Russian, Chinese Simplified, Chinese Traditional) thanks the translators @iepure @Innocentius @SergeyKodolov help us translate to more languages via [Crowdin](https://crowdin.com/project/runtipi/invite?h=ae594e86cd807bc075310cab20a4aa921693663)
+
+**Improvements**
+
+- Change JWT session to Cookie based. Will imporve UX on first page loads and increase security
+
+**Fixes**
+
+- Apps with a lowercase starting letter will no longer be pushed at the bottom of the list
+- Use config.json placeholder in install form field instead of duplicating label
+
+**Technical**
+
+- Created a insecure traefik http transport to use with apps that already have a self signed cert
+- Update all dependencies
+- Setup dependabot
+
+## 1.3.0
+
+This update is mandatory if you want to receive all future app additions or updates
+
+**New features**
+
+- Add icons for all categories available
+- Added more info in install form fields like "required indicator" and hint tooltip
+- new "AI" category
+- Display app website in details tab
+
+**Improvements**
+
+- Add healthcheck to all redis containers to prevent dashboard failing to connect to redis
+- Make default field type `text` to not break previous versions when we release new field types
+- Allow apps to be force exposed. The user cannot install it without a domain
+
+**Fixes**
+
+- Return default values of 0 when system-info.json fails to parse
+- Keep the loading state on update and restart settings button
+
+**Technical**
+
+- Migrate from Prisma to drizzle-orm for postgres queries
+- Upgrade node to 18.15
