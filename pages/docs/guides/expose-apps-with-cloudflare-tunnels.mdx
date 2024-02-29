@@ -1,5 +1,5 @@
-import { Steps, Callout, FileTree } from 'nextra-theme-docs'
-import Image from 'next/image'
+import { Steps, Callout, FileTree } from 'nextra-theme-docs';
+import Image from 'next/image';
 
 # Expose your apps using Cloudflare tunnels
 
@@ -19,6 +19,7 @@ Cloudflare tunnels are available for free for all Cloudflare users.
 You want to expose to the internet the **searxng** instance running on your Tipi.
 
 ## Configuration
+
 <Steps>
 ### Add your domain to Cloudflare
 
@@ -41,9 +42,7 @@ This step may take a few minutes to propagate.
 
 ### Create a tunnel
 
-In the Cloudflare dashboard, go to the **Zero Trust** tab and click on **Access** -> **Tunnels**.
-<br />
-<Image src="/images/cloudflare-tunnels/tunnels-menu.png" width={260} height={300} />
+In the Cloudflare dashboard, go to the **Zero Trust** tab and click on **Networks** -> **Tunnels**.
 
 Click on the **Create a tunnel** button.
 
@@ -54,10 +53,7 @@ Give your tunnel a name and click on **Save tunnel**.
 Click on Docker and copy the command presented in the dashboard.
 SSH into your Tipi server and run the command copied from the Cloudflare dashboard.
 
-<Callout>
-  You can add the `-d` flag to run it in the background.
-  `docker run -d ...`
-</Callout>
+<Callout>You can add the `-d` flag to run it in the background. `docker run -d ...`</Callout>
 
 You should now see the tunnel running in the dashboard.
 
@@ -71,6 +67,7 @@ Fill out the form by entering the subdomain you want (e.g. searxng) and select y
 In the service section, choose the type **HTTPS** and in URL enter the IP address of your Tipi server.
 
 In the additional settings section, choose the **No TLS Verfiy** option.
+
 <br />
 
 <Image src="/images/cloudflare-tunnels/hostname-config.png" width={1303} height={828} />
@@ -83,6 +80,7 @@ Open your Tipi dashboard and search for the app you want to expose.
 Make sure the app is stopped and click on the settings button.
 
 Enable the **Expose app** option and enter the subdomain you chose earlier.
+
 <br />
 
 <Image src="/images/cloudflare-tunnels/tipi-expose.png" width={730} height={289} />
@@ -91,7 +89,6 @@ Click on **Save** and then start the app again.
 
 ### Access your app
 
-You can now access your app securely by visiting `https://<subdomain>.<domain>`. 
+You can now access your app securely by visiting `https://<subdomain>.<domain>`.
 
 </Steps>
-

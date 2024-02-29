@@ -17,9 +17,6 @@
   "local-certificate": {
     "title": "Local SSL certificate"
   },
-  "start-on-system-boot": {
-    "title": "Start on system boot"
-  },
   "uninstalling": {
     "title": "Uninstalling"
   },
