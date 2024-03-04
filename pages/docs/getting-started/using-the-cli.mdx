@@ -1,10 +1,8 @@
-import { Callout } from 'nextra-theme-docs'
+import { Callout } from 'nextra-theme-docs';
 
 # Using the CLI
 
-If you are running a version above 1.6.0 the ```scripts``` folder is deprecated and no longer working and the recommended way
-to interact with tipi from the command line is the all new utility ```runtipi-cli```. The cli is a powerfull tool added to tipi
-that organizes everything in one file. Here is the reference:
+The runtipi-cli is a command line tool that allows you to start, stop, restart, update, and manage tipi from the command line.
 
 Usage:
 
@@ -14,8 +12,6 @@ Usage:
 
 ## Start Command
 
-The start command starts tipi through the command line.
-
 To start tipi run the following command:
 
 ```bash
@@ -23,12 +19,12 @@ sudo ./runtipi-cli start
 ```
 
 <Callout type="info">
-Tipi is run as root in the examples because during the start process it needs to check and eventually change the permissions of some files in the `runtipi` folder. You can run the command without sudo but it is not guaranteed to work.
+  Tipi is run as root in the examples because during the start process it needs to check and
+  eventually change the permissions of some files in the `runtipi` folder. You can run the command
+  without sudo if needed but you may encounter permission issues.
 </Callout>
 
 ## Stop Command
-
-The stop command stop tipi through the command line.
 
 To stop tipi run the following command:
 
@@ -44,7 +40,7 @@ To restart tipi from the command line run this command:
 sudo ./runtipi-cli restart
 ```
 
-## Update 
+## Update
 
 This command updates tipi to the latest version available.
 
@@ -54,38 +50,27 @@ You can update to the latest version with this command:
 sudo ./runtipi-cli update latest
 ```
 
-If you want to specify a specific version to update or downgrade to you can use the command 
-like this:
+If you want to update to a specific version you give the version number as an argument:
 
 ```bash
 sudo ./runtipi-cli update v2.0.7
 ```
 
 <Callout type="warning">
-You can downgrade Tipi to a previous version by running the update command with the version you want to downgrade to.
-However, this is highly discouraged as it may lead to breaking your install. Make sure you know what you are doing.
+  You can downgrade Tipi to a previous version by running the update command with the version you
+  want to downgrade to. However, this is highly discouraged as it may lead to breaking your install.
+  Make sure you know what you are doing.
 </Callout>
-
 
 ## Reset password command
 
-This command is used to reset a forgotten password.
+This command is used to reset a forgotten admin password.
 
-To reset your password run the following command and refresh your tipi webpage
+To reset your password run the following command and visit the tipi rest page at `http://<your-ip>/reset-password`
 it should prompt you to enter your new password.
 
 ```bash
 ./runtipi-cli reset-password
-```
-
-## Clean logs command
-
-This command is used to clean tipi's logs. 
-
-To clean the logs run this command:
-
-```bash
-./runtipi-cli clean-logs
 ```
 
 ## App management command
@@ -108,7 +93,17 @@ This command can be used to start and stop apps from the cli.
 ./runtipi-cli app stop code-server
 ```
 
-## Help command 
+## Debug command
+
+This command is used to display useful information about the tipi installation. It can be used to troubleshoot issues.
+
+To use this command just run this:
+
+```bash
+./runtipi-cli debug
+```
+
+## Help command
 
 This command is used to display help for an other command in runtipi cli.
 
