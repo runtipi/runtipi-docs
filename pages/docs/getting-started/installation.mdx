@@ -53,6 +53,18 @@ If Docker is already installed on your machine, Tipi will use it to run the dash
   occur.
 </Callout>
 
+## VPS users
+
+If you intend to self-host stuff on a VPS consider if it is a good or bad idea. Whether you use Runtipi or not, it is most of the time a bad idea. Except if you put the correct security measures in place.
+
+When you install Runtipi on a VPS it is immediately vulnerable and open to the world through its public IP. The same goes for all apps you will install down the line through their respective ports.
+
+If you still want to run on a VPS, here are a few steps to consider in order to increase your safety:
+
+- Setup a firewall and ensure it is impossible to access a running service from ip:port
+- Install a VPN like tailscale to create a secure and trusted private network to access your apps.
+- If an app needs to be accessed from the public, always use a tunnel and set it up specifically for this app
+
 ## Download and install Tipi
 
 Download the latest version of Tipi:
