@@ -1,12 +1,32 @@
 # Running the CLI locally
 
-While the CLI is not meant to run during development, when developing new features for the CLI, it is useful to run it locally to test your changes.
+## Overview
 
-You can do so by navigating to the `packages/cli` folder and executing the following command:
+During development it is useful to be able to run the cli locally to test any changes you make.
+
+## Requirements
+
+- Rust needs to be installed
+- Git needs to be installed
+
+## Running the cli
+
+You firstly need to clone the cli repository. This can be done with this command:
 
 ```bash
-NODE_ENV=development npx tsx ./src/index.ts <command>
+git clone https://github.com/runtipi/cli
 ```
 
-This will run the CLI using the TypeScript compiler and execute the `index.ts` file with the given command.
-This command is the equivalent of running `./runtipi-cli <command>` on a production instance.
+Then you can run the cli with this command:
+
+```bash
+cargo run
+```
+
+If you need to build the cli you can do so with this command:
+
+```bash
+cargo build
+```
+
+If everything succeeds the cli should be located in `target/debug/runtipi-cli`.

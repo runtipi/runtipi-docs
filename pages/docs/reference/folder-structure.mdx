@@ -1,4 +1,4 @@
-import { Callout, FileTree } from 'nextra-theme-docs'
+import { Callout, FileTree } from 'nextra-theme-docs';
 
 # Folder Structure
 
@@ -6,40 +6,40 @@ In this section, we will describe the folder structure of the project.
 Here is a look at the folder structure after installation:
 
 <FileTree>
-    <FileTree.Folder name="runtipi" defaultOpen>
-        <FileTree.Folder name="apps" />
-        <FileTree.Folder name="app-data" />
-        <FileTree.Folder name="logs" />
-        <FileTree.Folder name="media" defaultClosed>
-            <FileTree.Folder name="data" defaultClosed>
-                <FileTree.Folder name="books" />
-                <FileTree.Folder name="comics" />
-                <FileTree.Folder name="images" />
-                <FileTree.Folder name="movies" />
-                <FileTree.Folder name="music" />
-                <FileTree.Folder name="podcasts" />
-                <FileTree.Folder name="roms" />
-                <FileTree.Folder name="tv" />
-            </FileTree.Folder>
-            <FileTree.Folder name="downloads" defaultClosed>
-                <FileTree.Folder name="watch" />
-                <FileTree.Folder name="completed" />
-                <FileTree.Folder name="incomplete" />
-            </FileTree.Folder>
-            <FileTree.Folder name="torrents" defaultClosed>
-                <FileTree.Folder name="watch" />
-                <FileTree.Folder name="completed" />
-                <FileTree.Folder name="incomplete" />
-            </FileTree.Folder>
-            <FileTree.Folder name="usenet" defaultClosed>
-                <FileTree.Folder name="watch" />
-                <FileTree.Folder name="completed" />
-                <FileTree.Folder name="incomplete" />
-            </FileTree.Folder>
-        </FileTree.Folder>
-        <FileTree.Folder name="repos" />
-        <FileTree.Folder name="state" />
+  <FileTree.Folder name="runtipi" defaultOpen>
+    <FileTree.Folder name="apps" />
+    <FileTree.Folder name="app-data" />
+    <FileTree.Folder name="logs" />
+    <FileTree.Folder name="media" defaultClosed>
+      <FileTree.Folder name="data" defaultClosed>
+        <FileTree.Folder name="books" />
+        <FileTree.Folder name="comics" />
+        <FileTree.Folder name="images" />
+        <FileTree.Folder name="movies" />
+        <FileTree.Folder name="music" />
+        <FileTree.Folder name="podcasts" />
+        <FileTree.Folder name="roms" />
+        <FileTree.Folder name="tv" />
+      </FileTree.Folder>
+      <FileTree.Folder name="downloads" defaultClosed>
+        <FileTree.Folder name="watch" />
+        <FileTree.Folder name="completed" />
+        <FileTree.Folder name="incomplete" />
+      </FileTree.Folder>
+      <FileTree.Folder name="torrents" defaultClosed>
+        <FileTree.Folder name="watch" />
+        <FileTree.Folder name="completed" />
+        <FileTree.Folder name="incomplete" />
+      </FileTree.Folder>
+      <FileTree.Folder name="usenet" defaultClosed>
+        <FileTree.Folder name="watch" />
+        <FileTree.Folder name="completed" />
+        <FileTree.Folder name="incomplete" />
+      </FileTree.Folder>
     </FileTree.Folder>
+    <FileTree.Folder name="repos" />
+    <FileTree.Folder name="state" />
+  </FileTree.Folder>
 </FileTree>
 
 ## Apps
@@ -61,10 +61,10 @@ Each app has it's own folder with the app name. And all the data of the app is s
 The `logs` folder contains all the logs of the apps. The logs are seperated into 3 files
 
 <FileTree>
-    <FileTree.Folder name="logs" defaultOpen>
-        <FileTree.File name="error.log" />
-        <FileTree.File name="app.log" />
-    </FileTree.Folder>
+  <FileTree.Folder name="logs" defaultOpen>
+    <FileTree.File name="error.log" />
+    <FileTree.File name="app.log" />
+  </FileTree.Folder>
 </FileTree>
 
 The `error.log` file contains all the errors that are thrown by the app. The `app.log` file contains all the logs that are printed by the app.
@@ -83,6 +83,4 @@ If add a custom repository in your `settings.json` file, it will be downloaded t
 
 ## State
 
-The `state` folder contains the state of your instance. It contains the `settings.json` file which contains the custom settings of the installation alongside some other files necessary for Tipi to run.
-
-
+The `state` folder contains the state of your instance. It contains the `settings.json` file which contains the custom settings of the installation alongside some other files necessary for runtipi to run.

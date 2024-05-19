@@ -2,7 +2,7 @@ import { Callout } from 'nextra-theme-docs';
 
 # Using the CLI
 
-The runtipi-cli is a command line tool that allows you to start, stop, restart, update, and manage tipi from the command line.
+The runtipi-cli is a command line tool that allows you to start, stop, restart, update, and manage runtipi from the command line.
 
 Usage:
 
@@ -12,21 +12,21 @@ Usage:
 
 ## Start Command
 
-To start tipi run the following command:
+To start runtipi run the following command:
 
 ```bash
 sudo ./runtipi-cli start
 ```
 
 <Callout type="info">
-  Tipi is run as root in the examples because during the start process it needs to check and
+  Runtipi is run as root in the examples because during the start process it needs to check and
   eventually change the permissions of some files in the `runtipi` folder. You can run the command
   without sudo if needed but you may encounter permission issues.
 </Callout>
 
 ## Stop Command
 
-To stop tipi run the following command:
+To stop runtipi run the following command:
 
 ```bash
 sudo ./runtipi-cli stop
@@ -34,7 +34,7 @@ sudo ./runtipi-cli stop
 
 ## Restart Command
 
-To restart tipi from the command line run this command:
+To restart runtipi from the command line run this command:
 
 ```bash
 sudo ./runtipi-cli restart
@@ -42,7 +42,7 @@ sudo ./runtipi-cli restart
 
 ## Update
 
-This command updates tipi to the latest version available.
+This command updates runtipi to the latest version available.
 
 You can update to the latest version with this command:
 
@@ -57,7 +57,7 @@ sudo ./runtipi-cli update v2.0.7
 ```
 
 <Callout type="warning">
-  You can downgrade Tipi to a previous version by running the update command with the version you
+  You can downgrade runtipi to a previous version by running the update command with the version you
   want to downgrade to. However, this is highly discouraged as it may lead to breaking your install.
   Make sure you know what you are doing.
 </Callout>
@@ -66,7 +66,7 @@ sudo ./runtipi-cli update v2.0.7
 
 This command is used to reset a forgotten admin password.
 
-To reset your password run the following command and visit the tipi rest page at `http://<your-ip>/reset-password`
+To reset your password run the following command and visit the runtipi rest page at `http://<your-ip>/reset-password`
 it should prompt you to enter your new password.
 
 ```bash
@@ -95,7 +95,7 @@ This command can be used to start and stop apps from the cli.
 
 ## Debug command
 
-This command is used to display useful information about the tipi installation. It can be used to troubleshoot issues.
+This command is used to display useful information about the runtipi installation. It can be used to troubleshoot issues.
 
 To use this command just run this:
 

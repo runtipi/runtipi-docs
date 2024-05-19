@@ -3,13 +3,16 @@
     "title": "Customize app config"
   },
   "customize-compose-and-traefik": {
-    "title": "Customize tipi compose and traefik config"
+    "title": "Customize runtipi compose and traefik config"
   },
   "expose-your-apps": {
     "title": "Expose your apps"
   },
   "expose-apps-with-cloudflare-tunnels": {
     "title": "Expose apps with cloudflare tunnels"
+  },
+  "dns-challenge-cloudflare": {
+    "title": "Setup a DNS challenge with cloudflare"
   },
   "linking-a-domain-to-your-dashboard": {
     "title": "Linking a domain to your dashboard"

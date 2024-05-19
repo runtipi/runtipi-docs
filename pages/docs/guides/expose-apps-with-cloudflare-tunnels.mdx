@@ -12,15 +12,16 @@ Cloudflare tunnels are available for free for all Cloudflare users.
 
 - A Cloudflare account [sign up here](https://dash.cloudflare.com/sign-up)
 - A domain name
-- A tipi instance running on your local network
+- A runtipi instance running on your local network
 
 ## Use case
 
-You want to expose to the internet the **searxng** instance running on your Tipi.
+You want to expose to the internet the **searxng** instance running on your runtipi.
 
 ## Configuration
 
 <Steps>
+
 ### Add your domain to Cloudflare
 
 In the Cloudflare dashboard, go to the Website tab and click on the **Add site** button.
@@ -51,11 +52,14 @@ Give your tunnel a name and click on **Save tunnel**.
 ### Run the connector on your server
 
 Click on Docker and copy the command presented in the dashboard.
-SSH into your Tipi server and run the command copied from the Cloudflare dashboard.
+SSH into your runtipi server and run the command copied from the Cloudflare dashboard.
 
 <Callout>You can add the `-d` flag to run it in the background. `docker run -d ...`</Callout>
 
 You should now see the tunnel running in the dashboard.
+
+Alternatively you can use the Cloudflare Tunnels app in the app store. Just install it, open the dashboard and copy paste the `cloudflared`
+command that Cloudflare gave you (make sure to remove the `sudo` command).
 
 ### Add a Public hostname to your tunnel
 
@@ -64,7 +68,7 @@ Select your newly created tunnel, **configure** and click on the **Public hostna
 Click on **Add a public hostname**
 
 Fill out the form by entering the subdomain you want (e.g. searxng) and select your domain name from the dropdown.
-In the service section, choose the type **HTTPS** and in URL enter the IP address of your Tipi server.
+In the service section, choose the type **HTTPS** and in URL enter the IP address of your Runtipi server.
 
 In the additional settings section, choose the **No TLS Verfiy** option.
 
@@ -74,9 +78,9 @@ In the additional settings section, choose the **No TLS Verfiy** option.
 
 Click on **Save hostname**.
 
-### Expose your app on Tipi
+### Expose your app on runtipi
 
-Open your Tipi dashboard and search for the app you want to expose.
+Open your runtipi dashboard and search for the app you want to expose.
 Make sure the app is stopped and click on the settings button.
 
 Enable the **Expose app** option and enter the subdomain you chose earlier.

@@ -1,4 +1,4 @@
-import { Callout, FileTree } from 'nextra-theme-docs'
+import { Steps, Callout, FileTree } from 'nextra-theme-docs';
 
 # Customize app config
 
@@ -9,7 +9,7 @@ In this guide, we'll show you how to customize the configuration of an app by ov
 ## Example use cases
 
 - Set `Pihole` to listen on a custom IP address
-- Mount an existing volume on your host into a media app such as `Jellyfin`. *By default, media apps will only be able to see files within `runtipi/media`, but you can add other volumes.*
+- Mount an existing volume on your host into a media app such as `Jellyfin`. _By default, media apps will only be able to see files within `runtipi/media`, but you can add other volumes._
 
 An alternative approach to mounting a volume into an app would be to symlink your host volume into `runtipi/media`. However, that would make it visible to all apps that mount the `media` folder, which may not be desirable.
 
@@ -32,7 +32,12 @@ From this, we know that we need to set the `NETWORK_INTERFACE` variable.
   Don't edit the files in the `apps` folder directly; they will be overwritten on update.
 </Callout>
 
-1. Create `user-config` folder within `runtipi` and a folder for each app:
+<Steps>
+
+### Create the folders
+
+Create `user-config` folder within `runtipi` and a folder for each app:
+
 ```bash
 cd runtipi
 mkdir user-config
@@ -40,7 +45,9 @@ mkdir user-config/jellyfin
 mkdir user-config/pihole
 ```
 
-2. Create a `docker-compose.yml` for `jellyfin` and add this content:
+### Create the custom config
+
+Create a `docker-compose.yml` for `jellyfin` and add this content:
 
 ```bash
 touch user-config/jellyfin/docker-compose.yml
@@ -48,18 +55,17 @@ nano user-config/jellyfin/docker-compose.yml
 ```
 
 ```yml
-version: "3.7"
 services:
   jellyfin:
     volumes:
       - /cellar:/cellar
 ```
 
-<Callout>
-  Replace `/cellar` with the volume you want to mount.
-</Callout>
+<Callout>Replace `/cellar` with the volume you want to mount.</Callout>
 
-3. Create an `app.env` for `pihole` and add this content:
+### Modify the environment files
+
+Create an `app.env` for `pihole` and add this content:
 
 ```bash
 touch user-config/pihole/app.env
@@ -70,28 +76,28 @@ nano user-config/pihole/app.env
 NETWORK_INTERFACE=10.20.0.53
 ```
 
-<Callout>
-  Replace `10.20.0.53` with the IP address you want pihole to listen on.
-</Callout>
+<Callout>Replace `10.20.0.53` with the IP address you want pihole to listen on.</Callout>
 
-4. You should end up with a structure like this:
+### Check your file structure
+
+You should end up with a structure like this:
 
 <FileTree>
-    <FileTree.Folder name="runtipi" defaultOpen>
-        <FileTree.Folder name="app-data" />
-        <FileTree.Folder name="apps" />
-        <FileTree.Folder name="user-config" defaultOpen>
-            <FileTree.Folder name="jellyfin" defaultOpen>
-                <FileTree.File name="docker-compose.yml" />
-            </FileTree.Folder>
-            <FileTree.Folder name="pihole" defaultOpen>
-                <FileTree.File name="app.env" />
-            </FileTree.Folder>
-        </FileTree.Folder>
+  <FileTree.Folder name="runtipi" defaultOpen>
+    <FileTree.Folder name="app-data" />
+    <FileTree.Folder name="apps" />
+    <FileTree.Folder name="user-config" defaultOpen>
+      <FileTree.Folder name="jellyfin" defaultOpen>
+        <FileTree.File name="docker-compose.yml" />
+      </FileTree.Folder>
+      <FileTree.Folder name="pihole" defaultOpen>
+        <FileTree.File name="app.env" />
+      </FileTree.Folder>
     </FileTree.Folder>
+  </FileTree.Folder>
 </FileTree>
 
-5. Restart the apps and test:
+### Restart the apps and test
 
 ```bash
 ./runtipi-cli app stop jellyfin
@@ -99,6 +105,8 @@ NETWORK_INTERFACE=10.20.0.53
 ./runtipi-cli app start jellyfin
 ./runtipi-cli app start pihole
 ```
+
+</Steps>
 
 - Test Jellyfin by opening the app and configuring a library. You should now see your mounted volume.
 - Test Pihole with a DNS query to the new IP address:
