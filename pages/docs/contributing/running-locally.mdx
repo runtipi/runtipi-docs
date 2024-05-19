@@ -10,7 +10,7 @@ In this guide we will show you how to run runtipi locally on your machine. This 
 
 ## Prepare
 
-Once you have forked the repo and cloned it on your local machine you can start to prepare the environment.
+Once you have forked the repository and cloned it on your local machine you can start to prepare the environment.
 
 ## Install dependencies
 
@@ -20,7 +20,7 @@ runtipi uses `pnpm` as a package manager and monorepo orchestrator. Install it w
 Install the project dependencies
 `pnpm i`
 
-## Edit the envs
+## Edit the environment variables
 
 You need to copy `.env.exemple` to `.env` and edit there following env
 
@@ -32,11 +32,11 @@ You need to copy `.env.exemple` to `.env` and edit there following env
 1. Start the app with `npm run start:dev` from the root folder
 2. Visit `localhost` in your browser
 
-## Using your own appstore repo
+## Using your own appstore repository
 
 You can change the repository runtipi is using to retrieve the appstore in order to test new apps you added.
 
-Create a `settings.json` file in the `state` folder (`runtipi/state/settings.json`) containing the URL of your repo and restart runtipi.
+Create a `settings.json` file in the `state` folder (`runtipi/state/settings.json`) containing the URL of your repository and restart runtipi.
 
 ```json
 {
@@ -44,7 +44,7 @@ Create a `settings.json` file in the `state` folder (`runtipi/state/settings.jso
 }
 ```
 
-If you need to be on a different branch than the main one in your repo, write your repo URL using the following notation :
+If you need to be on a different branch than the main one in your repository, write your repository URL using the following notation :
 
 ```json
 {
