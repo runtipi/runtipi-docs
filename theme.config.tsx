@@ -53,16 +53,13 @@ const config: DocsThemeConfig = {
       },
     };
   },
-  nextThemes: {
-    forcedTheme: 'light',
-  },
   logo: (
     <div className="flex">
       <Image src={logo} alt="Tipi logo" className="h-6 w-6" />
       <span className="ml-2 font-bold">Runtipi</span>
     </div>
   ),
-  darkMode: false,
+  darkMode: true,
   project: {
     link: 'https://github.com/runtipi/runtipi',
   },
