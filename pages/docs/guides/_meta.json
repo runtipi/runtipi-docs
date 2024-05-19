@@ -9,10 +9,10 @@
     "title": "Expose your apps"
   },
   "expose-apps-with-cloudflare-tunnels": {
-    "title": "Expose apps with cloudflare tunnels"
+    "title": "Expose your apps using Cloudflare tunnels"
   },
   "dns-challenge-cloudflare": {
-    "title": "Setup a DNS challenge with cloudflare"
+    "title": "Setup a DNS challenge with Cloudflare"
   },
   "linking-a-domain-to-your-dashboard": {
     "title": "Linking a domain to your dashboard"
@@ -27,6 +27,6 @@
     "title": "Backup and restore"
   },
   "auto-update-with-cron": {
-    "title": "Auto update with cron"
+    "title": "Auto update your instance with cron"
   }
 }
