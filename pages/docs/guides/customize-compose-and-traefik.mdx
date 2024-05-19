@@ -156,8 +156,11 @@ Your settings file will look something like this:
 
 Here you just need to change the `"persistTraefikConfig"` from `false` to `true`, then you can save and exit with `Ctrl+X` then `y` and `Enter`.
 
-Now runtipi will not reset the traefik config, you can always change it back to `true` to reset your changes. So now that our config is persistent we
-can safely make our changes by opening the `traefik/traefik.yml` file and changing this:
+Now runtipi will not reset the traefik config, you can always change it back to `true` to reset your changes.
+
+### Edit the traefik config
+
+So now that our config is persistent we can safely make our changes by opening the `traefik/traefik.yml` file and changing this:
 
 ```yaml
 log:
