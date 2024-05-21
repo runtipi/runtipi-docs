@@ -6,7 +6,7 @@ In this guide, we'll show you how to customize the default docker compose file o
 
 <Callout type="warning">
   This guide is for advanced users who are familiar with docker and traefik. If you break the config
-  we won't be able to help you.
+  we won't be able to help you. You will probably face issues if the main runtipi config is changed.
 </Callout>
 
 ## Example use cases
@@ -21,7 +21,7 @@ In this example we will expose the traefik dashboard by editing the main runtipi
 Firstly we need to figure out what port traefik dashboard uses (which is 8080) and what is the name of the docker container of traefik (which we can learn from the `docker-compose.yml`) which is `runtipi-reverse-proxy` in this case.
 
 <Callout>
-  Don't edit the `docker-compose.yml` file directly because it will be overwritten in every restart
+  Don't edit the `docker-compose.yml` file directly because it will be overwritten on every restart
   of runtipi.
 </Callout>
 
@@ -66,7 +66,7 @@ You should have this file structure:
 ./runtipi-cli restart
 ```
 
-After restarting you should be able to see the traefik dashboard by visiting [localhost](http://127.0.0.1:8080) (in your runtipi server)
+After restarting you should be able to see the traefik dashboard by visiting **SERVER-IP:8080**
 
 </Steps>
 
@@ -118,23 +118,14 @@ log:
   level: ERROR
 ```
 
-By default if you try to edit the traefik config it will be overwritten on every restart. To keep the config we just need to change a small thing in the settings
-which can be done easily with 2 steps.
+By default if you try to edit the traefik config it will be overwritten on every restart. To keep the config we need to change a setting
+which can be done easily by editing the `settings.json` file.
 
 <Steps>
 
-### Open the runtipi settings file
-
-Open the `state/settings.json` file with your prefered editor. We will use `nano` in this example.
-
-```bash
-nano state/setting.json
-```
-
-Make sure this is performed within the `runtipi` directory.
-
 ### Modify the the settings
 
+Open the `runtipi/state/settings.json` file with your prefered editor.
 Your settings file will look something like this:
 
 ```json
@@ -154,13 +145,10 @@ Your settings file will look something like this:
 }
 ```
 
-Here you just need to change the `"persistTraefikConfig"` from `false` to `true`, then you can save and exit with `Ctrl+X` then `y` and `Enter`.
+Here you need to change the `"persistTraefikConfig"` from `false` to `true`.
 
-Now runtipi will not reset the traefik config, you can always change it back to `true` to reset your changes.
-
-### Edit the traefik config
-
-So now that our config is persistent we can safely make our changes by opening the `traefik/traefik.yml` file and changing this:
+Now runtipi will keep your custom traefik config on start, you can always change it back to `true` to reset your changes. So now that our config is persistent we
+can safely make our changes by opening the `traefik/traefik.yml` file and changing this:
 
 ```yaml
 log:
@@ -174,11 +162,9 @@ log:
   level: DEBUG
 ```
 
-Now you can save the file (`Ctrl+X` then `y` and `Enter` if you are using nano).
-
 ### Test the changes
 
-Lastly restart runtipi with this command:
+Finally restart runtipi:
 
 ```bash
 sudo ./runtipi-cli restart
