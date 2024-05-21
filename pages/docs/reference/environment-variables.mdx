@@ -38,3 +38,17 @@ You can change some values by using [custom settings](/docs/getting-started/cust
 | `GUEST_DASHBOARD`          | Whether the server will have a guest dashboard.                                                                  |
 | `ALLOW_ERROR_MONITORING`   | Whether the server will send error reports to runtipi developers.                                                |
 | `PERSIST_TRAEFIK_CONFIG`   | Do not replace the traefik config in every restart                                                               |
+
+## App specific environment variables
+
+Each app will have access to the previously mentioned environment variables as well as the following ones:
+
+| Variable       | Description                                                          |
+| -------------- | -------------------------------------------------------------------- |
+| `APP_PORT`     | The port used by the app.                                            |
+| `APP_ID`       | The ID of the app.                                                   |
+| `APP_DATA_DIR` | The path where the app data is stored.                               |
+| `APP_EXPOSED`  | Whether the app is exposed by traefik.                               |
+| `APP_DOMAIN`   | The domain of the app. FQDN if exposed otherwise ip:port.            |
+| `APP_HOST`     | Same as `APP_DOMAIN`. But without the port in non-exposed scenarios. |
+| `APP_PROTOCOL` | The protocol used by the app. (http or https)                        |

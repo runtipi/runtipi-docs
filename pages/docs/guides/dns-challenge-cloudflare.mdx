@@ -1,0 +1,106 @@
+import { Steps, Callout } from 'nextra-theme-docs';
+import Image from 'next/image';
+
+# Setup a DNS challenge with Cloudflare
+
+## Overview
+
+In this guide, we will show you how to set up your runtipi instance with a dns challenge and cloudflare. By default runtipi uses an http challenge to obtain ssl certificates requiring you to expose the dashboard to the internet which is a very
+bad security practice. With a DNS challenge you can get trusted ssl certificates without needing to expose anything to the internet.
+
+## Requirements
+
+- A runtipi instace
+- A domain name connected to cloudflare
+
+## Setting up the DNS challenge
+
+So lets get started setting up the DNS challenge.
+
+<Steps>
+
+### Set up the DNS records
+
+To begin with we need to set up two DNS records in our cloudflare dashboard, one should look like this:
+
+<br />
+<Image src="/images/cloudflare-dns-challenge/record-1.png" width={1470} height={565} />
+
+And the other one should like this:
+
+<br />
+<Image src="/images/cloudflare-dns-challenge/record-2.png" width={1467} height={571} />
+
+<Callout>Make sure to replace `10.0.0.15` with the ip adress of your runtipi server.</Callout>
+
+### Obtain your API key
+
+Now we need to get the api key that traefik is going to use to get the certificates. In order to do that go to [this](https://dash.cloudflare.com/profile/api-tokens) page
+of the cloudflare dashboard and click `Create token`. Then select the `Edit zone DNS` template. The only thing you need to do is select your domain in
+the `Zone Resources` section. Finally click `Continue to summary` and then `Create token`, make sure to save that token since you can only view it once.
+
+### Create the custom compose file
+
+We need to give the token to traefik in order to do that we need to create a custom compose with the following contents:
+
+```yaml
+version: '3.9'
+services:
+  runtipi-reverse-proxy:
+    environment:
+      - CF_DNS_API_TOKEN=yourtoken
+```
+
+Make sure to replace the `yourtoken` part with the actual token you got in the previous step.
+
+<Callout>
+  If you don't know how to create a custom compose file you can check the guide
+  [here](customize-compose-and-traefik.mdx).
+</Callout>
+
+### Edit the traefik config
+
+Now it is time to edit the traefik config. You need to replace this part:
+
+```yaml
+certificatesResolvers:
+  myresolver:
+    acme:
+      email: acme@thisprops.com
+      storage: /shared/acme.json
+      httpChallenge:
+        entryPoint: web
+```
+
+To this:
+
+```yaml
+certificatesResolvers:
+  myresolver:
+    acme:
+      email: email@example.com
+      storage: /shared/acme.json
+      dnsChallenge:
+        provider: cloudflare
+        delayBeforeCheck: 0
+```
+
+Make sure to replace the `email@example.com` with your actual email adress so Let's Encrypt can notify you if something is wrong.
+
+<Callout>
+  Make sure that you have enabled the option to persist the traefik config. If you are not sure how
+  to do it check the guide [here](customize-compose-and-traefik.mdx).
+</Callout>
+
+### Restart runtipi and test
+
+Finally we need to restart runtipi with this command:
+
+```bash
+sudo ./runtipi-cli restart
+```
+
+After that you can go to your runtipi dashboard and try to expose an app, after you expose it traefik should automatically obtain
+an ssl certificate from Let's Encrypt, be patient though, it may take up to 2 minutes to complete.
+
+</Steps>

@@ -11,7 +11,7 @@ type App = {
 
 export const getStaticProps = async () => {
   const apps: Record<string, App> = {};
-  // fetch apps from app store repo
+  // fetch apps from app store repository
   const res = await fetch('https://api.github.com/repos/runtipi/runtipi-appstore/contents/apps');
 
   const data = await res.json();

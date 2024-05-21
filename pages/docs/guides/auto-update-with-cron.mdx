@@ -1,4 +1,4 @@
-import { Steps, Callout } from 'nextra-theme-docs'
+import { Steps, Callout } from 'nextra-theme-docs';
 
 # Auto update your instance with cron
 
@@ -8,7 +8,9 @@ It will check periodically if a new minor or security release is available and i
 Thanks to [DansNewLegs](https://github.com/DansNewLegs) for putting this guide together.
 
 ## Setup
+
 <Steps>
+
 ### Create the auto-update script
 
 Create a new script file in a new `runtipi/scripts` folder called `auto-update.sh` and paste the following code:
@@ -53,7 +55,7 @@ if [[ $major_version_match -eq 0 ]] && [[ "$tag_name" > "$current_version" ]]; t
     if [ ! -d "$runtipi_path/backups" ]; then
         mkdir -p $runtipi_path/backups
     fi
-    tar -czvf runtipi-backup-$current_version.tar.gz --exclude=media --exclude=backups * 
+    tar -czvf runtipi-backup-$current_version.tar.gz --exclude=media --exclude=backups *
     mv runtipi-backup-$current_version.tar.gz $runtipi_path/backups
     echo "Starting update"
     $runtipi_path/runtipi-cli update latest
@@ -65,7 +67,7 @@ fi
 This script will check if a new release is available and if so, it will backup your current installation and update to the latest release.
 
 <Callout type="warning">
-    Make sure to change the `runtipi_path` variable to the path of your runtipi installation.
+  Make sure to change the `runtipi_path` variable to the path of your runtipi installation.
 </Callout>
 
 ### Make the script executable

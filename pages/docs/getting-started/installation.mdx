@@ -4,7 +4,7 @@ import { Callout } from 'nextra-theme-docs';
 
 ## Introduction
 
-This guide will help you install Tipi on your server. Make sure your server is secured and you have followed basic security practices before installing Tipi. (e.g. firewall, ssh keys, root access, etc.) Here is a [good guide](https://www.tecmint.com/initial-ubuntu-server-setup-guide/) to follow.
+This guide will help you install runtipi on your server. Make sure your server is secured and you have followed basic security practices before installing Tipi. (e.g. firewall, ssh keys, root access, etc.) Here is a [good guide](https://www.tecmint.com/initial-ubuntu-server-setup-guide/) to follow.
 
 ## Hardware Requirements
 
@@ -28,7 +28,7 @@ Our software uses containerization and has the same hardware requirements as Doc
 - arm64
 
 <Callout>
-  Not all apps are supported in the arm64 architecture, tipi will auto hide apps that are not
+  Not all apps are supported in the arm64 architecture, runtipi will auto hide apps that are not
   supported by your architecture.
 </Callout>
 
@@ -37,12 +37,11 @@ Our software uses containerization and has the same hardware requirements as Doc
 Ubuntu 18.04 LTS or higher is recommended. However other major Linux distribution are supported but may lead to installation issues.
 Please file an issue if you encounter one.
 
-If Docker is already installed on your machine, Tipi will use it to run the dashboard. Otherwise, it will install Docker for you.
+If Docker is already installed on your machine, runtipi will use it to run the dashboard. Otherwise, it will install Docker for you.
 
 <Callout type="warning">
-  If you already have docker installed make sure to have the docker compose plugin installed.
-  <br />
-  Run `docker compose version` to check if it is installed. Instructions to install it can be found
+  If you already have docker installed make sure to have the docker compose plugin installed. Run
+  `docker compose version` to check if it is installed. Instructions to install it can be found
   [here](https://docs.docker.com/compose/install/linux/).
 </Callout>
 
@@ -65,9 +64,9 @@ If you still want to run on a VPS, here are a few steps to consider in order to 
 - Install a VPN like tailscale to create a secure and trusted private network to access your apps.
 - If an app needs to be accessed from the public, always use a tunnel and set it up specifically for this app
 
-## Download and install Tipi
+## Download and install runtipi
 
-Download the latest version of Tipi:
+Download the latest version of runtipi:
 
 ```bash
 curl -L https://setup.runtipi.io | bash
@@ -81,7 +80,7 @@ curl -L https://raw.githubusercontent.com/runtipi/runtipi/master/scripts/install
 
 ## Update
 
-This command updates tipi to the latest version available.
+This command updates runtipi to the latest version available.
 
 You can update to the latest version with this command:
 
@@ -97,6 +96,6 @@ sudo ./runtipi-cli update v2.0.7
 ```
 
 <Callout type="warning">
-  You can downgrade Tipi to a previous version by running the update command with the version you
+  You can downgrade runtipi to a previous version by running the update command with the version you
   want to downgrade to. However, this is highly discouraged as it may lead to breaking your install.
 </Callout>

@@ -1,30 +1,34 @@
-import { Callout, FileTree } from 'nextra-theme-docs';
+import { Steps, Callout, FileTree } from 'nextra-theme-docs';
 
 # Adding a new app
 
 <Callout>In order to proceed you should be familiar working with the Terminal and Git.</Callout>
 
-In this guide, we will explain how to add a new app to the Runtipi App Store. The process is pretty simple and should take you less than 20 minutes.
+In this guide, we will show you how to add a new app to the Runtipi App Store. The process is pretty simple and should take you less than 20 minutes.
 
-### Prerequisites
+## Prerequisites
 
 - The app you want to add is free and open-source (or at least source available with a permissive license for personal use)
 - The app you want to add has an official and maintained docker image
 
-## Fork the repo
+## Let's add the app
 
-In order to open a pull request you need to fork the repo. Visit the official [App Store repo](https://github.com/runtipi/runtipi-appstore) and start by clicking the "Fork" button in the upper right corner of the page.
-This will create a new repository with your name and an identical structure to the original repo.
+<Steps>
 
-## Clone the repo locally
+### Fork the repository
 
-On your computer clone the repo you just forked.
+In order to open a pull request you need to fork the repository. Visit the official [App Store repository](https://github.com/runtipi/runtipi-appstore) and start by clicking the "Fork" button in the upper right corner of the page.
+This will create a new repository with your name and an identical structure to the original repository.
+
+### Clone the repository locally
+
+On your computer clone the repository you just forked.
 
 ```bash
 git clone https://<your-github-username>/runtipi/runtipi-appstore
 ```
 
-## Create a new branch for your app
+### Create a new branch for your app
 
 Navigate to the repoisitory you just cloned.
 
@@ -38,122 +42,69 @@ Create a new branch for your app.
 git checkout -b app/<app-name>
 ```
 
-## Create the app files
+### Create the app files
 
-Each app requires at least the following files:
+Each app requires at least these files:
 
 - A `docker-compose.yml` file to run your app
 - A `config.json` file to configure your app
 - A description in markdown format
-- A logo in jpg format (512 x 512px)
+- A logo in jpg format `512x512` pixels)
 
-Inside the repo open the `apps` folder and create a new folder for your app. The name should be the same as the app name without spaces or capital letters.
+Inside the repository open the `apps` folder and create a new folder for your app. The name should be the same as the app name without spaces or capital letters.
 
-Create a new `config.json` file inside the newly create folder
+#### The `config.json` file
+
+Create a new `config.json` file inside the newly created folder:
 
 ```json
 {
   "name": "My super app",
+  "id": "my-super-app",
   "available": true,
-  "port": 8100,
-  "exposable": true, # Wether the app can be exposed via a domain name
-  "id": "my-app", # This should be the same name as the folder
-  "description": "", # Long description of the app
-  "tipi_version": 1, # Always 1 if you are adding a new app
-  "version": "1.25.1", # The actual version of the app (not the tipi version)
-  "categories": ["utilities"], # One or more categories for the app
-  "short_desc": "", # Short description of the app
-  "author": "", # Link or name of the author
-  "source": "", # Link for git repo
-  "website": "", # Link to the official website
-  "form_fields": [] # Used to ask for more info to the user before installing. Will be explained further
+  "short_desc": "Its an awesome app!",
+  "author": "me",
+  "port": 8685,
+  "categories": ["development", "ai"],
+  "description": "This app does x thing and y thing.",
+  "tipi_version": 1,
+  "version": "v1.5.7",
+  "source": "https://github.com/me/my-awesome-app",
+  "exposable": true,
+  "supported_architectures": ["arm64", "amd64"]
 }
 ```
 
-<Callout type="warning">
-  Be sure to remove the comments from the example above an that the final content is a valid JSON
-  format. You can easily check for validity in an online tool like [JSONLint](https://jsonlint.com/)
+<Callout>
+  This `config.json` file contains all the minimum required options. Check out the [reference
+  table](/docs/reference/config-json) for all available options.
 </Callout>
 
-Available categories : `utilities`, `network`, `media`, `development`, `automation`, `social`, `utilities`, `photography`, `security`, `featured`, `books`, `data`, `music`, `finance`, `ai`
+Available categories : `utilities`, `network`, `media`, `development`, `automation`, `social`, `utilities`, `photography`, `security`, `featured`, `books`, `data`, `music`, `finance`, `ai`. If you want to add a new category, please open a new issue.
 
-Details for all the options of the `config.json` file:
-
-| Option                      | Description                                                                                                                                                                                                                       | Example value                                                                                                                                                                                                                     |
-| --------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **name**                    | Name of the app                                                                                                                                                                                                                   | Nextcloud                                                                                                                                                                                                                         |
-| **id**                      | This should be the same name as the folder                                                                                                                                                                                        | nextcloud                                                                                                                                                                                                                         |
-| **available**               | If set to false, the app will not be available in the app store                                                                                                                                                                   | true                                                                                                                                                                                                                              |
-| **short_desc**              | Short description of the app                                                                                                                                                                                                      | Nextcloud is a suite of client-server software for creating and using file hosting services.                                                                                                                                      |
-| **author**                  | Link or name of the original author of the app                                                                                                                                                                                    | https://nextcloud.com                                                                                                                                                                                                             |
-| **port**                    | Port used by the app. This port will be exposed to the host.                                                                                                                                                                      | 8100                                                                                                                                                                                                                              |
-| **categories**              | One or more categories for the app                                                                                                                                                                                                | ["utilities", "network"]                                                                                                                                                                                                          |
-| **description**             | Long description of the app                                                                                                                                                                                                       | Nextcloud is a suite of client-server software for creating and using file hosting services. Nextcloud is free and open-source, which means that anyone is allowed to install and operate it on their own private server devices. |
-| **tipi_version**            | Always 1 if you are adding a new app. Increment this number if you are updating an existing app                                                                                                                                   | 1                                                                                                                                                                                                                                 |
-| **version**                 | The actual version of the app (not the tipi version)                                                                                                                                                                              | 1.25.1                                                                                                                                                                                                                            |
-| **source**                  | Link for git repo                                                                                                                                                                                                                 | https://github.com/nextcloud/docker                                                                                                                                                                                               |
-| **website**                 | Link to the official website                                                                                                                                                                                                      | https://nextcloud.com                                                                                                                                                                                                             |
-| **exposable**               | If set to true, the app will allow the user to expose it via a domain name.                                                                                                                                                       | true                                                                                                                                                                                                                              |
-| **force_expose**            | If set to true, the app will require a domain name.                                                                                                                                                                               | true                                                                                                                                                                                                                              |
-| **generate_vapid_keys**     | If set to true, the app will generate VAPID keys for web push notifications. `VAPID_PUBLIC_KEY` and `VAPID_PRIVATE_KEY` will be available as environment variables                                                                | true                                                                                                                                                                                                                              |
-| **url_suffix**              | If set, the app will be accessible at `https://<your-domain>/<url_suffix>`                                                                                                                                                        | my-app                                                                                                                                                                                                                            |
-| **https**                   | If set to true, the app will be accessible via https only.                                                                                                                                                                        | true                                                                                                                                                                                                                              |
-| **no_gui**                  | Set to true for apps with no GUI. Open button will be hidden                                                                                                                                                                      | true                                                                                                                                                                                                                              |
-| **supported_architectures** | If the app is only available for a specific architecture, you can specify it here. If not given, app will be available for all architectures                                                                                      | ["arm64", "amd64"]                                                                                                                                                                                                                |
-| **uid**, **gid**            | These parameters allow you to give a specific set of permission for the app's data folder. Runtipi will automatically chown the data directory with the provided gid and uid. Both options need to be specified in order to apply | 1000                                                                                                                                                                                                                              |
-
-If you want to add a new category, please open a new issue.
-
-When choosing a port, please make sure that it is not in use already. You can check [tipi.community/app-db](https://tipi.community/app-db) for an updated list. Feel free to let us know if there are any missing ones!
-
-In the same folder, create a `docker-compose.yml` file with your app config.
-
-```yml
-version: '3.9'
-services:
-  my-app: # Should be exact same name as "id" field in config.json
-    container_name: my-app # Should be exact same name as "id" field in config.json
-    image: my-app:1.0.0 # Try to avoid "latest" tag. As it may break configs in the future.
-    environment:
-      - TZ=${TZ} # Can use any env variable. List in runtipi/templates/env-sample
-    volumes:
-      - ${APP_DATA_DIR}/data/config:/config # Always start the path with ${APP_DATA_DIR}. This will put all data inside app-data/my-app/data
-      - ${APP_DATA_DIR}/data/projects:/projects
-    ports:
-      - ${APP_PORT}:8443
-    restart: unless-stopped
-    networks:
-      - tipi_main_network
-```
-
-You'll also need to create a `metadata` folder and inside put the following files:
-
-- `description.md` - Long description of the app in markdown format. (see other apps for inspiration)
-- `logo.jpg` - Logo of the app in jpg format (512 x 512px) make sure the logo looks good in the dashboard
-
-## User defined environment variables
+When choosing a port, please make sure that it is not in use already. You can check by using the search feature in your editor (for example the search icon on Visual Studio Code). You can also visit the
+[App Store repository](https://github.com/runtipi/runtipi-appstore) and look the README.md file for the list of used ports for each app.
 
 Sometimes an app is requiring more info to run it such as passwords or username. You can leverage the `form_fields` property in the `config.json` file to ask such information. Let's take for example Nextcloud. The image requires a username and password. We can simply add two fields in the config.json that will be presented to the user before installing.
 
 ```json
 {
-  ...
   "form_fields": [
     {
-        "type": "text",
-        "label": "Username",
-        "max": 50,
-        "min": 3,
-        "required": true,
-        "env_variable": "NEXTCLOUD_ADMIN_USER"
+      "type": "text",
+      "label": "Username",
+      "max": 50,
+      "min": 3,
+      "required": true,
+      "env_variable": "NEXTCLOUD_ADMIN_USER"
     },
     {
-        "type": "password",
-        "label": "Password",
-        "max": 50,
-        "min": 3,
-        "required": true,
-        "env_variable": "NEXTCLOUD_ADMIN_PASSWORD"
+      "type": "password",
+      "label": "Password",
+      "max": 50,
+      "min": 3,
+      "required": true,
+      "env_variable": "NEXTCLOUD_ADMIN_PASSWORD"
     }
   ]
 }
@@ -173,19 +124,31 @@ You can choose between different types of fields. The app will automatically val
 | **random**   | Generate a random value for the user | 2m3ffc0923rk93df9023f9       |
 | **boolean**  | A checkbox                           | true or false                |
 
-You can also define a min and max length of input with the corresponding properties.
-The `env_variable` property is the name of the variable you'll use in your `docker-compose.yml` file. Be sure to have a unique name.
+Here is also a table of what a `form_field` object requires:
 
-<Callout type="info">
+| Name              | Description                                                            | Example value                              | Required |
+| ----------------- | ---------------------------------------------------------------------- | ------------------------------------------ | -------- |
+| **type**          | The type of the form field to use, see above.                          | text                                       | yes      |
+| **label**         | The label to show the user.                                            | Nextcloud Username                         | yes      |
+| **hint**          | A small hint to show the user.                                         | The username you want to use for nextcloud | false    |
+| **placeholder**   | A placeholder for the form field                                       | user                                       | false    |
+| **default**       | Add a default value, used only if the required option is set to false  | user                                       | false    |
+| **regex**         | Use a reggex pattern to verify the user input                          | ^[0-9]+.[0-9]+.[0-9]+$                     | false    |
+| **pattern_error** | The error to show when the regex pattern validation fails              | Invalid username                           | false    |
+| **min**           | The minium length for a text or password input                         | 5                                          | false    |
+| **max**           | The maximum length for a text or password input                        | 100                                        | false    |
+| **required**      | Wheter the form field is required or not                               | true                                       | yes      |
+| **env_variable**  | The name of the variable you'll use in your `docker-compose.yml` file. | NEXTCLOUD_USERNAME                         | yes      |
+| **options**       | Options for multiple select                                            | See bellow                                 | false    |
+
+<Callout>
   When using the field type random for a password or secret, the min value will be used to determine
   the length of the string. If the min value is omitted the default length is 32 characters.
 </Callout>
 
-So if we take the Nextcloud example again, this is how you would use the `form_fields` inside your compose file.
+Here is how to use the form fields in your docker compose file:
 
-```yml
-version: '3.7'
-
+```yaml
 services:
   nextcloud:
     container_name: nextcloud
@@ -200,28 +163,9 @@ services:
       - NEXTCLOUD_ADMIN_PASSWORD=${NEXTCLOUD_ADMIN_PASSWORD}
 ```
 
-`NEXTCLOUD_ADMIN_USER` and `NEXTCLOUD_ADMIN_PASSWORD` are coming from the user inputs.
+`NEXTCLOUD_ADMIN_USER` and `NEXTCLOUD_ADMIN_PASSWORD` are coming from the user inputs example above.
 
-### Regex validation
-
-You can validate a user input against a regex:
-
-```json
-{
-  "env_variable": "version",
-  "label": "Version",
-  "pattern_error": "Version must be in the format x.y.z",
-  "regex": "^[0-9]+.[0-9]+.[0-9]+$",
-  "required": true,
-  "type": "text"
-}
-```
-
-The regex will be tested against the user input. If it doesn't match, the user will see the error message defined in `pattern_error`.
-
-### Multi select
-
-You can also define a multi select field. This will be rendered as a dropdown in the UI.
+Now let's take a look at the `options` option in the form fields, this will be rendered as dropdown in the UI. You can use them like this:
 
 ```json
 {
@@ -237,7 +181,74 @@ You can also define a multi select field. This will be rendered as a dropdown in
 }
 ```
 
-## Default data folder
+#### The `docker-compose.yml` file
+
+In the same folder, create a `docker-compose.yml` file with your app config.
+
+```yml
+version: "3.9"
+services:
+  my-app: # Should be exact same name as "id" field in config.json
+    container_name: my-app # Should be exact same name as "id" field in config.json
+    image: my-app:1.0.0 # Try to avoid "latest" tag. As it may break configs in the future.
+    restart: unless-stopped # Do not change this
+    environment:
+      - TZ=${TZ} # Can use any env variable. See "environment variables" section in the docs
+    volumes:
+      - ${APP_DATA_DIR}/data/config:/config # Always start the path with ${APP_DATA_DIR}/data/. This will put all data inside app-data/my-app/data
+      - ${APP_DATA_DIR}/data/projects:/projects
+    ports:
+      - ${APP_PORT}:8443
+    restart: unless-stopped
+    networks:
+      - tipi_main_network # That should not be changed
+    labels: # Use your editors search and replace feature to replace all instances of "myapp" with your app name in the traefik labels
+      # Main
+      traefik.enable: true
+      traefik.http.middlewares.myapp-web-redirect.redirectscheme.scheme: https
+      traefik.http.services.myapp.loadbalancer.server.port: 8443 # Should be the same as the app internal port so for this example 9443
+      # Web
+      traefik.http.routers.myapp-insecure.rule: Host(`${APP_DOMAIN}`)
+      traefik.http.routers.myapp-insecure.entrypoints: web
+      traefik.http.routers.myapp-insecure.service: myapp
+      traefik.http.routers.myapp-insecure.middlewares: myapp-web-redirect
+      # Websecure
+      traefik.http.routers.myapp.rule: Host(`${APP_DOMAIN}`)
+      traefik.http.routers.myapp.entrypoints: websecure
+      traefik.http.routers.myapp.service: myapp
+      traefik.http.routers.myapp.tls.certresolver: myresolver
+      # Local domain
+      traefik.http.routers.myapp-local-insecure.rule: Host(`myapp.${LOCAL_DOMAIN}`)
+      traefik.http.routers.myapp-local-insecure.entrypoints: web
+      traefik.http.routers.myapp-local-insecure.service: myapp
+      traefik.http.routers.myapp-local-insecure.middlewares: myapp-web-redirect
+      # Local domain secure
+      traefik.http.routers.myapp-local.rule: Host(`myapp.${LOCAL_DOMAIN}`)
+      traefik.http.routers.myapp-local.entrypoints: websecure
+      traefik.http.routers.myapp-local.service: myapp
+      traefik.http.routers.myapp-local.tls: true
+```
+
+If your app requires different docker-compose files for different architectures, you can use the following naming convention:
+
+```bash
+docker-compose.arm64.yml
+```
+
+If the user is running on an arm64 architecture, this file will be used instead of the default `docker-compose.yml`.
+
+#### The `metadata/description.md` file
+
+Here is located the long description of the app in markdown (html is supported too), usually a copy of the readme provided by the app's author.
+Make sure that when using images they are coming from github or an image service since tipi doesn't support loading images from local storage in the description.
+
+#### The `metadata/logo.jpg` file
+
+That's a simple logo of the app in `.jpg` format. In order for the app to look good make sure to use an image of `512x512` pixels and that it
+of course looks good in the dashboard. Additionally if you can it would be nice to try to avoid the white-background-logo format since it makes the app look
+bad in the appstore.
+
+#### The data folder
 
 If your app requires default files or configuration, you can easily provide those by creating a `data` folder beside the app config.
 
@@ -270,8 +281,6 @@ my-app:
     - ${APP_DATA_DIR}/data:/var/lib/config # Will mount the folder with `anything.conf` inside
 ```
 
-### Using a template in your data folder
-
 If one of your files requires some dynamic values, you can use a template file. Let's take the example of a `config.ini` file that requires the `APP_PORT` variable.
 
 ```ini
@@ -283,17 +292,7 @@ If you name your file `config.ini.template`, it will automatically replace the v
 
 For example if you put the previous example in `data/config.ini.template`, it will be copied over to `app-data/<app-id>/data/config.ini` with the `APP_PORT` variable replaced.
 
-### Per-architecture docker-compose files
-
-If your app requires different docker-compose files for different architectures, you can use the following naming convention:
-
-```bash
-docker-compose.arm64.yml
-```
-
-If the user is running on an arm64 architecture, this file will be used instead of the default `docker-compose.yml`.
-
-## Commit your changes
+### Commit your changes
 
 Once you're done, you can commit your changes to the repository.
 
@@ -303,7 +302,12 @@ git commit -m "Add my-app"
 git push origin master
 ```
 
-## Submit a Pull Request
+### Test your app in your own instance
+
+Before submitting your app, you can test it in your own instance. You can do so by adding your app repository to the `appsRepoUrl` property in the `settings.json` file.
+Visit the [Using your own appstore repository](/docs/contributing/running-locally#using-your-own-appstore-repository) section to learn more.
+
+### Submit a Pull Request
 
 You can now submit a pull request to the repository.
 
@@ -311,7 +315,4 @@ You can now submit a pull request to the repository.
 - Click on "New pull request" and fill in the title and description.
 - Choose your branch and target the main repository at `runtipi/runtipi-appstore`.
 
-## Test your app in your own instance
-
-Before submitting your app, you can test it in your own instance. You can do so by adding your app repository to the `appsRepoUrl` property in the `settings.json` file.
-Visit the [Using your own appstore repo](/docs/contributing/running-locally#using-your-own-appstore-repo) section to learn more.
+</Steps>

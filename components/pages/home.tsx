@@ -33,7 +33,7 @@ export default function Home() {
               management made easy.
             </h1>
             <p className="mt-6 max-w-2xl text-xl font-medium leading-tight text-gray-400">
-              Free and open-source, Runtipi lets you install all your favorite self-hosted apps
+              Free and open-source, runtipi lets you install all your favorite self-hosted apps
               without the hassle of configuring and managing each service. One-click installs and
               updates for more than 200 popular apps.
             </p>
