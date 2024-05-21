@@ -1,6 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
-import { DocsThemeConfig } from 'nextra-theme-docs';
+import { DocsThemeConfig, ThemeSwitch } from 'nextra-theme-docs';
 
 import logo from './public/tipi.png';
 import { useRouter } from 'next/router';
@@ -59,16 +59,21 @@ const config: DocsThemeConfig = {
       <span className="ml-2 font-bold">Runtipi</span>
     </div>
   ),
-  darkMode: true,
   project: {
     link: 'https://github.com/runtipi/runtipi',
   },
   chat: {
     link: 'https://discord.gg/Bu9qEPnHsc',
   },
+  navbar: {
+    extraContent: <ThemeSwitch lite className="[&_span]:hidden" />,
+  },
   docsRepositoryBase: 'https://github.com/runtipi/runtipi-docs',
   footer: {
     text: footer(),
+  },
+  toc: {
+    backToTop: true,
   },
   head: (
     <>
