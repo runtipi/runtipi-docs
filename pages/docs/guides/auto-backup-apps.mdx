@@ -33,7 +33,6 @@ backupPath="$tipiPath/backups"
 dailyRetention=3
 weeklyRetention=3
 monthlyRetention=3
-tempRetention=1
 
 # Default runtipi paths
 appsDataPath="$tipiPath/app-data"
@@ -76,9 +75,6 @@ case "$backupType" in
         ;;
     monthly)
         keepLast=$monthlyRetention
-        ;;
-    temp)
-        keepLast=$tempRetention
         ;;
     *)
         echo "Invalid backup type specified. Use 'daily', 'weekly' or 'monthly'."
