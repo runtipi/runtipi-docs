@@ -28,5 +28,8 @@
   },
   "auto-update-with-cron": {
     "title": "Auto update your instance with cron"
+  },
+  "auto-backup-apps": {
+    "title": "Auto backup your apps using cron"
   }
 }
