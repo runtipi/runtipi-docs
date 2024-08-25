@@ -128,20 +128,21 @@ You can choose between different types of fields. The app will automatically val
 
 Here is also a table of what a `form_field` object requires:
 
-| Name              | Description                                                            | Example value                              | Required |
-| ----------------- | ---------------------------------------------------------------------- | ------------------------------------------ | -------- |
-| **type**          | The type of the form field to use, see above.                          | text                                       | yes      |
-| **label**         | The label to show the user.                                            | Nextcloud Username                         | yes      |
-| **hint**          | A small hint to show the user.                                         | The username you want to use for nextcloud | false    |
-| **placeholder**   | A placeholder for the form field                                       | user                                       | false    |
-| **default**       | Add a default value, used only if the required option is set to false  | user                                       | false    |
-| **regex**         | Use a reggex pattern to verify the user input                          | ^[0-9]+.[0-9]+.[0-9]+$                     | false    |
-| **pattern_error** | The error to show when the regex pattern validation fails              | Invalid username                           | false    |
-| **min**           | The minium length for a text or password input                         | 5                                          | false    |
-| **max**           | The maximum length for a text or password input                        | 100                                        | false    |
-| **required**      | Wheter the form field is required or not                               | true                                       | yes      |
-| **env_variable**  | The name of the variable you'll use in your `docker-compose.yml` file. | NEXTCLOUD_USERNAME                         | yes      |
-| **options**       | Options for multiple select                                            | See bellow                                 | false    |
+| Name              | Description                                                                                        | Example value                              | Required |
+| ----------------- | -------------------------------------------------------------------------------------------------- | ------------------------------------------ | -------- |
+| **type**          | The type of the form field to use, see above.                                                      | text                                       | yes      |
+| **label**         | The label to show the user.                                                                        | Nextcloud Username                         | yes      |
+| **hint**          | A small hint to show the user.                                                                     | The username you want to use for nextcloud | false    |
+| **placeholder**   | A placeholder for the form field                                                                   | user                                       | false    |
+| **default**       | Add a default value, used only if the required option is set to false                              | user                                       | false    |
+| **regex**         | Use a reggex pattern to verify the user input                                                      | ^[0-9]+.[0-9]+.[0-9]+$                     | false    |
+| **pattern_error** | The error to show when the regex pattern validation fails                                          | Invalid username                           | false    |
+| **min**           | The minium length for a text or password input                                                     | 5                                          | false    |
+| **max**           | The maximum length for a text or password input                                                    | 100                                        | false    |
+| **required**      | Wheter the form field is required or not                                                           | true                                       | yes      |
+| **env_variable**  | The name of the variable you'll use in your `docker-compose.yml` file.                             | NEXTCLOUD_USERNAME                         | yes      |
+| **options**       | Options for multiple select                                                                        | See bellow                                 | false    |
+| **encoding**      | Used only in addintion to random type. Specify the random value encoding. Can be `base64` or `hex` | base64                                     | false    |
 
 <Callout>
   When using the field type random for a password or secret, the min value will be used to determine
