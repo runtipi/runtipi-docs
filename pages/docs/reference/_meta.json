@@ -10,5 +10,8 @@
   },
   "config-json": {
     "title": "config.json options"
+  },
+  "dynamic-compose": {
+    "title": "Dynamic compose"
   }
 }

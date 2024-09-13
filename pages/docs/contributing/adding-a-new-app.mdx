@@ -240,6 +240,13 @@ docker-compose.arm64.yml
 
 If the user is running on an arm64 architecture, this file will be used instead of the default `docker-compose.yml`.
 
+#### The `docker-compose.json` file (optional)
+
+If you would like your app to have all our advanced features (like the ability to use only a reverse proxy or disable the app's port),
+you can check our [Dynamic Compose](https://runtipi.io/docs/reference/dynamic-compose) section to add the new compose file.
+In the future we are planning to mainstream this new dynamic compose. You would help us a lot by including this file since
+it will make the later migration faster.
+
 #### The `metadata/description.md` file
 
 Here is located the long description of the app in markdown (html is supported too), usually a copy of the readme provided by the app's author.
