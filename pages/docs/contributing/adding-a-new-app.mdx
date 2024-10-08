@@ -202,7 +202,6 @@ services:
       - ${APP_DATA_DIR}/data/projects:/projects
     ports:
       - ${APP_PORT}:8443
-    restart: unless-stopped
     networks:
       - tipi_main_network # That should not be changed
     labels: # Use your editors search and replace feature to replace all instances of "myapp" with your app name in the traefik labels
