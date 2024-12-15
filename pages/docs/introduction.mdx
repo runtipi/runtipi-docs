@@ -1,5 +1,6 @@
 import { AppScreenshot } from '@/components/AppScreenshot';
-import { Card, Cards, Callout } from 'nextra-theme-docs';
+
+import { Cards, Callout } from 'nextra/components';
 import { WrenchIcon, LightBulbIcon } from '@heroicons/react/24/outline';
 
 # Introduction
@@ -28,6 +29,10 @@ Runtipi is in continuous development, so issues may occur. Nevertheless, the com
 To get started with runtipi, follow the installation instructions, and enjoy hosting your own services effortlessly.
 
 <Cards>
-  <Card icon={<LightBulbIcon />} title="Apps available" href="/docs/apps-available" />
-  <Card icon={<WrenchIcon />} title="Installation" href="/docs/getting-started/installation" />
+  <Cards.Card icon={<LightBulbIcon />} title="Apps available" href="/docs/apps-available" />
+  <Cards.Card
+    icon={<WrenchIcon />}
+    title="Installation"
+    href="/docs/getting-started/installation"
+  />
 </Cards>

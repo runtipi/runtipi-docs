@@ -70,7 +70,7 @@ const config: DocsThemeConfig = {
   },
   docsRepositoryBase: 'https://github.com/runtipi/runtipi-docs',
   footer: {
-    text: footer(),
+    content: footer(),
   },
   toc: {
     backToTop: true,

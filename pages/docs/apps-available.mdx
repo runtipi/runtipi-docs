@@ -1,16 +1,16 @@
 import { AppsList, getStaticProps as gsp } from '@/components/AppsList';
-import { useSSG } from 'nextra/ssg';
+import { useData } from 'nextra/hooks';
 
 export const getStaticProps = gsp;
 
 export const Apps = () => {
   // Get the data from SSG, and render it as a component.
-  const { apps } = useSSG();
+  const { apps } = useData();
   return <AppsList apps={apps} />;
 };
 
 export const AppsCount = () => {
-  const { apps } = useSSG();
+  const { apps } = useData();
   const length = Object.keys(apps).length;
   return (
     <>

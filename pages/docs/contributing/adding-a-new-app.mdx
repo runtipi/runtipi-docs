@@ -1,4 +1,4 @@
-import { Steps, Callout, FileTree } from 'nextra-theme-docs';
+import { Steps, Callout, FileTree } from 'nextra/components';
 
 # Adding a new app
 
@@ -204,7 +204,7 @@ Now let's take a look at the `options` option in the form fields, this will be r
 In the same folder, create a `docker-compose.yml` file with your app config.
 
 ```yml
-version: "3.9"
+version: '3.9'
 services:
   my-app: # Should be exact same name as "id" field in config.json
     container_name: my-app # Should be exact same name as "id" field in config.json
