@@ -29,24 +29,24 @@
     "react-compare-image": "^3.4.0",
     "react-compare-slider": "^3.1.0",
     "react-dom": "^19.0.0",
-    "react-hot-toast": "^2.4.1",
+    "react-hot-toast": "^2.5.1",
     "react-image-comparison-slider": "^1.8.4",
     "sass": "^1.83.0",
     "sharp": "^0.33.5"
   },
   "devDependencies": {
-    "@types/node": "22.10.2",
-    "@types/react": "^19.0.1",
+    "@types/node": "22.10.5",
+    "@types/react": "^19.0.2",
     "@types/react-dom": "19.0.2",
     "@typescript-eslint/eslint-plugin": "^6.9.0",
     "@typescript-eslint/parser": "^6.9.0",
     "autoprefixer": "^10.4.20",
     "eslint": "^8.52.0",
-    "eslint-plugin-react": "^7.33.2",
-    "eslint-plugin-tailwindcss": "^3.13.0",
+    "eslint-plugin-react": "^7.37.3",
+    "eslint-plugin-tailwindcss": "^3.17.5",
     "postcss": "^8.4.49",
-    "prettier": "^3.0.3",
-    "tailwindcss": "^3.4.16",
+    "prettier": "^3.4.2",
+    "tailwindcss": "^3.4.17",
     "typescript": "^5.7.2"
   }
 }
