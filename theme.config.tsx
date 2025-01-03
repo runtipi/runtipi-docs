@@ -55,7 +55,27 @@ const config: DocsThemeConfig = {
   navbar: {
     extraContent: <ThemeSwitch lite className="[&_span]:hidden" />,
   },
-  docsRepositoryBase: 'https://github.com/runtipi/runtipi-docs',
+  feedback: {
+    content: 'Need help? Visit our forums →',
+    useLink: () => 'https://forums.runtipi.io/',
+  },
+  main: (props) => (
+    <>
+      {props.children}
+      <div className="text-sm">
+        Need more help? Visit our{' '}
+        <a
+          href="https://forums.runtipi.io"
+          target="_blank"
+          rel="noreferrer"
+          className="font-bold text-blue-500 hover:underline"
+        >
+          forums
+        </a>{' '}
+        to get help from the community.
+      </div>
+    </>
+  ),
   footer: {
     content: footer(),
   },
