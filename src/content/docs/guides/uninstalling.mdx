@@ -1,0 +1,18 @@
+# Uninstalling
+
+Make sure Runtipi is completely stopped and then remove the `runtipi` directory.
+
+```bash
+sudo ./runtipi-cli stop
+cd ..
+sudo rm -rf runtipi
+```
+
+If you want to purge every Docker image/volume/network created too you can run this command:
+
+```bash
+docker volume prune
+docker stop $(docker ps -a -q)
+docker rm $(docker ps -a -q)
+docker rmi $(docker images -a -q)
+```

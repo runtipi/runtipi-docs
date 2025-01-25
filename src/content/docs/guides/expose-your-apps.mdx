@@ -1,0 +1,60 @@
+import Image from "next/image";
+import { Callout } from "nextra/components";
+
+# Expose your apps
+
+Runtipi allows you to expose your apps to the internet through a public domain that you own. Automatic HTTPS is provided by Let's Encrypt and Runtipi will automatically renew your certificates.
+
+<Callout type="warning">
+  Exposing your apps will make them accessible from the internet. Make sure you
+  understand the security implications of doing so. Runtipi is not responsible
+  for any security breach that could happen on your server resulting from
+  exposing your apps.
+</Callout>
+<Callout type="warning">
+  Also be aware that opening ports 80 or 443 on your router can expose your
+  network to security risks. If someone knows your public IP address (which is
+  easy to find by looking up your domain) they will be able to access your
+  Runtipi login page. Make sure you have a strong password and use 2FA to secure
+  your Runtipi instance.
+</Callout>
+
+## Prerequisites
+
+- You have a running Runtipi instance on your server
+- You have a running app on your server that you want to expose
+- You own a domain name and have access to its DNS configuration
+- You have access to your router configuration and know how to forward ports
+
+## Configure your router
+
+Runtipi needs to be able to receive requests from the internet in order to generate the SSL certificates.
+To do so, you need to forward the port 80 and 443 of your router to the port 80 and 443 of your server.
+This is a common operation and you can find a lot of tutorials on the internet on how to do it.
+
+## Configure your DNS
+
+Runtipi needs to be able to verify that you own the domain name you want to expose your app on. To do so, you need to add an **A** record to your DNS configuration pointing to the public IP address of your server.
+
+For example, if you want to expose the `nextcloud` app on the `cloud.my-domain.io` domain, you need to add an **A** record for `cloud.my-domain.io` pointing to the public IP address of your server.
+
+## Expose your app from the dashboard
+
+Once your router and DNS are configured, you can expose your app from the dashboard. Go to the details page of the app you want to expose and click on the `Settings` button.
+Enable the `Expose app` switch and enter the domain name you want to expose your app on. Click on the `Save` button to save your changes.
+
+<br />
+<Image
+  src="/images/expose-your-apps/expose-settings.png"
+  alt="Screenshot of Runtipi's expose app setting"
+  width={704}
+  height={200}
+/>
+
+## Restart your app
+
+In order to take into account the changes you just made, you need to restart your app. Go to the details page of your app and click on the `Stop` button then on the `Start` button.
+
+## Enjoy
+
+The rest is automatic. Runtipi will automatically renew your certificates and expose your app on the domain name you entered.
