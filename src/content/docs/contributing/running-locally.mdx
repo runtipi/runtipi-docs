@@ -1,0 +1,59 @@
+# Running locally
+
+In this guide we will show you how to run Runtipi locally on your machine. This is useful if you want to contribute to the project or if you want to test new apps you added to the appstore.
+
+## Prerequisites
+
+- Docker desktop up to date and running. Instructions: [Install Docker Engine](https://docs.docker.com/engine/install/)
+- Docker-compose
+- Node version 16+
+
+## Prepare
+
+Once you have forked the repository and cloned it on your local machine you can start to prepare the environment.
+
+## Install dependencies
+
+runtipi uses `pnpm` as a package manager and monorepo orchestrator. Install it with
+`npm i -g pnpm`
+
+Install the project dependencies
+`pnpm i`
+
+## Edit the environment variables
+
+You need to copy `.env.example` to `.env` and edit there following env
+
+- ROOT_FOLDER_HOST change to put your root folder of runtipi
+- RUNTIPI_APP_DATA_PATH change to put your app data folder of runtipi
+
+## Run runtipi
+
+1. Start the app with `npm run start:dev` from the root folder
+2. Visit `localhost` in your browser
+
+## Using your own appstore repository
+
+You can change the repository Runtipi is using to retrieve the appstore in order to test new apps you added.
+
+Create a `settings.json` file in the `state` folder (`runtipi/state/settings.json`) containing the URL of your repository and restart runtipi.
+
+```json
+{
+  "appsRepoUrl": "https://github.com/runtipi/runtipi-appstore.git"
+}
+```
+
+If you need to be on a different branch than the main one in your repository, write your repository URL using the following notation :
+
+```json
+{
+  "appsRepoUrl": "https://github.com/runtipi/runtipi-appstore/tree/mybranch"
+}
+```
+
+Alternatively, you can go in the repository directory `cd ./repos/<generated-id>` and checkout your branch.
+
+```bash
+git checkout mybranch
+```

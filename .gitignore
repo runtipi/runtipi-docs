@@ -1,6 +1,10 @@
-.next
-node_modules
+# dependencies
+/node_modules
 
-out
+# next.js
+/.next/
+/out/
 
+# misc
 .DS_Store
+next-env.d.ts

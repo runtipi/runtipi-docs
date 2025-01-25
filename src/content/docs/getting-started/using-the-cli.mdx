@@ -1,0 +1,118 @@
+import { Callout } from "nextra/components";
+
+# Using the CLI
+
+The runtipi-cli is a command line tool that allows you to start, stop, restart, update, and manage Runtipi from the command line.
+
+Usage:
+
+```bash
+./runtipi-cli command options
+```
+
+## Start Command
+
+To start Runtipi run the following command:
+
+```bash
+sudo ./runtipi-cli start
+```
+
+<Callout type="info">
+  Runtipi is run as root in the examples because during the start process it
+  needs to check and eventually change the permissions of some files in the
+  `runtipi` folder. You can run the command without sudo if needed but you may
+  encounter permission issues.
+</Callout>
+
+## Stop Command
+
+To stop Runtipi run the following command:
+
+```bash
+sudo ./runtipi-cli stop
+```
+
+## Restart Command
+
+To restart Runtipi from the command line run this command:
+
+```bash
+sudo ./runtipi-cli restart
+```
+
+## Update
+
+This command updates Runtipi to the latest version available.
+
+You can update to the latest version with this command:
+
+```bash
+sudo ./runtipi-cli update latest
+```
+
+If you want to update to a specific version you give the version number as an argument:
+
+```bash
+sudo ./runtipi-cli update v2.0.7
+```
+
+<Callout type="warning">
+  You can downgrade Runtipi to a previous version by running the update command
+  with the version you want to downgrade to. However, this is highly discouraged
+  as it may lead to breaking your install. Make sure you know what you are
+  doing.
+</Callout>
+
+## Reset password command
+
+This command is used to reset a forgotten admin password.
+
+To reset your password run the following command and visit the Runtipi rest page at `http://<your-ip>/reset-password`
+it should prompt you to enter your new password.
+
+```bash
+./runtipi-cli reset-password
+```
+
+## App management command
+
+This command can be used to start and stop apps from the cli.
+
+```bash
+./runtipi-cli app [command] <app>
+```
+
+**Example**: Start the code-server app
+
+```bash
+./runtipi-cli app start code-server
+```
+
+**Example**: Stop the code-server app
+
+```bash
+./runtipi-cli app stop code-server
+```
+
+## Debug command
+
+This command is used to display useful information about the Runtipi installation. It can be used to troubleshoot issues.
+
+To use this command just run this:
+
+```bash
+./runtipi-cli debug
+```
+
+## Help command
+
+This command is used to display help for an other command in Runtipi cli.
+
+To use this command just run this:
+
+```bash
+./runtipi-cli help start
+```
+
+This will display the help for the start command.
