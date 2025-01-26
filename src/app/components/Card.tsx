@@ -25,7 +25,7 @@ export default function Card({
           </div>
         )}
         <div className="flex-1">
-          <h3 className="text-lg font-medium text-black/90 dark:text-white/90 leading-none">
+          <h3 className="text-lg leading-none font-medium text-black/90 dark:text-white/90">
             {title}
           </h3>
           <div className="mt-3 text-sm leading-relaxed text-black/60 dark:text-white/60">

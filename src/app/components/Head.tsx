@@ -1,6 +1,8 @@
 "use client";
 
-import { useConfig } from "nextra-theme-docs";
+// Commented out properties in this file depends on https://github.com/shuding/nextra/issues/3980 being solved. For now this breaks X/Twitter OpenGraph previews
+
+// import { useConfig } from "nextra-theme-docs";
 import { Head as NextraHead } from "nextra/components";
 
 export function Head() {
@@ -10,11 +12,6 @@ export function Head() {
   const image = "https://runtipi.io/images/tipi-og.png";
   return (
     <NextraHead>
-      {/* <link
-        rel="apple-touch-icon"
-        sizes="180x180"
-        href="/apple-touch-icon.png"
-      /> */}
       <link
         rel="icon"
         type="image/png"
