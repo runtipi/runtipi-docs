@@ -7,7 +7,6 @@ import Card from "../Card";
 import {
   IconAdjustments,
   IconApps,
-  IconBolt,
   IconCircleArrowUp,
   IconDownload,
   IconHandClick,
@@ -21,7 +20,10 @@ import Button from "../Button";
 import { DiscordIcon, GitHubIcon } from "nextra/icons";
 import GridPattern from "../GridPattern";
 import Image from "next/image";
-import appstore_image from "../../../../public/images/screenshot.png";
+import appstore_light from "../../../../public/images/appstore.png";
+import appstore_dark from "../../../../public/images/appstore-dark.png";
+import app_page_light from "../../../../public/images/appstore.png";
+import app_page_dark from "../../../../public/images/appstore-dark.png";
 
 export default async function Home() {
   return (
@@ -62,7 +64,7 @@ export default async function Home() {
         <h2 className="text-center text-3xl font-bold tracking-tight text-neutral-800 sm:text-4xl dark:text-neutral-200">
           Features
         </h2>
-        <div className="lg:m-8 mt-8 grid gap-8 lg:grid-cols-3">
+        <div className="mt-8 grid gap-8 lg:m-8 lg:grid-cols-3">
           <Card title="Get going in minutes" icon={IconDownload}>
             Just run the installation script which takes care of everything for
             you. All you need is an 64 bit Linux system and some terminal
@@ -84,7 +86,7 @@ export default async function Home() {
         <h2 className="px-8 text-4xl font-bold tracking-tight text-neutral-800 dark:text-neutral-200">
           Simple app management.
         </h2>
-        <div className="lg:m-8 mt-8 grid gap-12 lg:grid-cols-2">
+        <div className="mt-8 grid gap-12 lg:m-8 lg:grid-cols-2">
           <div className="flex flex-col gap-8">
             <Card title="Straightforward installation" icon={IconApps}>
               No need to copy around config files and set up storage paths! Just
@@ -103,9 +105,14 @@ export default async function Home() {
             </Card>
           </div>
           <Image
-            src={appstore_image}
-            alt="Screenshot of App store"
-            className="rounded-xl"
+            src={appstore_light}
+            alt="Screenshot of Runtipi's app store"
+            className="rounded-xl dark:hidden"
+          />
+          <Image
+            src={appstore_dark}
+            alt="Screenshot of Runtipi's app store"
+            className="hidden rounded-xl dark:block"
           />
         </div>
       </div>
@@ -113,11 +120,16 @@ export default async function Home() {
         <h2 className="px-8 text-right text-4xl font-bold tracking-tight text-neutral-800 dark:text-neutral-200">
           Secure and flexible.
         </h2>
-        <div className="lg:m-8 mt-8 grid gap-12 lg:grid-cols-2">
+        <div className="mt-8 grid gap-12 lg:m-8 lg:grid-cols-2">
           <Image
-            src={appstore_image}
-            alt="Screenshot of App store"
-            className="rounded-xl"
+            src={app_page_light}
+            alt="Screenshot of Runtipi's app store"
+            className="rounded-xl dark:hidden"
+          />
+          <Image
+            src={app_page_dark}
+            alt="Screenshot of Runtipi's app store"
+            className="hidden rounded-xl dark:block"
           />
           <div className="flex flex-col gap-8">
             <Card title="Extend and customize it" icon={IconPuzzle}>

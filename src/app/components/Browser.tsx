@@ -1,6 +1,8 @@
 import Image from "next/image";
-import hero from "../../../public/images/hero.png";
-import hero_mobile from "../../../public/images/hero-mobile.png";
+import hero_light from "../../../public/images/hero.png";
+import hero_mobile_light from "../../../public/images/hero-mobile.png";
+import hero_dark from "../../../public/images/hero-dark.png";
+import hero_mobile_dark from "../../../public/images/hero-mobile-dark.png";
 
 export function Browser() {
   return (
@@ -126,9 +128,14 @@ export function Browser() {
             clipPath="url(#roundedBottom)"
           >
             <Image
-              src={hero}
+              src={hero_light}
               alt="Screenshot of Tipi's dashboard"
-              className="h-full object-cover"
+              className="h-full object-cover dark:hidden"
+            />
+            <Image
+              src={hero_dark}
+              alt="Screenshot of Tipi's dashboard"
+              className="hidden h-full object-cover dark:block"
             />
           </foreignObject>
         </g>
@@ -192,9 +199,14 @@ export function Browser() {
           clipPath="url(#roundedCorners)"
         >
           <Image
-            src={hero_mobile}
+            src={hero_mobile_light}
             alt="Screenshot of Tipi's dashboard"
-            className="size-full object-cover"
+            className="size-full object-cover dark:hidden"
+          />
+          <Image
+            src={hero_mobile_dark}
+            alt="Screenshot of Tipi's dashboard"
+            className="hidden size-full object-cover dark:block"
           />
         </foreignObject>
         <rect
