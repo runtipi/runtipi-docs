@@ -77,7 +77,7 @@ export default async function Home() {
           </Card>
           <Card title="Fully-equipped app store" icon={IconShoppingBag}>
             Our collection of almost 300 apps gives you an enormous amount of
-            choices whether you're running local AI agents, a home media server,
+            choices whether you&apos;re running local AI agents, a home media server,
             or various other utilities.
           </Card>
         </div>
@@ -91,7 +91,7 @@ export default async function Home() {
             <Card title="Straightforward installation" icon={IconApps}>
               No need to copy around config files and set up storage paths! Just
               click the install button, complete the form with any required
-              configuration options and you're done!
+              configuration options and you&apos;re done!
             </Card>
             <Card title="Make it your own" icon={IconAdjustments}>
               Configure your apps through a form on the dashboard. Choose
@@ -99,19 +99,19 @@ export default async function Home() {
             </Card>
             <Card title="Built-in backup management" icon={IconRestore}>
               Backing up and restoring app data is done through a dedicated
-              section on the app page. Additionally, you'll be asked if you want
-              to backup app data before updating an app, so you'll never mess
+              section on the app page. Additionally, you&apos;ll be asked if you want
+              to backup app data before updating an app, so you&apos;ll never mess
               up!
             </Card>
           </div>
           <Image
             src={appstore_light}
-            alt="Screenshot of Runtipi's app store"
+            alt="Screenshot of Runtipi&apos;s app store"
             className="rounded-xl dark:hidden"
           />
           <Image
             src={appstore_dark}
-            alt="Screenshot of Runtipi's app store"
+            alt="Screenshot of Runtipi&apos;s app store"
             className="hidden rounded-xl dark:block"
           />
         </div>
@@ -123,12 +123,12 @@ export default async function Home() {
         <div className="mt-8 grid gap-12 lg:m-8 lg:grid-cols-2">
           <Image
             src={app_page_light}
-            alt="Screenshot of Runtipi's app store"
+            alt="Screenshot of Runtipi&apos;s app store"
             className="rounded-xl dark:hidden"
           />
           <Image
             src={app_page_dark}
-            alt="Screenshot of Runtipi's app store"
+            alt="Screenshot of Runtipi&apos;s app store"
             className="hidden rounded-xl dark:block"
           />
           <div className="flex flex-col gap-8">
@@ -144,7 +144,7 @@ export default async function Home() {
               the update button!
             </Card>
             <Card title="Secure by design" icon={IconLockCheck}>
-              Everything - including Runtipi's own containers - runs in Docker
+              Everything - including Runtipi&apos;s own containers - runs in Docker
               containers to ensure you have a secure enough environment by
               default.
             </Card>
@@ -209,13 +209,13 @@ export default async function Home() {
               </>
             }
           >
-            Runtipi's Discord server is the heart of our community, and we're
+            Runtipi&apos;s Discord server is the heart of our community, and we&apos;re
             now expanding the conversation to our newly launched forums - join
             in and help us build a thriving community!"
           </Card>
           <Card title="Get involved">
             We welcome and appreciate contributions from anyone who is
-            interested in helping us improve our project. Whether you're a
+            interested in helping us improve our project. Whether you&apos;re a
             developer, designer, or simply a user with a great idea, you can
             help.
             <br />

@@ -129,12 +129,12 @@ export function Browser() {
           >
             <Image
               src={hero_light}
-              alt="Screenshot of Tipi's dashboard"
+              alt="Screenshot of Tipi&apos;s dashboard"
               className="h-full object-cover dark:hidden"
             />
             <Image
               src={hero_dark}
-              alt="Screenshot of Tipi's dashboard"
+              alt="Screenshot of Tipi&apos;s dashboard"
               className="hidden h-full object-cover dark:block"
             />
           </foreignObject>
@@ -200,12 +200,12 @@ export function Browser() {
         >
           <Image
             src={hero_mobile_light}
-            alt="Screenshot of Tipi's dashboard"
+            alt="Screenshot of Tipi&apos;s dashboard"
             className="size-full object-cover dark:hidden"
           />
           <Image
             src={hero_mobile_dark}
-            alt="Screenshot of Tipi's dashboard"
+            alt="Screenshot of Tipi&apos;s dashboard"
             className="hidden size-full object-cover dark:block"
           />
         </foreignObject>
