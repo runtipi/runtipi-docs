@@ -39,10 +39,10 @@ export default async function Home() {
               management made easy.
             </h1>
             <p className="mx-auto mt-6 max-w-3xl text-center text-xl leading-tight font-medium text-gray-400">
-              Free and open-source, Runtipi lets you install all your favorite
-              self-hosted apps without the hassle of configuring and managing
-              each service. One-click installs and updates for almost 300
-              popular apps.
+              Say goodbye to tedious configurations. Runtipi is your all-in-one,
+              free, and open-source solution for managing self-hosted apps with
+              ease. Install and update nearly 300 powerful apps in just one
+              click—no hassle, no headaches.
             </p>
           </div>
           <div className="mt-4 mb-6 flex h-32 flex-col gap-3 md:my-0 md:flex-row md:items-center xl:flex-row">
@@ -65,43 +65,39 @@ export default async function Home() {
           Features
         </h2>
         <div className="mt-8 grid gap-8 lg:m-8 lg:grid-cols-3">
-          <Card title="Get going in minutes" icon={IconDownload}>
-            Just run the installation script which takes care of everything for
-            you. All you need is an 64 bit Linux system and some terminal
-            know-how. Most common Linux distros are supported.
+          <Card title="Set up in minutes" icon={IconDownload}>
+            Run a single command, and Runtipi handles everything for you. Works
+            seamlessly on most 64-bit Linux systems with minimal terminal
+            know-how required.
           </Card>
-          <Card title="Everything at your fingertips" icon={IconHandClick}>
-            Check on your system status, install apps, manage settings, backups
-            and more through the web dashboard in the most intuitive,
-            user-friendly way.
+          <Card title="Ultimate control" icon={IconHandClick}>
+            Manage system status, install apps, tweak settings, and handle
+            backups—all from a sleek, intuitive web dashboard built for
+            efficiency.
           </Card>
-          <Card title="Fully-equipped app store" icon={IconShoppingBag}>
-            Our collection of almost 300 apps gives you an enormous amount of
-            choices whether you&apos;re running local AI agents, a home media server,
-            or various other utilities.
+          <Card title="Massive app library" icon={IconShoppingBag}>
+            With nearly 300 apps at your fingertips, you can set up AI agents,
+            media servers, utilities, and more—all with effortless installation.
           </Card>
         </div>
       </div>
       <div className="m-8 border-t border-gray-200 py-12 dark:border-gray-800">
         <h2 className="px-8 text-4xl font-bold tracking-tight text-neutral-800 dark:text-neutral-200">
-          Simple app management.
+          Powerful. Simple. Reliable.
         </h2>
         <div className="mt-8 grid gap-12 lg:m-8 lg:grid-cols-2">
           <div className="flex flex-col gap-8">
-            <Card title="Straightforward installation" icon={IconApps}>
-              No need to copy around config files and set up storage paths! Just
-              click the install button, complete the form with any required
-              configuration options and you&apos;re done!
+            <Card title="Effortless installation" icon={IconApps}>
+              No need for complex configurations. Click to install, fill in any
+              required details, and you’re good to go.
             </Card>
-            <Card title="Make it your own" icon={IconAdjustments}>
-              Configure your apps through a form on the dashboard. Choose
-              between options to expose your app and more!
+            <Card title="Tailor your setup" icon={IconAdjustments}>
+              Customize apps directly through the dashboard. Choose how they're
+              exposed, tweak settings, and make it your own.
             </Card>
-            <Card title="Built-in backup management" icon={IconRestore}>
-              Backing up and restoring app data is done through a dedicated
-              section on the app page. Additionally, you&apos;ll be asked if you want
-              to backup app data before updating an app, so you&apos;ll never mess
-              up!
+            <Card title="Seamless backup & restore" icon={IconRestore}>
+              Never lose your data. Easily back up and restore app data before
+              updates, ensuring a smooth experience.
             </Card>
           </div>
           <Image
@@ -118,7 +114,7 @@ export default async function Home() {
       </div>
       <div className="m-8 border-t border-gray-200 py-12 dark:border-gray-800">
         <h2 className="px-8 text-right text-4xl font-bold tracking-tight text-neutral-800 dark:text-neutral-200">
-          Secure and flexible.
+          Secure. Flexible. Future-Proof.
         </h2>
         <div className="mt-8 grid gap-12 lg:m-8 lg:grid-cols-2">
           <Image
@@ -132,28 +128,24 @@ export default async function Home() {
             className="hidden rounded-xl dark:block"
           />
           <div className="flex flex-col gap-8">
-            <Card title="Extend and customize it" icon={IconPuzzle}>
-              While all apps come preconfigured with working defaults, you can
-              directly override parts of the docker compose files to get the
-              ideal setup. All customizations are persistent across updates.
+            <Card title="Advanced customization" icon={IconPuzzle}>
+              Modify Docker Compose files to fine-tune your apps. Your changes
+              stay intact even after updates.
             </Card>
-            <Card title="Painless update management" icon={IconCircleArrowUp}>
-              Runtipi automatically checks for updates to itself and your apps
-              and will let you know on the dashboard. Updating Runtipi is made
-              easy with the CLI, while all you need to do for your apps is click
-              the update button!
+            <Card title="One-click updates" icon={IconCircleArrowUp}>
+              Stay up to date with zero hassle. Get notified of new versions and
+              update your apps with a single click.
             </Card>
             <Card title="Secure by design" icon={IconLockCheck}>
-              Everything - including Runtipi&apos;s own containers - runs in Docker
-              containers to ensure you have a secure enough environment by
-              default.
+              Every service runs in its own Docker container, keeping your
+              environment secure by default.
             </Card>
           </div>
         </div>
       </div>
       <div className="border-t border-gray-200 py-12 dark:border-gray-800">
         <h2 className="px-8 text-center text-3xl font-bold tracking-tight text-neutral-800 sm:text-4xl dark:text-neutral-200">
-          Community Driven.
+          Built by the Community. For the Community.
         </h2>
         <div className="m-8 grid gap-8 lg:grid-cols-3">
           <Card
@@ -189,7 +181,7 @@ export default async function Home() {
             , report issues, and submit pull requests to help improve Runtipi.
           </Card>
           <Card
-            title="Active community"
+            title="A Thriving Community"
             footer={
               <>
                 <Button
@@ -201,7 +193,7 @@ export default async function Home() {
                 </Button>
                 <Button
                   href="https://forums.runtipi.io"
-                  className="betterhover:hover:bg-gray-700 betterhover:dark:hover:bg-gray-300 w-full bg-black px-4 text-white dark:bg-white dark:text-black"
+                  className="betterhover:hover:bg-gray-700 w-full bg-black px-4 text-white dark:bg-white dark:text-black"
                 >
                   Join our forums
                   <IconMessage className="ml-2 size-6" />
@@ -209,9 +201,8 @@ export default async function Home() {
               </>
             }
           >
-            Runtipi&apos;s Discord server is the heart of our community, and we&apos;re
-            now expanding the conversation to our newly launched forums - join
-            in and help us build a thriving community!"
+            Engage with hundreads of self-hosting enthusiasts. Share ideas,
+            troubleshoot, and shape the future of Runtipi.
           </Card>
           <Card title="Get involved">
             We welcome and appreciate contributions from anyone who is
