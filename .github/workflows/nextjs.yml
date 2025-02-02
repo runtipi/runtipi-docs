@@ -1,4 +1,4 @@
-name: Deploy Next.js site to Pages
+name: Deploy docs site to Github Pages
 
 on:
   push:
@@ -28,22 +28,18 @@ jobs:
         with:
           node-version: 20
 
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-        id: pnpm-install
-        with:
-          version: 9
-          run_install: false
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v1
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
       - name: Install dependencies
-        run: pnpm install
+        run: bun install
 
-      - name: Build with Next.js
-        run: pnpm next build
-
+      - name: Build
+        run: bun run build
+        
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
