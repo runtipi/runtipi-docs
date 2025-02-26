@@ -23,7 +23,7 @@ class MyDocument extends Document {
           <script
             defer
             data-domain="runtipi.io"
-            src="https://plausible.foreach.li/js/script.js"
+            src="https://assets.foreach.li/js/script.js"
           ></script>
         </Head>
         <body>
