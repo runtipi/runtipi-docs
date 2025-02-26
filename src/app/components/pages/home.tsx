@@ -86,7 +86,7 @@ export default async function Home() {
           Powerful. Simple. Reliable.
         </h2>
         <div className="mt-8 grid gap-12 lg:m-8 lg:grid-cols-2">
-          <div className="flex flex-col gap-8">
+          <div className="flex flex-col gap-6">
             <Card title="Effortless installation" icon={IconApps}>
               No need for complex configurations. Click to install, fill in any
               required details, and you’re good to go.
@@ -102,13 +102,13 @@ export default async function Home() {
           </div>
           <Image
             src={appstore_light}
-            alt="Screenshot of Runtipi&apos;s app store"
-            className="rounded-xl dark:hidden"
+            alt="Screenshot of Runtipi's app store"
+            className="self-center rounded-xl dark:hidden"
           />
           <Image
             src={appstore_dark}
-            alt="Screenshot of Runtipi&apos;s app store"
-            className="hidden rounded-xl dark:block"
+            alt="Screenshot of Runtipi's app store"
+            className="hidden self-center rounded-xl dark:block"
           />
         </div>
       </div>
@@ -119,15 +119,15 @@ export default async function Home() {
         <div className="mt-8 grid gap-12 lg:m-8 lg:grid-cols-2">
           <Image
             src={app_page_light}
-            alt="Screenshot of Runtipi&apos;s app store"
-            className="rounded-xl dark:hidden"
+            alt="Screenshot of Runtipi's app store"
+            className="self-center rounded-xl dark:hidden"
           />
           <Image
             src={app_page_dark}
-            alt="Screenshot of Runtipi&apos;s app store"
-            className="hidden rounded-xl dark:block"
+            alt="Screenshot of Runtipi's app store"
+            className="hidden self-center rounded-xl dark:block"
           />
-          <div className="flex flex-col gap-8">
+          <div className="flex flex-col gap-6">
             <Card title="Advanced customization" icon={IconPuzzle}>
               Modify Docker Compose files to fine-tune your apps. Your changes
               stay intact even after updates.

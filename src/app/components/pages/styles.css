@@ -1,17 +1,3 @@
-/* Override nextra styles restricting width */
-
-:root {
-  --nextra-content-width: unset !important;
-}
-
-header.nextra-navbar {
-  --nextra-content-width: 90rem;
-}
-
-article {
-  padding-inline: 0 !important;
-}
-
 #hero {
   animation-name: hero;
   animation-duration: 1500ms;
