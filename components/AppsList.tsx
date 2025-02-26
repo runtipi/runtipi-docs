@@ -26,7 +26,7 @@ export const getStaticProps = async () => {
       const appConfigJson = JSON.parse(appConfig);
 
       if (appConfigJson.deprecated) {
-        continue
+        continue;
       }
 
       apps[app] = {
