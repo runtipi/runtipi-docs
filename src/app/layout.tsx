@@ -69,9 +69,7 @@ export default async function RootLayout({
           }}
           docsRepositoryBase="https://github.com/runtipi/runtipi-docs"
         >
-          <div className="flex flex-col">
-            <div className="container self-center">{children}</div>
-          </div>
+          {children}
         </Layout>
       </body>
     </html>

@@ -1,5 +1,6 @@
 export default {
   index: {
+    title: "Home",
     theme: {
       sidebar: false,
       toc: false,
