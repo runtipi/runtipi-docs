@@ -1,0 +1,73 @@
+# Why using runtipi?
+
+If you are discovering Runtipi for the first time, you may wonder why you should use
+it over other solutions and where it fits in your self-hosted stack. Or you may even
+be wondering why we created Runtipi in the first place.
+
+Runtipi is not an OS or a distribution, but a set of tools to help you manage your
+self-hosted services. It is designed to be lightweight, easy to use, and provide a
+set of default configurations that work out of the box.
+
+The project was initially created as a pet project to learn more about self-hosting and
+containerization. It was born out of the frustration of having to manage configs, secrets,
+logs, and networking for each service individually and through clunky web-based terminals
+and unconfigured text editors over SSH.
+
+## How it started
+
+Runtipi started as a very opinionated set of Docker Compose files and shell scripts
+targeted at a beginner audience. It was designed to be a one-stop-shop for all your
+self-hosting needs. It was a great way to get started with self-hosting, but it was
+not very flexible and did not scale well.
+
+Since then, the community has grown, and we quickly realized that there is no such
+thing as a one-size-fits-all solution. Runtipi has tried to evolve into a more modular
+and flexible tool. While we are not completely there yet, we have a vision of a set of
+tools that can be used by any self-hosting enthusiast, and that can be easily extended
+and customized without any limitations.
+
+## What are we trying to achieve?
+
+Runtipi is not reinventing the wheel. We have no intention of creating a new container
+runtime, orchestrator, or package manager. We are not trying to replace Docker, Kubernetes,
+or Ansible. We are not trying to create a new Linux distribution or a new package manager.
+
+Instead, we are trying to build a product which steps on the shoulders of giants. We envision
+a future where self-hosting is as easy as installing an app on your phone. With the benefit of
+being able to customize and extend your services as much as you want.
+
+Here are a few principles we are trying to follow:
+
+### Declarativeness
+
+Too often, when installing a new service, we go through a series of configuration steps and
+commands and end up with a service that is not reproducible. When it's time to move the service
+to a new server or to update it, we completely forgot what we did and where we found the information.
+
+We think that configuration as code is the way to go. By using a declarative configuration format,
+we can easily reproduce the service on a new server or update it without having to remember all the
+steps we took. Others can also replicate the service and understand how it works at a glance.
+
+By working this way, we generate a self-documenting configuration that can be versioned and shared
+with others. We can also easily track changes and roll back to a previous version if needed.
+
+### Flexibility
+
+While we are leveraging our own tools and configuration format, the resulting services is
+always a standard Docker container configuration. This means that if you decide to move away
+or if runtipi disappears, you can still use your services an run them with a simple `docker-compose up` command.
+
+### Openness
+
+The world of self-hosting is vast and diverse. Even if we tried, we could not create a
+wall-garden of services that would satisfy everyone. We are trying to be as open as possible
+to any service, any configuration, and any individual. We are not trying to lock you
+into our ecosystem, but to provide you with the tools to manage your own.
+
+## Where we're at
+
+While we just described what our dream product looks like, you bet we are not there yet.
+By joining the community, you won't get a perfect product, but you will get a product that
+is constantly evolving and improving and that you can help shape. You will also get support
+from a community of like-minded individuals who are passionate about self-hosting and who
+are willing to help you with your journey.

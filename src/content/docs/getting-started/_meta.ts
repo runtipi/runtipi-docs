@@ -1,4 +1,7 @@
 export default {
+  "why-runtipi": {
+    title: "Why using Runtipi?",
+  },
   installation: {
     title: "Installation",
   },
