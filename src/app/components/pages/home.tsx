@@ -153,7 +153,11 @@ export default async function Home() {
         </p>
         {/* lg:grid-cols-3 */}
         <div className="m-8 grid place-items-center gap-8 lg:grid-cols-1">
-          <a href="https://coderabbit.ai" target="_blank" rel="noreferrer">
+          <a
+            href="https://coderabbit.ai?utm_source=runtipi&utm_campaign=website"
+            target="_blank"
+            rel="noreferrer"
+          >
             <Card title="" footer={<p>coderabbit.ai</p>}>
               <h3 className="text-center text-xl font-bold text-neutral-800 underline dark:text-neutral-200">
                 CodeRabbit
