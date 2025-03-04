@@ -143,6 +143,41 @@ export default async function Home() {
           </div>
         </div>
       </div>
+      {/* Sponsors section */}
+      <div className="flex flex-col border-t border-gray-200 py-12 dark:border-gray-800">
+        <h2 className="px-8 text-center text-3xl font-bold tracking-tight text-neutral-800 sm:text-4xl dark:text-neutral-200">
+          Thanks to our generous Sponsors
+        </h2>
+        <p className="mt-4 px-8 text-center text-gray-600 dark:text-gray-300">
+          Their contributions help us maintain and improve our project.
+        </p>
+        {/* lg:grid-cols-3 */}
+        <div className="m-8 grid place-items-center gap-8 lg:grid-cols-1">
+          <a href="https://coderabbit.ai" target="_blank" rel="noreferrer">
+            <Card title="" footer={<p>coderabbit.ai</p>}>
+              <h3 className="text-center text-xl font-bold text-neutral-800 underline dark:text-neutral-200">
+                CodeRabbit
+              </h3>
+              <p className="text-center text-gray-600 dark:text-gray-300">
+                Cut Code Review Time & Bugs in Half
+              </p>
+              <img
+                src="/images/sponsors/coderabbit.png"
+                alt="CodeRabbit logo"
+                width="200"
+                className="mx-auto mt-4"
+              />
+            </Card>
+          </a>
+        </div>
+        <Button
+          href="https://github.com/runtipi/runtipi?sponsor=1"
+          className="self-center bg-black text-white dark:bg-white dark:text-black"
+        >
+          Sponsor us
+        </Button>
+      </div>
+
       <div className="border-t border-gray-200 py-12 dark:border-gray-800">
         <h2 className="px-8 text-center text-3xl font-bold tracking-tight text-neutral-800 sm:text-4xl dark:text-neutral-200">
           Built by the Community. For the Community.
