@@ -1,71 +1,53 @@
 # Why use Runtipi
 
-If you just discovered Runtipi you may be wondering why should you use it over
-docker compose and if it suits your needs. You may also be wondering why we created
-Runtipi in the first place.
+If you just discovered Runtipi, you may be wondering why you should use it over docker-compose and if it suits your needs. 
+You may also be wondering why we created Runtipi in the first place.
 
-Runtipi is neither an OS nor a distribution, but a set of tools to help you manage your
-self-hosted services. It is designed to be lightweight, easy to use and most importantly
-provide a set of default configurations that work out of the box.
+Runtipi is neither an OS nor a distribution but a set of tools for managing self-hosted services.
+It is designed to be lightweight, easy to use, and most importantly provide a set of default configurations that work out of the box.
 
 The project was initially created as a way to learn more about self-hosting and containerization.
-It was born out of the frustration of having to manage configs, secrets, logs, and networking for
-each service through clunky web-based terminals or poorly configured text editors
-over SSH.
+It was born out of the frustration of having to manage configs, secrets, logs, and networking for each service through clunky web-based terminals or poorly configured text editors over SSH.
 
 ## How it started
 
-Runtipi started as a very opinionated set of Docker Compose files and shell scripts
-targeted at a beginner audience. It was designed to be a one-stop-shop for all your
-self-hosting needs. It was a great way to get started with self-hosting, but it was
-not very flexible and did not scale well.
+Runtipi started as a very opinionated set of Docker Compose files and shell scripts targeted at a beginner audience. It was designed to be a one-stop shop for all your self-hosting needs.
+It was a great way to get started with self-hosting, but it was not very flexible and did not scale well.
 
-Since then, the community has grown and we quickly realized that there is no such
-thing as an one-size-fits-all solution. That's why Runtipi has tried to evolve into a more modular
-and flexible tool. While we are not completely there yet, our vision is to provide
-a set of tools that can be used by anyone, regardless of their level of expertise.
+Since then, the community has grown and we quickly realized that there is no such thing as a one-size-fits-all solution.
+That's why Runtipi has tried to evolve into a more modular and flexible tool.
+While we are not completely there yet, our vision is to provide a set of tools that can be used by anyone, regardless of their level of expertise.
 
 ## Our goals
 
-Runtipi is not trying to reinvent the wheel. We have no intention of creating a new container
-runtime, orchestrator, or package manager nor are we trying to replace Docker, Kubernetes,
-or Ansible.
+Runtipi is not trying to reinvent the wheel. We have no intention of creating a new container runtime, orchestrator, or package manager nor are we trying to replace Docker, Kubernetes, or Ansible.
 
 Instead, we are trying to build a product that works on top of tools you already know and love.
-We envision a future where self-hosting is as easy as installing an app on your phone, while keeping
-the benefit of being able to customize and extend your services as much as you like.
+We envision a future where self-hosting is as easy as installing an app on your phone while keeping the benefit of being able to customize and extend your services as much as you like.
 
 ### Declarative configuration
 
-Too often, when installing a new service, we have to go through a series of configuration steps and
-commands and end up with a service that is not reproducible. When it's time to move the service
-to a new server or update it, we have completely forgot how we set it up in the first place and
-what guides we followed.
+Too often, when installing a new service, we have to go through a series of configuration steps and commands and end up with a service that is not reproducible.
+When it's time to move the service to a new server or update it, we have completely forgotten how we set it up in the first place and what guides we followed.
 
-We think that configuration as code is the way to go. By using a declarative configuration format,
-we can easily reproduce the service in a new environment or update it, without having to remember all the
-steps we took. Others can also replicate the service and understand how it works at a glance.
+We think that configuration as code is the way to go. By using a declarative configuration format, we can easily reproduce the service in a new environment or update it, without having to remember all the steps we took.
+Others can also replicate the service and understand how it works at a glance.
 
-By working this way, we generate a self-documenting configuration that can be versioned and shared
-with others. We can also easily track changes and roll back to a previous version if needed.
+By working this way, we generate a self-documenting configuration that can be versioned and shared with others.
+We can also easily track changes and roll back to a previous version if needed.
 
 ### Flexibility
 
-While we are leveraging our own tools and configuration format, the resulting services are
-always a standard Docker container configuration. This means that if you decide to move away,
-you can still use your services and run them with a simple `docker-compose up` command.
+While we are leveraging our own tools and configuration format, the resulting services are always a standard Docker container configuration.
+This means that if you decide to move away, you can still use your services and run them with a simple `docker-compose up` command.
 
 ### Open source at its core
 
-The world of self-hosting is vast and diverse. Even if we tried, we could not create a
-wall-garden of services that would satisfy everyone. We are trying to be as open as possible
-to any service, any configuration and any individual. We are not trying to lock you
-into our ecosystem, but to provide you with the tools to manage your own.
+The world of self-hosting is vast and diverse. Even if we tried, we could not create a walled garden of services that would satisfy everyone.
+We are trying to be as open as possible to any service, any configuration, and any individual. We are not trying to lock you into our ecosystem, but to provide you with the tools to manage your own.
 
 ## Where we're at
 
-While we just described what our dream product looks like, we can't help saying that we are not
-there yet and that there is a long way to go. By joining the community, we can guarantee that you will
-get a product that may not be perfect, but that is constantly evolving and improving based on your own
-input. Additionally, you will get support from a community of like-minded individuals who are passionate
-about self-hosting and who are willing to help you with your journey.
+While we just described what our dream product looks like, we can't help saying that we are not there yet and that there is a long way to go.
+By joining the community, we can guarantee that you will get a product that may not be perfect, but that is constantly evolving and improving based on your own input.
+Additionally, you will get support from a community of like-minded individuals who are passionate about self-hosting and who are willing to help you with your journey.
