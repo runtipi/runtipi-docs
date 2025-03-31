@@ -18,50 +18,120 @@ Create a new script file in a new `runtipi/scripts` folder called `auto-update.s
 ```bash
 #!/usr/bin/env bash
 
-# Function to compare semantic versions
 compare_major_version() {
-    local major_version1=$(echo $1 | cut -d. -f1)
-    local major_version2=$(echo $2 | cut -d. -f1)
+    local major_version1=$(echo "$1" | cut -d. -f1)
+    local major_version2=$(echo "$2" | cut -d. -f1)
 
     if [[ "$major_version1" == "$major_version2" ]]; then
-        return 0
+        return 0 # Success (major versions match)
     else
-        return 1
+        return 1 # Failure (major versions differ)
     fi
 }
 
+# IMPORTANT: Change this to the path of your Runtipi installation.
+runtipi_path="/opt/runtipi"
+
+# Validate Runtipi path and VERSION file
+if [[ ! -d "$runtipi_path" ]]; then
+    echo "Error: Runtipi path '$runtipi_path' not found or is not a directory." >&2
+    echo "Please correct the 'runtipi_path' variable in the script." >&2
+    exit 1
+fi
+version_file="$runtipi_path/VERSION"
+if [[ ! -f "$version_file" ]]; then
+    echo "Error: Version file '$version_file' not found." >&2
+    exit 1
+fi
+
 # Get Current Version of Runtipi
-runtipi_path=/path/to/runtipi # Change this to the path of your Runtipi installation.
-current_version=$(cat $runtipi_path/VERSION)
+current_version=$(cat "$version_file")
+if [[ -z "$current_version" ]]; then
+    echo "Error: Could not read current version from '$version_file'." >&2
+    exit 1
+fi
+echo "Current version: $current_version"
 
 # Get the latest release information from GitHub API
-latest_release=$(curl -L \
+echo "Fetching latest release info..."
+latest_release=$(curl -fsSL \
   -H "Accept: application/vnd.github+json" \
   -H "X-GitHub-Api-Version: 2022-11-28" \
   https://api.github.com/repos/runtipi/runtipi/releases/latest)
 
-# Extract the tag name from the release information
+if [[ $? -ne 0 || -z "$latest_release" ]]; then
+    echo "Error: Failed to fetch release information from GitHub." >&2
+    exit 1
+fi
+
 tag_name=$(echo "$latest_release" | grep -o '"tag_name": "[^"]*' | cut -d'"' -f4)
 
-# Compare major version numbers
+if [[ -z "$tag_name" ]]; then
+    echo "Error: Could not extract tag_name from GitHub API response." >&2
+    exit 1
+fi
+echo "Latest version: $tag_name"
+
 compare_major_version "$tag_name" "$current_version"
 major_version_match=$?
 
-# Check if major versions are the same and if the latest release is newer than the current version
-if [[ $major_version_match -eq 0 ]] && [[ "$tag_name" > "$current_version" ]]; then
-    echo "A new release is available: $tag_name"
-    cd $runtipi_path
-    echo "Backing up current version"
-    if [ ! -d "$runtipi_path/backups" ]; then
-        mkdir -p $runtipi_path/backups
+is_newer=1
+if [[ "$tag_name" != "$current_version" ]]; then
+    latest_sorted=$(printf '%s\n%s\n' "$current_version" "$tag_name" | sort -V | tail -n1)
+    if [[ "$latest_sorted" == "$tag_name" ]]; then
+        is_newer=0
     fi
-    tar -czvf runtipi-backup-$current_version.tar.gz --exclude=media --exclude=backups *
-    mv runtipi-backup-$current_version.tar.gz $runtipi_path/backups
-    echo "Starting update"
-    $runtipi_path/runtipi-cli update latest
-else
-    echo "No new release found or major version mismatch"
 fi
+
+if [[ $major_version_match -eq 0 ]] && [[ $is_newer -eq 0 ]]; then
+    echo "A new compatible release is available: $tag_name"
+
+    runtipi_cli="$runtipi_path/runtipi-cli"
+    if [[ ! -x "$runtipi_cli" ]]; then
+        echo "Error: Runtipi CLI '$runtipi_cli' not found or not executable." >&2
+        exit 1
+    fi
+
+    cd "$runtipi_path" || exit 1
+
+    echo "Backing up current version..."
+    backup_dir="backups"
+    backup_file="runtipi-backup-$current_version.tar.gz"
+    backup_path="$backup_dir/$backup_file"
+
+    if [ ! -d "$backup_dir" ]; then
+        mkdir -p "$backup_dir"
+    fi
+
+    echo "Creating backup: $backup_path"
+
+    if tar -czf "$backup_path" --exclude=./media --exclude=./"$backup_dir" .; then
+        echo "Backup successful."
+        echo "Starting update..."
+
+        if "$runtipi_cli" update latest; then
+             echo "Update command finished."
+        else
+             echo "Error: Runtipi update command failed. Check output above." >&2
+             echo "Restore from backup '$backup_path' if necessary." >&2
+             exit 1
+        fi
+    else
+        echo "Error: Failed to create backup archive '$backup_path'." >&2
+        exit 1
+    fi
+else
+    if [[ "$tag_name" == "$current_version" ]]; then
+        echo "You are already running the latest version ($current_version)."
+    elif [[ $major_version_match -ne 0 ]]; then
+        echo "No new release found. Major version mismatch (Current: $current_version, Latest: $tag_name)."
+    else
+        echo "No new release found."
+    fi
+fi
+
+echo "Update check complete."
+exit 0
 ```
 
 This script will check if a new release is available and if so, it will backup your current installation and update to the latest release.
