@@ -13,7 +13,7 @@ sudo ./runtipi-cli stop
 Navigate to the parent directory and create an archive of the `runtipi` folder
 
 ```bash
-tar -czvf runtipi.tar.gz runtipi
+tar -czvf runtipi.tar.gz --exclude='runtipi/media' --exclude='runtipi/repos' --exclude='runtipi/backups' runtipi
 ```
 
 Send the archive to your second server. For example, using [magic-wormhole](https://github.com/magic-wormhole/magic-wormhole).

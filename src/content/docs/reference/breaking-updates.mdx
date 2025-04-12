@@ -6,6 +6,182 @@ import { Steps, Callout, FileTree } from "nextra/components";
 
 This page is dedicated to describe breaking updates and guide you through the process of updating your instance to the newer versions.
 
+## Update from 3.x.x to 4.0.0 (Beta)
+
+<Callout type="warning">4.0.0 is still a beta version</Callout>
+
+In the version **4.0.0** we introduced a major new feature: multi app-store support. This feature requires you to update your folder structure to support multiple app-stores.
+In previous versions, the folder structure was like this:
+
+<FileTree>
+  <FileTree.Folder name="runtipi" defaultOpen>
+    <FileTree.Folder name="app-data" defaultOpen>
+      <FileTree.Folder name="nextcloud" />
+    </FileTree.Folder>
+    <FileTree.Folder name="apps" defaultOpen>
+      <FileTree.Folder name="nextcloud" />
+    </FileTree.Folder>
+  </FileTree.Folder>
+</FileTree>
+
+From now on, the folder structure will include a new sub-folder for each app-store. The new folder structure will look like this:
+
+<FileTree>
+  <FileTree.Folder name="runtipi" defaultOpen>
+    <FileTree.Folder name="app-data" defaultOpen>
+      <FileTree.Folder name="<my-store>" defaultOpen>
+        <FileTree.Folder name="nextcloud" />
+      </FileTree.Folder>
+    </FileTree.Folder>
+    <FileTree.Folder name="apps" defaultOpen>
+      <FileTree.Folder name="<my-store>" defaultOpen>
+        <FileTree.Folder name="nextcloud" />
+      </FileTree.Folder>
+    </FileTree.Folder>
+  </FileTree.Folder>
+</FileTree>
+
+We have prepared a script that will automatically update your folder structure to the new format. You can run it by executing the following command in your `runtipi` directory:
+
+```bash
+curl -sSL https://raw.githubusercontent.com/runtipi/runtipi/release/4.0.0/scripts/temp-update-3.0.0-to-4.0.0-beta.sh | bash
+```
+
+Or you can do it manually by following these steps:
+
+<Steps>
+
+### Ensure you have a backup of your instance
+
+You can refer to the [backup documentation](/docs/guides/backup-and-restore) for more information on how to backup your data.
+
+### Stop all you applications
+
+Navigate to your runtipi dashboard and stop all your applications one by one.
+
+### Stop your Runtipi instance
+
+```bash
+./runtipi-cli stop
+```
+
+### Move your existing directories to a temporary location
+
+Run each of the following commands in your `runtipi` directory:
+
+Create a temporary directory to store your existing directories:
+
+```bash
+mkdir -p migration-backups
+```
+
+Move your existing directories to the newly created temporary directory:
+
+```bash
+mv app-data migration-backups/app-data
+mv apps migration-backups/apps
+mv user-config migration-backups/user-config
+mv backups migration-backups/backups
+```
+
+Create the new directories:
+
+```bash
+mkdir -p app-data/migrated apps/migrated user-config/migrated backups/migrated
+```
+
+<Callout>
+  **Note**: The name `migrated` is important. This is the new name of your
+  existing app-store.
+</Callout>
+
+### Move back your existing directories to the new locations
+
+For each app you have installed, run the following commands:
+
+```bash
+mv migration-backups/apps/<app-name> apps/migrated/migrated/<app-name>
+mv migration-backups/app-data/<app-name> app-data/migrated/migrated/<app-name>
+mv migration-backups/user-config/<app-name> user-config/migrated/migrated/<app-name>
+mv migration-backups/backups/<app-name> backups/migrated/migrated/<app-name>
+```
+
+If you had a custom `tipi-compose.yml` file, you will need to move it back but
+outside of the `migrated` folder. You can do this by running the following
+command:
+
+```bash
+mv migration-backups/user-config/tipi-compose.yml user-config/tipi-compose.yml
+```
+
+### Make sure you have moved all your data
+
+Check that you did not miss any app. You can do this by running the following command:
+
+```bash
+ls -la migration-backups/apps
+ls -la migration-backups/app-data
+ls -la migration-backups/user-config
+ls -la migration-backups/backups
+```
+
+It should print an empty list.
+
+### Determine the architecture of your system
+
+```bash
+uname -m
+```
+
+The output should be either `x86_64`, `arm64` or `aarch64`
+
+If you are running `x86_64` architecture, the asset you need to download is `runtipi-cli-linux-x86_64.tar.gz`
+otherwise you need to download `runtipi-cli-linux-aarch64.tar.gz`.
+
+### Download the new CLI in your `runtipi` directory
+
+```bash
+curl -sSL https://github.com/runtipi/runtipi/releases/download/v4.0.0-beta.5/<asset-name> | tar -xz
+```
+
+### Remove the old CLI
+
+```bash
+rm runtipi-cli
+```
+
+### Rename the new CLI
+
+```bash
+mv runtipi-cli-linux-<arch> runtipi-cli
+```
+
+### Make the new CLI executable
+
+```bash
+chmod +x ./runtipi-cli
+```
+
+### Start your instance
+
+```bash
+sudo ./runtipi-cli start
+```
+
+### Check your instance
+
+Navigate to your runtipi dashboard and start all your applications one by one. Make sure everything is working as expected.
+
+### Clean up
+
+After you are sure everything is working as expected, you can delete the temporary directory:
+
+```bash
+rm -rf migration-backups
+```
+
+</Steps>
+
 ## Update from 2.x.x to 3.0.0
 
 In the version **3.0.0** we completely re-wrote the `runtipi-cli` tool.
