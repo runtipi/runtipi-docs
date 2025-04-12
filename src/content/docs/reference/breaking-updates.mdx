@@ -43,11 +43,25 @@ From now on, the folder structure will include a new sub-folder for each app-sto
 
 We have prepared a script that will automatically update your folder structure to the new format. You can run it by executing the following command in your `runtipi` directory:
 
+Inside the runtipi directory, download the script:
+
 ```bash
-curl -sSL https://raw.githubusercontent.com/runtipi/runtipi/release/4.0.0/scripts/temp-update-3.0.0-to-4.0.0-beta.sh | bash
+curl -sSL https://raw.githubusercontent.com/runtipi/runtipi/release/4.0.0/scripts/temp-update-3.0.0-to-4.0.0-beta.sh -o update_script.sh
 ```
 
-Or you can do it manually by following these steps:
+Make the script executable:
+
+```bash
+chmod +x update_script.sh
+```
+
+Run the script:
+
+```bash
+sudo ./update_script.sh
+```
+
+Or you can follow all the manual steps below:
 
 <Steps>
 
