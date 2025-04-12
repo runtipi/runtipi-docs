@@ -97,13 +97,13 @@ mkdir -p app-data/migrated apps/migrated user-config/migrated backups/migrated
 
 ### Move back your existing directories to the new locations
 
-For each app you have installed, run the following commands:
+Move back your existing data to the new locations. You can do this by running the following commands:
 
 ```bash
-mv migration-backups/apps/<app-name> apps/migrated/migrated/<app-name>
-mv migration-backups/app-data/<app-name> app-data/migrated/migrated/<app-name>
-mv migration-backups/user-config/<app-name> user-config/migrated/migrated/<app-name>
-mv migration-backups/backups/<app-name> backups/migrated/migrated/<app-name>
+mv migration-backups/apps/* apps/migrated/
+mv migration-backups/app-data/* app-data/migrated/
+mv migration-backups/user-config/* user-config/migrated/
+mv migration-backups/backups/* backups/migrated/
 ```
 
 If you had a custom `tipi-compose.yml` file, you will need to move it back but
