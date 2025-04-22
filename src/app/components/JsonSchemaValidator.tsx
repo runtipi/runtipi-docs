@@ -27,7 +27,7 @@ export const JsonSchemaValidator = ({
 
     try {
       const parsedValue = JSON.parse(value);
-      const ajv = new Ajv({ allErrors: true, removeAdditional: true });
+      const ajv = new Ajv({ allErrors: true });
       const validate = ajv.compile(schema);
       const valid = validate(parsedValue);
 
