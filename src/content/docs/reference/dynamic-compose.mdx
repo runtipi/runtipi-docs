@@ -1,367 +1,21 @@
 import { Steps } from "nextra/components";
+import { JsonSchemaValidator } from "@/app/components";
+import { toJsonSchema, dynamicComposeSchema } from "@runtipi/common/schemas";
 
-# Dynamic Compose
+# Dynamic Compose Reference
 
-In Runtipi version `v3.2.0` we added a new feature called dynamic compose, this is a
-simplified and custom version of the `docker-compose.yml` file that allows for more control
-on how apps gets deployed, for example only using the reverse proxy or only using ports,
-it also allows extra features like multiple appstores.
+In Runtipi version `v3.2.0` we added dynamic compose, a simplified and custom version of the `docker-compose.yml` file that allows for more control on how apps get deployed. For example, you can choose to only use the reverse proxy or only use ports. It also allows extra features like multiple appstores.
 
-Here is an example `docker-compose.json` file for a simple app like Nginx:
+For a step-by-step guide on creating dynamic compose files, see [Creating a dynamic compose file](/docs/guides/dynamic-compose-guide).
 
-```json
-{
-  "services": [
-    {
-      "name": "nginx",
-      "image": "nginx",
-      "internalPort": 80,
-      "isMain": true
-    }
-  ]
-}
-```
+## Try it out
 
-And that's it, with just a few lines of config you can deploy an nginx app.
+You can validate your dynamic compose configuration using the validator below:
 
-## Creating the dynamic compose file
-
-Let's see how easy it is to create the `docker-compose.json` file.
-
-<Steps>
-
-### Creating the file and enabling dynamic compose
-
-The first thing we need to do is create the `docker-compose.json` next to the `docker-compose.yml` file
-in the app folder. We also need to tell Runtipi to use the file so we need to edit the app's `config.json`
-and add the following configuration line at the end:
-
-```json
-"dynamic_config": true
-```
-
-### Defining the services
-
-Now we need to add our `services` array which defines all our services.
-
-```json
-{
-  "services": []
-}
-```
-
-The `services` key is the same as in the `docker-compose.yml`, inside this array we can add multiple apps.
-
-### Adding a service
-
-Let's add our `myapp` service.
-
-```json
-{
-  "services": [
-    {
-      "name": "myapp"
-    }
-  ]
-}
-```
-
-As you can see I created an object and added the `name` key, that defines the service name and container name.
-
-### Adding an image
-
-Let's add an image now, for this example our image is `myapp:latest`.
-
-```json
-{
-  "services": [
-    {
-      "name": "app",
-      "image": "myapp:latest"
-    }
-  ]
-}
-```
-
-### Exposing the UI
-
-In this example this service also exposes a web UI, so let's add that too.
-
-```json
-{
-  "services": [
-    {
-      "name": "myapp",
-      "image": "myapp:latest",
-      "internalPort": 80,
-      "isMain": true
-    }
-  ]
-}
-```
-
-So we defined our app port using the `internalPort` key, the `isMain` key indicates where the traefik labels should go,
-traefik labels should always be on the part of the app that exposes the UI.
-
-### Adding volumes
-
-In this example we also need to store some app data, we want to bind the `${APP_DATA_DIR}/data/myapp` host folder to
-the `/data` container folder with read-write permissions, this can be done like this:
-
-```json
-{
-  "services": [
-    {
-      "name": "myapp",
-      "image": "myapp:latest",
-      "internalPort": 80,
-      "isMain": true,
-      "volumes": [
-        {
-          "hostPath": "${APP_DATA_DIR}/data/myapp",
-          "containerPath": "data",
-          "readOnly": false
-        }
-      ]
-    }
-  ]
-}
-```
-
-As you can see the `volumes` key is an array where you can define multiple volumes in the form of the object we showcased
-above.
-
-### Adding environment variables
-
-Another important thing in a Docker Compose file are the environment variables, environment variables can be added
-very easily using this simple format:
-
-```json
-{
-  "services": [
-    {
-      "name": "myapp",
-      "image": "myapp:latest",
-      "internalPort": 80,
-      "isMain": true,
-      "volumes": [
-        {
-          "hostPath": "${APP_DATA_DIR}/data/myapp",
-          "containerPath": "data",
-          "readOnly": false
-        }
-      ],
-      "environment": {
-        "FOO": "bar",
-        "PASSWORD": "${MYAPP_PASSWORD}"
-      }
-    }
-  ]
-}
-```
-
-You can add as many environment variables as you like and you can also use the values from form
-fields as you normally would.
-
-### Adding multiple ports
-
-A lot of apps require more that one port, either an API or a setup UI, you can add multiple ports like this:
-
-```json
-{
-  "services": [
-    {
-      "name": "myapp",
-      "image": "myapp:latest",
-      "internalPort": 80,
-      "isMain": true,
-      "volumes": [
-        {
-          "hostPath": "${APP_DATA_DIR}/data/myapp",
-          "containerPath": "data",
-          "readOnly": false
-        }
-      ],
-      "environment": {
-        "FOO": "bar",
-        "PASSWORD": "${MYAPP_PASSWORD}"
-      },
-      "addPorts": [
-        {
-          "containerPort": 8080,
-          "hostPort": 8080,
-          "tcp": true
-        },
-        {
-          "containerPort": 25565,
-          "hostPort": 25565,
-          "udp": true
-        }
-      ]
-    }
-  ]
-}
-```
-
-Again we create an `addPorts` array and define our container and host port, you can specify if the port is UDP or TCP,
-if you don't define anything TCP will be assumed. If you need to add a ports that does both TCP and UDP you can do it like so:
-
-```json
-"addPorts": [
-  {
-    "containerPort": 8080, "hostPort": 8080, "tcp": true
-  },
-  {
-    "containerPort": 8080, "hostPort": 8080, "udp": true
-  }
-]
-```
-
-### Adding a healthcheck
-
-If you like you can add a healthcheck to your app, this is exactly the same as in the `docker-compose.yml` file
-but in JSON format. Here is an example:
-
-```json
-{
-  "services": [
-    {
-      "name": "myapp",
-      "image": "myapp:latest",
-      "internalPort": 80,
-      "isMain": true,
-      "volumes": [
-        {
-          "hostPath": "${APP_DATA_DIR}/data/myapp",
-          "containerPath": "data",
-          "readOnly": false
-        }
-      ],
-      "environment": {
-        "FOO": "bar",
-        "PASSWORD": "${MYAPP_PASSWORD}"
-      },
-      "addPorts": [
-        {
-          "containerPort": 8080,
-          "hostPort": 8080,
-          "tcp": true
-        },
-        {
-          "containerPort": 25565,
-          "hostPort": 25565,
-          "udp": true
-        }
-      ],
-      "healthCheck": {
-        "test": "curl --fail http://localhost || exit 1",
-        "retries": 3,
-        "interval": "30s",
-        "timeout": "10s"
-      }
-    }
-  ]
-}
-```
-
-### Depends on
-
-A lot of services depend on other services (like a database) to be ready when they start. You can add the `dependsOn` key
-like this:
-
-```json
-{
-  "services": [
-    {
-      "name": "myapp",
-      "image": "myapp:latest",
-      "internalPort": 80,
-      "isMain": true,
-      "volumes": [
-        {
-          "hostPath": "${APP_DATA_DIR}/data/myapp",
-          "containerPath": "data",
-          "readOnly": false
-        }
-      ],
-      "environment": {
-        "FOO": "bar",
-        "PASSWORD": "${MYAPP_PASSWORD}"
-      },
-      "addPorts": [
-        {
-          "containerPort": 8080,
-          "hostPort": 8080,
-          "tcp": true
-        },
-        {
-          "containerPort": 25565,
-          "hostPort": 25565,
-          "udp": true
-        }
-      ],
-      "healthCheck": {
-        "test": "curl --fail http://localhost || exit 1",
-        "retries": 3,
-        "interval": "30s",
-        "timeout": "10s"
-      },
-      "dependsOn": {
-        "service1": {
-          "condition": "service_healthy"
-        }
-      }
-    }
-  ]
-}
-```
-
-If you don't need to specify the condition you can add a simpler format like this:
-
-```json
-"dependsOn": "service1"
-```
-
-### Miscellaneous
-
-Apart from the most common Docker Compose items, you can also add some other not so often ones.
-
-For example a custom command:
-
-```json
-"command": "/my/app"
-```
-
-A custom network mode:
-
-```json
-"networkMode": "host"
-```
-
-Ulimits:
-
-```json
-"ulimits": {
-  "nproc": {
-    "soft": 10,
-    "hard": 20
-  },
-  "nofile": {
-    "soft": 20,
-    "hard": 30
-  }
-}
-```
-
-Extra hosts:
-
-```json
-"extraHosts": [
-  "somehost:someotherhost"
-]
-```
-
-</Steps>
+<JsonSchemaValidator
+  schema={toJsonSchema(dynamicComposeSchema)}
+  placeholder="Paste your dynamic compose configuration here to validate it..."
+/>
 
 ## Configuration Options Reference
 
@@ -402,8 +56,8 @@ Example `addPorts` configuration:
 
 Options for mounting volumes:
 
-| Option  | Type  | Description             | Example       |
-| ------- | ----- | ----------------------- | ------------- |
+| Option  | Type  | Description             | Example           |
+| ------- | ----- | ----------------------- | ----------------- |
 | volumes | array | List of volume mappings | See example below |
 
 Example `volumes` configuration:
@@ -432,8 +86,8 @@ Options related to networking:
 
 Options for container health monitoring:
 
-| Option      | Type   | Description                          | Example       |
-| ----------- | ------ | ------------------------------------ | ------------- |
+| Option      | Type   | Description                          | Example           |
+| ----------- | ------ | ------------------------------------ | ----------------- |
 | healthCheck | object | Container health check configuration | See example below |
 
 Example `healthCheck` configuration:
@@ -453,10 +107,10 @@ Example `healthCheck` configuration:
 
 Options for container resource limits and deployment:
 
-| Option  | Type   | Description                      | Example       |
-| ------- | ------ | -------------------------------- | ------------- |
-| deploy  | object | Resource limits and reservations | See example below |
-| ulimits | object | Resource limits                  | See example below |
+| Option  | Type   | Description                      | Example            |
+| ------- | ------ | -------------------------------- | ------------------ |
+| deploy  | object | Resource limits and reservations | See example below  |
+| ulimits | object | Resource limits                  | See example below  |
 | shmSize | string | Size of /dev/shm                 | `"shmSize": "2gb"` |
 
 Example `deploy` configuration:
@@ -499,18 +153,18 @@ Options related to container security:
 
 Additional options for fine-tuning:
 
-| Option          | Type               | Description                        | Example                                   |
-| --------------- | ------------------ | ---------------------------------- | ----------------------------------------- |
-| entrypoint      | string \| string[] | Container entrypoint               | `"entrypoint": "./entrypoint.sh"`         |
-| workingDir      | string             | Working directory inside container | `"workingDir": "/app"`                    |
-| tty             | boolean            | Allocate a pseudo-TTY              | `"tty": true`                             |
-| stdinOpen       | boolean            | Keep STDIN open                    | `"stdinOpen": true`                       |
-| stopSignal      | string             | Signal to stop the container       | `"stopSignal": "SIGTERM"`                 |
-| stopGracePeriod | string             | Time to wait to stop container     | `"stopGracePeriod": "10s"`                |
-| pid             | string             | PID namespace                      | `"pid": "host"`                           |
-| sysctls         | object             | Sysctl settings                    | `"sysctls": {"net.core.somaxconn": 1024}` |
-| logging         | object             | Logging configuration              | See example below                         |
-| devices         | string[]           | Device mappings                    | `"devices": ["/dev/ttyUSB0:/dev/ttyUSB0"]`|
+| Option          | Type               | Description                        | Example                                    |
+| --------------- | ------------------ | ---------------------------------- | ------------------------------------------ |
+| entrypoint      | string \| string[] | Container entrypoint               | `"entrypoint": "./entrypoint.sh"`          |
+| workingDir      | string             | Working directory inside container | `"workingDir": "/app"`                     |
+| tty             | boolean            | Allocate a pseudo-TTY              | `"tty": true`                              |
+| stdinOpen       | boolean            | Keep STDIN open                    | `"stdinOpen": true`                        |
+| stopSignal      | string             | Signal to stop the container       | `"stopSignal": "SIGTERM"`                  |
+| stopGracePeriod | string             | Time to wait to stop container     | `"stopGracePeriod": "10s"`                 |
+| pid             | string             | PID namespace                      | `"pid": "host"`                            |
+| sysctls         | object             | Sysctl settings                    | `"sysctls": {"net.core.somaxconn": 1024}`  |
+| logging         | object             | Logging configuration              | See example below                          |
+| devices         | string[]           | Device mappings                    | `"devices": ["/dev/ttyUSB0:/dev/ttyUSB0"]` |
 
 Example `logging` configuration:
 
@@ -527,10 +181,10 @@ Example `logging` configuration:
 
 Options for managing service dependencies:
 
-| Option    | Type             | Description                              | Example       |
-| --------- | ---------------- | ---------------------------------------- | ------------- |
-| dependsOn | object \| string | Service dependencies                     | See example below |
-| isMain    | boolean          | Indicates where traefik labels should be applied | `"isMain": true` |
+| Option    | Type             | Description                                      | Example           |
+| --------- | ---------------- | ------------------------------------------------ | ----------------- |
+| dependsOn | object \| string | Service dependencies                             | See example below |
+| isMain    | boolean          | Indicates where traefik labels should be applied | `"isMain": true`  |
 
 Example `dependsOn` configuration:
 

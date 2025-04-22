@@ -1,0 +1,372 @@
+import { Steps, Callout } from "nextra/components";
+import { JsonSchemaValidator } from "@/app/components";
+import { toJsonSchema, dynamicComposeSchema } from "@runtipi/common/schemas";
+
+# Creating a dynamic compose file
+
+In Runtipi version `v3.2.0` we added dynamic compose, a simplified and custom version of the `docker-compose.yml` file that allows for more control on how apps get deployed. For example, you can choose to only use the reverse proxy or only use ports. It also allows extra features like multiple appstores.
+
+Here is an example `docker-compose.json` file for a simple app like Nginx:
+
+```json
+{
+  "services": [
+    {
+      "name": "nginx",
+      "image": "nginx",
+      "internalPort": 80,
+      "isMain": true
+    }
+  ]
+}
+```
+
+And that's it, with just a few lines of config you can deploy an nginx app.
+
+## Creating your first dynamic compose file
+
+Let's see how easy it is to create the `docker-compose.json` file.
+
+<Steps>
+
+### Creating the file and enabling dynamic compose
+
+First create the `docker-compose.json` next to the `docker-compose.yml` file in your app folder. Then edit the app's `config.json` and add this configuration line at the end:
+
+```json
+"dynamic_config": true
+```
+
+### Defining the services
+
+Now add your `services` array which defines all your services:
+
+```json
+{
+  "services": []
+}
+```
+
+The `services` key is the same as in the `docker-compose.yml`. Inside this array you can add multiple apps.
+
+### Adding a service
+
+Let's add a service called `myapp`:
+
+```json
+{
+  "services": [
+    {
+      "name": "myapp"
+    }
+  ]
+}
+```
+
+The `name` key defines both the service name and container name.
+
+### Adding an image
+
+Add your Docker image. For this example we'll use `myapp:latest`:
+
+```json
+{
+  "services": [
+    {
+      "name": "app",
+      "image": "myapp:latest"
+    }
+  ]
+}
+```
+
+### Exposing the UI
+
+If your service exposes a web UI, add the port and main service configuration:
+
+```json
+{
+  "services": [
+    {
+      "name": "myapp",
+      "image": "myapp:latest",
+      "internalPort": 80,
+      "isMain": true
+    }
+  ]
+}
+```
+
+The `internalPort` specifies your app's port, and `isMain` indicates where the traefik labels should go. Traefik labels should always be on the part of the app that exposes the UI.
+
+### Adding volumes
+
+To store app data, you can bind mount directories. For example, to mount `${APP_DATA_DIR}/data/myapp` to `/data` with read-write permissions:
+
+```json
+{
+  "services": [
+    {
+      "name": "myapp",
+      "image": "myapp:latest",
+      "internalPort": 80,
+      "isMain": true,
+      "volumes": [
+        {
+          "hostPath": "${APP_DATA_DIR}/data/myapp",
+          "containerPath": "data",
+          "readOnly": false
+        }
+      ]
+    }
+  ]
+}
+```
+
+The `volumes` key is an array where you can define multiple volume mounts.
+
+### Adding environment variables
+
+Environment variables can be added easily using this format:
+
+```json
+{
+  "services": [
+    {
+      "name": "myapp",
+      "image": "myapp:latest",
+      "internalPort": 80,
+      "isMain": true,
+      "volumes": [
+        {
+          "hostPath": "${APP_DATA_DIR}/data/myapp",
+          "containerPath": "data",
+          "readOnly": false
+        }
+      ],
+      "environment": {
+        "FOO": "bar",
+        "PASSWORD": "${MYAPP_PASSWORD}"
+      }
+    }
+  ]
+}
+```
+
+You can add as many environment variables as needed and use values from form fields as you normally would.
+
+### Adding multiple ports
+
+Many apps require multiple ports for features like APIs or setup UIs. Add additional ports like this:
+
+```json
+{
+  "services": [
+    {
+      "name": "myapp",
+      "image": "myapp:latest",
+      "internalPort": 80,
+      "isMain": true,
+      "volumes": [
+        {
+          "hostPath": "${APP_DATA_DIR}/data/myapp",
+          "containerPath": "data",
+          "readOnly": false
+        }
+      ],
+      "environment": {
+        "FOO": "bar",
+        "PASSWORD": "${MYAPP_PASSWORD}"
+      },
+      "addPorts": [
+        {
+          "containerPort": 8080,
+          "hostPort": 8080,
+          "tcp": true
+        },
+        {
+          "containerPort": 25565,
+          "hostPort": 25565,
+          "udp": true
+        }
+      ]
+    }
+  ]
+}
+```
+
+Create an `addPorts` array and define your container and host ports. Specify if the port is UDP or TCP - if not defined, TCP is assumed. For ports that need both TCP and UDP:
+
+```json
+"addPorts": [
+  {
+    "containerPort": 8080,
+    "hostPort": 8080,
+    "tcp": true
+  },
+  {
+    "containerPort": 8080,
+    "hostPort": 8080,
+    "udp": true
+  }
+]
+```
+
+### Adding a healthcheck
+
+Add container health monitoring with a healthcheck:
+
+```json
+{
+  "services": [
+    {
+      "name": "myapp",
+      "image": "myapp:latest",
+      "internalPort": 80,
+      "isMain": true,
+      "volumes": [
+        {
+          "hostPath": "${APP_DATA_DIR}/data/myapp",
+          "containerPath": "data",
+          "readOnly": false
+        }
+      ],
+      "environment": {
+        "FOO": "bar",
+        "PASSWORD": "${MYAPP_PASSWORD}"
+      },
+      "addPorts": [
+        {
+          "containerPort": 8080,
+          "hostPort": 8080,
+          "tcp": true
+        },
+        {
+          "containerPort": 25565,
+          "hostPort": 25565,
+          "udp": true
+        }
+      ],
+      "healthCheck": {
+        "test": "curl --fail http://localhost || exit 1",
+        "retries": 3,
+        "interval": "30s",
+        "timeout": "10s"
+      }
+    }
+  ]
+}
+```
+
+### Adding dependencies
+
+If your service depends on other services (like a database), add the `dependsOn` key:
+
+```json
+{
+  "services": [
+    {
+      "name": "myapp",
+      "image": "myapp:latest",
+      "internalPort": 80,
+      "isMain": true,
+      "volumes": [
+        {
+          "hostPath": "${APP_DATA_DIR}/data/myapp",
+          "containerPath": "data",
+          "readOnly": false
+        }
+      ],
+      "environment": {
+        "FOO": "bar",
+        "PASSWORD": "${MYAPP_PASSWORD}"
+      },
+      "addPorts": [
+        {
+          "containerPort": 8080,
+          "hostPort": 8080,
+          "tcp": true
+        },
+        {
+          "containerPort": 25565,
+          "hostPort": 25565,
+          "udp": true
+        }
+      ],
+      "healthCheck": {
+        "test": "curl --fail http://localhost || exit 1",
+        "retries": 3,
+        "interval": "30s",
+        "timeout": "10s"
+      },
+      "dependsOn": {
+        "service1": {
+          "condition": "service_healthy"
+        }
+      }
+    }
+  ]
+}
+```
+
+For simple dependencies without conditions, you can use the shorter format:
+
+```json
+"dependsOn": "service1"
+```
+
+### Other configuration options
+
+You can also add these common options:
+
+Custom command:
+
+```json
+"command": "/my/app"
+```
+
+Custom network mode:
+
+```json
+"networkMode": "host"
+```
+
+Process limits:
+
+```json
+"ulimits": {
+  "nproc": {
+    "soft": 10,
+    "hard": 20
+  },
+  "nofile": {
+    "soft": 20,
+    "hard": 30
+  }
+}
+```
+
+Extra hosts:
+
+```json
+"extraHosts": [
+  "somehost:someotherhost"
+]
+```
+
+</Steps>
+
+## Try it out
+
+You can validate your dynamic compose configuration using the validator below:
+
+<JsonSchemaValidator
+  schema={toJsonSchema(dynamicComposeSchema)}
+  placeholder="Paste your dynamic compose configuration here to validate it..."
+/>
+
+<Callout type="info">
+  For a complete reference of all available configuration options, see the
+  [Dynamic Compose Reference](/docs/reference/dynamic-compose) documentation.
+</Callout>
+

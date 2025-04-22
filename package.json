@@ -11,14 +11,18 @@
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",
+    "@runtipi/common": "^0.6.0",
     "@tabler/icons-react": "^3.30.0",
+    "ajv": "^8.17.1",
+    "better-ajv-errors": "^1.2.0",
     "geist": "^1.3.1",
-    "next": "^15.2.0",
+    "next": "^15.3.1",
     "nextra": "^4.2.13",
     "nextra-theme-docs": "^4.2.13",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "tailwind-merge": "^3.0.2"
+    "tailwind-merge": "^3.0.2",
+    "zod-to-json-schema": "^3.24.5"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.0.9",
