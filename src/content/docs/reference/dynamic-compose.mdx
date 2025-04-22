@@ -5,11 +5,9 @@ import { Steps } from "nextra/components";
 In Runtipi version `v3.2.0` we added a new feature called dynamic compose, this is a
 simplified and custom version of the `docker-compose.yml` file that allows for more control
 on how apps gets deployed, for example only using the reverse proxy or only using ports,
-it also allows extra features like multiple appstores. This feature is still quite new
-and we are trying to migrate the entire appstore to the new format deprecating the
-`docker-compose.yml` file.
+it also allows extra features like multiple appstores.
 
-Here is an example `docker-compose.json` file for the app Nginx:
+Here is an example `docker-compose.json` file for a simple app like Nginx:
 
 ```json
 {
@@ -24,7 +22,7 @@ Here is an example `docker-compose.json` file for the app Nginx:
 }
 ```
 
-And that's it, with just 10 lines of json you can deploy an nginx app.
+And that's it, with just a few lines of config you can deploy an nginx app.
 
 ## Creating the dynamic compose file
 
@@ -364,3 +362,186 @@ Extra hosts:
 ```
 
 </Steps>
+
+## Configuration Options Reference
+
+### Basic Configuration
+
+These are the most commonly used options when configuring a service:
+
+| Option      | Type               | Description                           | Example                                                 |
+| ----------- | ------------------ | ------------------------------------- | ------------------------------------------------------- |
+| name        | string             | The name of the service and container | `"name": "nginx"`                                       |
+| image       | string             | The Docker image to use               | `"image": "nginx:latest"`                               |
+| command     | string \| string[] | The command to run in the container   | `"command": "/my/app"` or `"command": ["npm", "start"]` |
+| environment | object             | Environment variables                 | `"environment": {"FOO": "bar"}`                         |
+| restart     | string             | Container restart policy              | `"restart": "always"`                                   |
+
+### Port Configuration
+
+Options related to exposing ports:
+
+| Option       | Type   | Description                            | Example              |
+| ------------ | ------ | -------------------------------------- | -------------------- |
+| internalPort | number | The main port exposed by the container | `"internalPort": 80` |
+| addPorts     | array  | Additional ports to expose             | See example below    |
+
+Example `addPorts` configuration:
+
+```json
+"addPorts": [{
+  "containerPort": 8080,
+  "hostPort": 8080,
+  "tcp": true,
+  "udp": false,
+  "interface": "127.0.0.1"
+}]
+```
+
+### Volume Configuration
+
+Options for mounting volumes:
+
+| Option  | Type  | Description             | Example       |
+| ------- | ----- | ----------------------- | ------------- |
+| volumes | array | List of volume mappings | See example below |
+
+Example `volumes` configuration:
+
+```json
+"volumes": [{
+  "hostPath": "/host/path",
+  "containerPath": "/container/path",
+  "readOnly": false,
+  "shared": false,
+  "private": false
+}]
+```
+
+### Network Configuration
+
+Options related to networking:
+
+| Option      | Type     | Description                   | Example                       |
+| ----------- | -------- | ----------------------------- | ----------------------------- |
+| networkMode | string   | Custom network mode           | `"networkMode": "host"`       |
+| extraHosts  | string[] | Additional /etc/hosts entries | `"extraHosts": ["host1:ip1"]` |
+| hostname    | string   | Container hostname            | `"hostname": "mycontainer"`   |
+
+### Health Check Configuration
+
+Options for container health monitoring:
+
+| Option      | Type   | Description                          | Example       |
+| ----------- | ------ | ------------------------------------ | ------------- |
+| healthCheck | object | Container health check configuration | See example below |
+
+Example `healthCheck` configuration:
+
+```json
+"healthCheck": {
+  "test": "curl --fail http://localhost",
+  "retries": 3,
+  "interval": "30s",
+  "timeout": "10s",
+  "start_interval": "5s",
+  "start_period": "30s"
+}
+```
+
+### Resource Configuration
+
+Options for container resource limits and deployment:
+
+| Option  | Type   | Description                      | Example       |
+| ------- | ------ | -------------------------------- | ------------- |
+| deploy  | object | Resource limits and reservations | See example below |
+| ulimits | object | Resource limits                  | See example below |
+| shmSize | string | Size of /dev/shm                 | `"shmSize": "2gb"` |
+
+Example `deploy` configuration:
+
+```json
+"deploy": {
+  "resources": {
+    "limits": {
+      "cpus": "0.5",
+      "memory": "512M",
+      "pids": 100
+    }
+  }
+}
+```
+
+Example `ulimits` configuration:
+
+```json
+"ulimits": {
+  "nproc": {"soft": 10, "hard": 20},
+  "nofile": {"soft": 20, "hard": 30}
+}
+```
+
+### Security Configuration
+
+Options related to container security:
+
+| Option      | Type     | Description                            | Example                                |
+| ----------- | -------- | -------------------------------------- | -------------------------------------- |
+| privileged  | boolean  | Run container with elevated privileges | `"privileged": true`                   |
+| capAdd      | string[] | Add container capabilities             | `"capAdd": ["NET_ADMIN"]`              |
+| capDrop     | string[] | Drop container capabilities            | `"capDrop": ["NET_ADMIN"]`             |
+| securityOpt | string[] | Security options                       | `"securityOpt": ["no-new-privileges"]` |
+| readOnly    | boolean  | Mount root filesystem as read only     | `"readOnly": true`                     |
+| user        | string   | Username or UID                        | `"user": "1000:1000"`                  |
+
+### Advanced Configuration
+
+Additional options for fine-tuning:
+
+| Option          | Type               | Description                        | Example                                   |
+| --------------- | ------------------ | ---------------------------------- | ----------------------------------------- |
+| entrypoint      | string \| string[] | Container entrypoint               | `"entrypoint": "./entrypoint.sh"`         |
+| workingDir      | string             | Working directory inside container | `"workingDir": "/app"`                    |
+| tty             | boolean            | Allocate a pseudo-TTY              | `"tty": true`                             |
+| stdinOpen       | boolean            | Keep STDIN open                    | `"stdinOpen": true`                       |
+| stopSignal      | string             | Signal to stop the container       | `"stopSignal": "SIGTERM"`                 |
+| stopGracePeriod | string             | Time to wait to stop container     | `"stopGracePeriod": "10s"`                |
+| pid             | string             | PID namespace                      | `"pid": "host"`                           |
+| sysctls         | object             | Sysctl settings                    | `"sysctls": {"net.core.somaxconn": 1024}` |
+| logging         | object             | Logging configuration              | See example below                         |
+| devices         | string[]           | Device mappings                    | `"devices": ["/dev/ttyUSB0:/dev/ttyUSB0"]`|
+
+Example `logging` configuration:
+
+```json
+"logging": {
+  "driver": "json-file",
+  "options": {
+    "max-size": "10m"
+  }
+}
+```
+
+### Dependencies
+
+Options for managing service dependencies:
+
+| Option    | Type             | Description                              | Example       |
+| --------- | ---------------- | ---------------------------------------- | ------------- |
+| dependsOn | object \| string | Service dependencies                     | See example below |
+| isMain    | boolean          | Indicates where traefik labels should be applied | `"isMain": true` |
+
+Example `dependsOn` configuration:
+
+```json
+"dependsOn": {
+  "db": {
+    "condition": "service_healthy"
+  }
+}
+```
+
+> **Note**: Some of these options are advanced features that should be used with caution as they can affect container security and stability. Always refer to Docker documentation when using advanced options like `privileged`, `capAdd`, or `securityOpt`.
+
+> **Tip**: For most applications, you'll only need the Basic Configuration and Port Configuration options. The other options are available for more complex use cases.
