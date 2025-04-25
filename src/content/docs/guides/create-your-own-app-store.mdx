@@ -177,42 +177,23 @@ Here are some best practices to follow when creating your own app store:
 - **Avoid using `latest` tags** in Docker images as they can break your apps in the future
 - **Test your apps thoroughly** before publishing them
 - **Include comprehensive documentation** in your app descriptions
-- **Keep your repository organized** with clear folder structures and naming conventions
 - **Regularly update your apps** to keep them secure and compatible with the latest version of Runtipi
 - **Use dynamic compose format** which is required for Runtipi v4.0.0 and above
-
-## Updating your app store
-
-To update your app store, simply push the changes to your repository. The next time Runtipi checks for updates (on restart or when explicitly triggered), it will pull the latest changes.
-
-To manually update your app stores:
-
-```bash
-cd /path/to/runtipi
-./runtipi-cli app update-store
-```
 
 ## Troubleshooting
 
 If you encounter issues with your custom app store:
 
-- Check that your repository URL is correct in the `settings.json` file
-- Ensure your app's `config.json` and `docker-compose.json` files are valid JSON
+- Ensure your app's `config.json` and `docker-compose.json` files are valid using the validation tools
 - Verify that the folder structure matches what Runtipi expects
 - Check that the `id` field in `config.json` matches the folder name
 - Make sure you're using the dynamic compose format correctly
 - Look for errors in the Runtipi logs (located in `runtipi/logs`)
 
-<Callout type="warning">
-  If you're updating from an older version of Runtipi to v4.0.0 or newer, make
-  sure to follow the [migration
-  guide](/docs/reference/breaking-updates#update-from-3xx-to-400-beta) to adapt
-  to the new folder structure and dynamic compose requirements.
-</Callout>
 
 ## Sharing your app store
 
-Once you've created your app store, you can share it with others by providing them with your repository URL. They can add it to their `settings.json` file as described above.
+Once you've created your app store, you can share it with others by providing them with your repository URL. They can add it to their Runtipi instance in the same way you did.
 
 Consider documenting your app store with a README.md file in the repository root to help others understand what apps are included and how to use them.
 
