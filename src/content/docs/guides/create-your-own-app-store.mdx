@@ -1,0 +1,218 @@
+import { Steps, Callout, FileTree } from "nextra/components";
+import { JsonSchemaValidator } from "@/app/components";
+
+# Create your own app store
+
+As of Runtipi version `v4.0.0`, you can create and use your own custom app stores alongside the official one. This feature allows you to create, maintain, and share your own collection of apps.
+
+<Callout type="info">
+  This feature requires Runtipi version `v4.0.0` or above.
+</Callout>
+
+## Why create your own app store?
+
+There are several reasons why you might want to create your own app store:
+
+- Host specialized apps not available in the official repository
+- Develop and test new apps
+- Create an app store specific to your organization or use case
+- Modify existing apps to better suit your needs
+- Share your collection of apps with others
+
+## Setting up your own app store repository
+
+<Steps>
+
+### Use the repository template
+
+First, head over to the [Runtipi app store template repository](https://github.com/runtipi/example-appstore) and
+click the "Use this template" button to create a new repository based on the template.
+This will give you a starting point with the necessary structure and files.
+
+[![Use this template](/images/create-appstore/1-use-template.png)]()
+
+Give your new repository a meaningful name and make sure to set it as a public repository.
+
+[![Create repository](/images/create-appstore/2-create-repo.png)]()
+
+### Add your new store to Runtipi
+
+Grab the URL of your new repository. It should look something like this:
+
+```
+https://github.com/<your-username>/<your-store-name>
+```
+
+Head over to your Runtipi instance and navigate to the settings page.
+Click on "App Stores" and then "Add App Store".
+
+Paste the URL of your new repository and give it a name. This name will be used to identify the app store in the Runtipi dashboard.
+
+[![Add app store](/images/create-appstore/3-add-appstore.png)]()
+
+You should see your new app store listed in the app stores section with the default Whoami app.
+
+[![App store list](/images/create-appstore/4-appstore-list.png)]()
+
+### Create your first app
+
+First, clone your new repository to your local machine:
+
+```bash
+git clone <your-repo-url>
+```
+
+Open the cloned repository in your favorite code editor. Inside the `apps` directory, you'll find a sample app called `whoami`. You can use this as a template for your own apps.
+Each app should be in its own folder inside the `apps` directory. The folder name should match the app's ID in the `config.json` file. For each app, you'll need:
+
+1. A `config.json` file with app metadata (name, description, version, etc.)
+2. A `docker-compose.json` file defining the app's services using the dynamic compose format
+3. A `metadata` folder containing at least a `logo.jpg` image and a `description.md` file
+
+We will add Nginx as an example app.
+
+First create a new folder in the `apps` directory called `nginx`. Inside this folder, create two files: `docker-compose.json` and `config.json`.
+
+Here's the `docker-compose.json`
+
+```json
+{
+  "services": [
+    {
+      "name": "nginx",
+      "image": "nginx:1.25.3",
+      "isMain": true,
+      "internalPort": 80
+    }
+  ]
+}
+```
+
+And it's corresponding `config.json`:
+
+```json
+{
+  "name": "Nginx",
+  "available": true,
+  "port": 8754,
+  "exposable": true,
+  "dynamic_config": true,
+  "id": "nginx",
+  "description": "Simple webserver to test your tipi install. An alternative to the hello-world app.",
+  "tipi_version": 3,
+  "version": "1.25.3",
+  "categories": ["utilities"],
+  "short_desc": "Open-source simple and fast web server.",
+  "author": "nginx",
+  "source": "https://github.com/nginx/nginx",
+  "website": "https://www.nginx.com/",
+  "form_fields": [],
+  "supported_architectures": ["arm64", "amd64"],
+  "created_at": 1691943801422,
+  "updated_at": 1729872794208
+}
+```
+
+<Callout type="info">
+  See the [config.json options reference](/docs/reference/config-json) and the [Docker Compose](/docs/reference/docker-compose) reference
+  for a complete list of available options.
+</Callout>
+
+Add a `description.md` file in the `metadata` folder with a description of your app. This will be displayed in the Runtipi dashboard.
+Add a `logo.jpg` image in the `metadata` folder. This will be used as the app's icon in the Runtipi dashboard. Use a square image with a 1:1 aspect ratio.
+
+The final folder structure should look like this:
+
+<FileTree>
+  <FileTree.Folder name="my-store" defaultOpen>
+    <FileTree.Folder name="apps" defaultOpen>
+      <FileTree.Folder name="nginx" defaultOpen>
+        <FileTree.Folder name="metadata" defaultOpen>
+          <FileTree.File name="description.md" />
+          <FileTree.File name="logo.jpg" />
+        </FileTree.Folder>
+      </FileTree.Folder>
+      <FileTree.File name="config.json" />
+      <FileTree.File name="docker-compose.json" />
+    </FileTree.Folder>
+  </FileTree.Folder>
+</FileTree>
+
+### Commit and push your repository
+
+Once you've added your app, create a new branch and commit your changes:
+
+```bash
+git checkout -b add-nginx-app
+git add .
+git commit -m "Add Nginx app"
+git push -u origin add-nginx-app
+```
+
+### Create a pull request
+
+Head over to your GitHub repository and create a pull request. This will allow you to review your changes before merging them into the main branch.
+A default test suite will run to check that your app is valid and follows the Runtipi app store file format.
+
+[![Create pull request](/images/create-appstore/5-open-pr.png)]()
+
+Once the tests pass, you can merge your pull request into the main branch.
+
+[![Merge pull request](/images/create-appstore/6-merge-pr.png)]()
+
+### Test your new app
+
+Go to the Runtipi settings page and click on the "Update App Stores" button. This will pull the latest changes from your repository and update the app store.
+You can now try to install your new app.
+
+[![Update app store](/images/create-appstore/7-update-appstore.png)]()
+
+</Steps>
+
+## Best practices
+
+Here are some best practices to follow when creating your own app store:
+
+- **Use semantic versioning** for your apps, such as `1.0.0`, `1.2.3`, etc.
+- **Avoid using `latest` tags** in Docker images as they can break your apps in the future
+- **Test your apps thoroughly** before publishing them
+- **Include comprehensive documentation** in your app descriptions
+- **Keep your repository organized** with clear folder structures and naming conventions
+- **Regularly update your apps** to keep them secure and compatible with the latest version of Runtipi
+- **Use dynamic compose format** which is required for Runtipi v4.0.0 and above
+
+## Updating your app store
+
+To update your app store, simply push the changes to your repository. The next time Runtipi checks for updates (on restart or when explicitly triggered), it will pull the latest changes.
+
+To manually update your app stores:
+
+```bash
+cd /path/to/runtipi
+./runtipi-cli app update-store
+```
+
+## Troubleshooting
+
+If you encounter issues with your custom app store:
+
+- Check that your repository URL is correct in the `settings.json` file
+- Ensure your app's `config.json` and `docker-compose.json` files are valid JSON
+- Verify that the folder structure matches what Runtipi expects
+- Check that the `id` field in `config.json` matches the folder name
+- Make sure you're using the dynamic compose format correctly
+- Look for errors in the Runtipi logs (located in `runtipi/logs`)
+
+<Callout type="warning">
+  If you're updating from an older version of Runtipi to v4.0.0 or newer, make
+  sure to follow the [migration
+  guide](/docs/reference/breaking-updates#update-from-3xx-to-400-beta) to adapt
+  to the new folder structure and dynamic compose requirements.
+</Callout>
+
+## Sharing your app store
+
+Once you've created your app store, you can share it with others by providing them with your repository URL. They can add it to their `settings.json` file as described above.
+
+Consider documenting your app store with a README.md file in the repository root to help others understand what apps are included and how to use them.
+

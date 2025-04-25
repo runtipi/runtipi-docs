@@ -32,6 +32,9 @@ export default {
 	"auto-backup-apps": {
 		title: "Auto backup your apps using cron",
 	},
+	"create-your-own-app-store": {
+		title: "Create your own app store",
+	},
 	"dynamic-compose-guide": {
 		title: "Creating a dynamic compose file",
 	},
