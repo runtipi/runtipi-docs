@@ -35,22 +35,22 @@ Converting an existing `docker-compose.yml` file to Runtipi's dynamic compose fo
 
 These are the most commonly used options when configuring a service:
 
-| Option      | Type               | Description                           | Example                                                 |
-| ----------- | ------------------ | ------------------------------------- | ------------------------------------------------------- |
-| name        | string             | The name of the service and container | `"name": "nginx"`                                       |
-| image       | string             | The Docker image to use               | `"image": "nginx:latest"`                               |
-| command     | string \| string[] | The command to run in the container   | `"command": "/my/app"` or `"command": ["npm", "start"]` |
-| environment | object             | Environment variables                 | `"environment": {"FOO": "bar"}`                         |
-| restart     | string             | Container restart policy              | `"restart": "always"`                                   |
+| Option      | Type                        | Description                           | Example                                                 |
+| ----------- | --------------------------- | ------------------------------------- | ------------------------------------------------------- |
+| name        | `string`                    | The name of the service and container | `"name": "nginx"`                                       |
+| image       | `string`                    | The Docker image to use               | `"image": "nginx:latest"`                               |
+| command     | `string` \| `string[]`      | The command to run in the container   | `"command": "/my/app"` or `"command": ["npm", "start"]` |
+| environment | `object`                    | Environment variables                 | `"environment": {"FOO": "bar"}`                         |
+| restart     | `string`                    | Container restart policy              | `"restart": "always"`                                   |
 
 ### Port Configuration
 
 Options related to exposing ports:
 
-| Option       | Type   | Description                            | Example              |
-| ------------ | ------ | -------------------------------------- | -------------------- |
-| internalPort | number | The main port exposed by the container | `"internalPort": 80` |
-| addPorts     | array  | Additional ports to expose             | See example below    |
+| Option       | Type     | Description                            | Example              |
+| ------------ | -------- | -------------------------------------- | -------------------- |
+| internalPort | `number` | The main port exposed by the container | `"internalPort": 80` |
+| addPorts     | `array`  | Additional ports to expose             | See example below    |
 
 Example `addPorts` configuration:
 
@@ -68,9 +68,9 @@ Example `addPorts` configuration:
 
 Options for mounting volumes:
 
-| Option  | Type  | Description             | Example           |
-| ------- | ----- | ----------------------- | ----------------- |
-| volumes | array | List of volume mappings | See example below |
+| Option  | Type    | Description             | Example           |
+| ------- | ------- | ----------------------- | ----------------- |
+| volumes | `array` | List of volume mappings | See example below |
 
 Example `volumes` configuration:
 
@@ -88,19 +88,19 @@ Example `volumes` configuration:
 
 Options related to networking:
 
-| Option      | Type     | Description                   | Example                       |
-| ----------- | -------- | ----------------------------- | ----------------------------- |
-| networkMode | string   | Custom network mode           | `"networkMode": "host"`       |
-| extraHosts  | string[] | Additional /etc/hosts entries | `"extraHosts": ["host1:ip1"]` |
-| hostname    | string   | Container hostname            | `"hostname": "mycontainer"`   |
+| Option      | Type       | Description                   | Example                       |
+| ----------- | ---------- | ----------------------------- | ----------------------------- |
+| networkMode | `string`   | Custom network mode           | `"networkMode": "host"`       |
+| extraHosts  | `string[]` | Additional /etc/hosts entries | `"extraHosts": ["host1:ip1"]` |
+| hostname    | `string`   | Container hostname            | `"hostname": "mycontainer"`   |
 
 ### Health Check Configuration
 
 Options for container health monitoring:
 
-| Option      | Type   | Description                          | Example           |
-| ----------- | ------ | ------------------------------------ | ----------------- |
-| healthCheck | object | Container health check configuration | See example below |
+| Option      | Type     | Description                          | Example           |
+| ----------- | -------- | ------------------------------------ | ----------------- |
+| healthCheck | `object` | Container health check configuration | See example below |
 
 Example `healthCheck` configuration:
 
@@ -119,11 +119,11 @@ Example `healthCheck` configuration:
 
 Options for container resource limits and deployment:
 
-| Option  | Type   | Description                      | Example            |
-| ------- | ------ | -------------------------------- | ------------------ |
-| deploy  | object | Resource limits and reservations | See example below  |
-| ulimits | object | Resource limits                  | See example below  |
-| shmSize | string | Size of /dev/shm                 | `"shmSize": "2gb"` |
+| Option  | Type     | Description                      | Example            |
+| ------- | -------- | -------------------------------- | ------------------ |
+| deploy  | `object` | Resource limits and reservations | See example below  |
+| ulimits | `object` | Resource limits                  | See example below  |
+| shmSize | `string` | Size of /dev/shm                 | `"shmSize": "2gb"` |
 
 Example `deploy` configuration:
 
@@ -152,31 +152,31 @@ Example `ulimits` configuration:
 
 Options related to container security:
 
-| Option      | Type     | Description                            | Example                                |
-| ----------- | -------- | -------------------------------------- | -------------------------------------- |
-| privileged  | boolean  | Run container with elevated privileges | `"privileged": true`                   |
-| capAdd      | string[] | Add container capabilities             | `"capAdd": ["NET_ADMIN"]`              |
-| capDrop     | string[] | Drop container capabilities            | `"capDrop": ["NET_ADMIN"]`             |
-| securityOpt | string[] | Security options                       | `"securityOpt": ["no-new-privileges"]` |
-| readOnly    | boolean  | Mount root filesystem as read only     | `"readOnly": true`                     |
-| user        | string   | Username or UID                        | `"user": "1000:1000"`                  |
+| Option      | Type       | Description                            | Example                                |
+| ----------- | ---------- | -------------------------------------- | -------------------------------------- |
+| privileged  | `boolean`  | Run container with elevated privileges | `"privileged": true`                   |
+| capAdd      | `string[]` | Add container capabilities             | `"capAdd": ["NET_ADMIN"]`              |
+| capDrop     | `string[]` | Drop container capabilities            | `"capDrop": ["NET_ADMIN"]`             |
+| securityOpt | `string[]` | Security options                       | `"securityOpt": ["no-new-privileges"]` |
+| readOnly    | `boolean`  | Mount root filesystem as read only     | `"readOnly": true`                     |
+| user        | `string`   | Username or UID                        | `"user": "1000:1000"`                  |
 
 ### Advanced Configuration
 
 Additional options for fine-tuning:
 
-| Option          | Type               | Description                        | Example                                    |
-| --------------- | ------------------ | ---------------------------------- | ------------------------------------------ |
-| entrypoint      | string \| string[] | Container entrypoint               | `"entrypoint": "./entrypoint.sh"`          |
-| workingDir      | string             | Working directory inside container | `"workingDir": "/app"`                     |
-| tty             | boolean            | Allocate a pseudo-TTY              | `"tty": true`                              |
-| stdinOpen       | boolean            | Keep STDIN open                    | `"stdinOpen": true`                        |
-| stopSignal      | string             | Signal to stop the container       | `"stopSignal": "SIGTERM"`                  |
-| stopGracePeriod | string             | Time to wait to stop container     | `"stopGracePeriod": "10s"`                 |
-| pid             | string             | PID namespace                      | `"pid": "host"`                            |
-| sysctls         | object             | Sysctl settings                    | `"sysctls": {"net.core.somaxconn": 1024}`  |
-| logging         | object             | Logging configuration              | See example below                          |
-| devices         | string[]           | Device mappings                    | `"devices": ["/dev/ttyUSB0:/dev/ttyUSB0"]` |
+| Option          | Type                   | Description                        | Example                                    |
+| --------------- | ---------------------- | ---------------------------------- | ------------------------------------------ |
+| entrypoint      | `string` \| `string[]` | Container entrypoint               | `"entrypoint": "./entrypoint.sh"`          |
+| workingDir      | `string`               | Working directory inside container | `"workingDir": "/app"`                     |
+| tty             | `boolean`              | Allocate a pseudo-TTY              | `"tty": true`                              |
+| stdinOpen       | `boolean`              | Keep STDIN open                    | `"stdinOpen": true`                        |
+| stopSignal      | `string`               | Signal to stop the container       | `"stopSignal": "SIGTERM"`                  |
+| stopGracePeriod | `string`               | Time to wait to stop container     | `"stopGracePeriod": "10s"`                 |
+| pid             | `string`               | PID namespace                      | `"pid": "host"`                            |
+| sysctls         | `object`               | Sysctl settings                    | `"sysctls": {"net.core.somaxconn": 1024}`  |
+| logging         | `object`               | Logging configuration              | See example below                          |
+| devices         | `string[]`             | Device mappings                    | `"devices": ["/dev/ttyUSB0:/dev/ttyUSB0"]` |
 
 Example `logging` configuration:
 
@@ -193,10 +193,10 @@ Example `logging` configuration:
 
 Options for managing service dependencies:
 
-| Option    | Type             | Description                                      | Example           |
-| --------- | ---------------- | ------------------------------------------------ | ----------------- |
-| dependsOn | object \| string | Service dependencies                             | See example below |
-| isMain    | boolean          | Indicates where traefik labels should be applied | `"isMain": true`  |
+| Option    | Type               | Description                                      | Example           |
+| --------- | ------------------ | ------------------------------------------------ | ----------------- |
+| dependsOn | `object` \| `string` | Service dependencies                             | See example below |
+| isMain    | `boolean`          | Indicates where traefik labels should be applied | `"isMain": true`  |
 
 Example `dependsOn` configuration:
 
