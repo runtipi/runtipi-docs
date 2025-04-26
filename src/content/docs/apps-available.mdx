@@ -1,7 +1,27 @@
 import { AppsList } from "@/app/components/AppsList";
+import { Cards } from "nextra/components";
+import { ArrowRightIcon, PlusCircleIcon, WrenchIcon } from "@heroicons/react/24/outline";
 
 # Apps available
 
 Runtipi has a wide range of selfhosted apps you can install on your server. You can find them all in the [app store repository](https://github.com/runtipi/runtipi-appstore) and make requests for new apps there.
 
 <AppsList />
+
+<Cards>
+  <Cards.Card
+    icon={<ArrowRightIcon />}
+    title="Installation"
+    href="/docs/getting-started/installation"
+  />
+  <Cards.Card
+    icon={<PlusCircleIcon />}
+    title="Create Your Own App Store"
+    href="/docs/guides/create-your-own-app-store"
+  />
+  <Cards.Card
+    icon={<WrenchIcon />}
+    title="Customize App Config"
+    href="/docs/guides/customize-app-config"
+  />
+</Cards>

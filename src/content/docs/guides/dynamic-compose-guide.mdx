@@ -1,6 +1,7 @@
-import { Steps, Callout } from "nextra/components";
+import { Steps, Callout, Cards } from "nextra/components";
 import { JsonSchemaValidator, DockerComposeConverter } from "@/app/components";
 import { toJsonSchema, dynamicComposeSchema } from "@runtipi/common/schemas";
+import { BookOpenIcon, CodeBracketIcon, PlusCircleIcon } from "@heroicons/react/24/outline";
 
 # Creating a dynamic compose file
 
@@ -381,3 +382,21 @@ Converting an existing `docker-compose.yml` file to Runtipi's dynamic compose fo
   configuration to ensure it meets your needs. Some advanced features may not be
   fully supported.
 </Callout>
+
+<Cards>
+  <Cards.Card
+    icon={<BookOpenIcon />}
+    title="Dynamic Compose Reference"
+    href="/docs/reference/dynamic-compose"
+  />
+  <Cards.Card
+    icon={<CodeBracketIcon />}
+    title="Config.json Reference"
+    href="/docs/reference/config-json"
+  />
+  <Cards.Card
+    icon={<PlusCircleIcon />}
+    title="Create Your Own App Store"
+    href="/docs/guides/create-your-own-app-store"
+  />
+</Cards>

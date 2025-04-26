@@ -116,3 +116,24 @@ To use this command just run this:
 ```
 
 This will display the help for the start command.
+
+import { Cards } from "nextra/components";
+import { ArrowPathIcon, WrenchIcon, ShieldExclamationIcon } from "@heroicons/react/24/outline";
+
+<Cards>
+  <Cards.Card
+    icon={<ArrowPathIcon />}
+    title="Auto Update with Cron"
+    href="/docs/guides/auto-update-with-cron"
+  />
+  <Cards.Card
+    icon={<WrenchIcon />}
+    title="Environment Variables"
+    href="/docs/getting-started/custom-environment-variables"
+  />
+  <Cards.Card
+    icon={<ShieldExclamationIcon />}
+    title="Uninstalling"
+    href="/docs/guides/uninstalling"
+  />
+</Cards>

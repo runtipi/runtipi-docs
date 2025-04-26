@@ -1,4 +1,6 @@
 import { Callout } from "nextra/components";
+import { Cards } from "nextra/components";
+import { CommandLineIcon, WrenchIcon, ArrowPathIcon } from "@heroicons/react/24/outline";
 
 # Installation
 
@@ -101,3 +103,21 @@ sudo ./runtipi-cli update v2.0.7
   with the version you want to downgrade to. However, this is highly discouraged
   as it may lead to breaking your install.
 </Callout>
+
+<Cards>
+  <Cards.Card
+    icon={<CommandLineIcon />}
+    title="Using the CLI"
+    href="/docs/getting-started/using-the-cli"
+  />
+  <Cards.Card
+    icon={<WrenchIcon />}
+    title="Custom Settings"
+    href="/docs/getting-started/custom-settings"
+  />
+  <Cards.Card
+    icon={<ArrowPathIcon />}
+    title="Backup and Restore"
+    href="/docs/guides/backup-and-restore"
+  />
+</Cards>

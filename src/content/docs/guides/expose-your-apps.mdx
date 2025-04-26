@@ -57,3 +57,24 @@ In order to take into account the changes you just made, you need to restart you
 ## Enjoy
 
 The rest is automatic. Runtipi will automatically renew your certificates and expose your app on the domain name you entered.
+
+import { Cards } from "nextra/components";
+import { CloudIcon, ShieldCheckIcon, GlobeAltIcon } from "@heroicons/react/24/outline";
+
+<Cards>
+  <Cards.Card
+    icon={<CloudIcon />}
+    title="Expose Apps with Cloudflare Tunnels"
+    href="/docs/guides/expose-apps-with-cloudflare-tunnels"
+  />
+  <Cards.Card
+    icon={<ShieldCheckIcon />}
+    title="DNS Challenge with Cloudflare"
+    href="/docs/guides/dns-challenge-cloudflare"
+  />
+  <Cards.Card
+    icon={<GlobeAltIcon />}
+    title="Linking a Domain to Your Dashboard"
+    href="/docs/guides/linking-a-domain-to-your-dashboard"
+  />
+</Cards>

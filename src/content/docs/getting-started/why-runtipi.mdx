@@ -51,3 +51,24 @@ We are trying to be as open as possible to any service, any configuration, and a
 While we just described what our dream product looks like, we can't help saying that we are not there yet and that there is a long way to go.
 By joining the community, we can guarantee that you will get a product that may not be perfect, but that is constantly evolving and improving based on your own input.
 Additionally, you will get support from a community of like-minded individuals who are passionate about self-hosting and who are willing to help you with your journey.
+
+import { Cards } from "nextra/components";
+import { ArrowRightIcon, ServerStackIcon, WrenchIcon } from "@heroicons/react/24/outline";
+
+<Cards>
+  <Cards.Card
+    icon={<ArrowRightIcon />}
+    title="Installation"
+    href="/docs/getting-started/installation"
+  />
+  <Cards.Card
+    icon={<ServerStackIcon />}
+    title="Apps Available"
+    href="/docs/apps-available"
+  />
+  <Cards.Card
+    icon={<WrenchIcon />}
+    title="Architecture"
+    href="/docs/reference/architecture"
+  />
+</Cards>
