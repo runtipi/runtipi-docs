@@ -6,9 +6,14 @@ import { Steps, Callout, FileTree } from "nextra/components";
 
 This page is dedicated to describe breaking updates and guide you through the process of updating your instance to the newer versions.
 
-## Update from 3.x.x to 4.0.0 (Beta)
+## Update from 3.x.x to 4.0.0
 
-<Callout type="warning">4.0.0 is still a beta version</Callout>
+- Runtipi requires now Docker to be on version 28 at least. Check with `docker -v`
+- Runtipi now requires all apps in the configured app-stores to adhere to the dynamic-config definition. If you are running the default app-store there is no action to take. If you run a custom app-store you'll need to migrate your custom apps to use this configuration.
+- App data and app config are now stored in their repo subfolder. Example if you had an app installed it would be at `runtipi/apps/nginx` now there is a new subfolder for each appstore `runtipi/apps/<my-store>/nginx`
+- Secondary containers that come with apps (like databases) are now in their own isolated network and the main container will be bound to both the runtipi and the app specific network. Check your custom configs if you have any network configuration
+- Containers are now named according to docker's default scheme, we don't specifically name the container to the app name anymore.
+- App local domains are now including the app store name in the domain. Example: `nginx.runtipi.local` becomes `nginx-migrated.runtipi.local`
 
 In the version **4.0.0** we introduced a major new feature: multi app-store support. This feature requires you to update your folder structure to support multiple app-stores.
 In previous versions, the folder structure was like this:
@@ -50,7 +55,7 @@ We have prepared a script that will automatically update your folder structure t
 Inside the runtipi directory, download the script:
 
 ```bash
-curl -sSL https://raw.githubusercontent.com/runtipi/runtipi/release/4.0.0/scripts/temp-update-3.0.0-to-4.0.0-beta.sh -o update_script.sh
+curl -sSL https://raw.githubusercontent.com/runtipi/runtipi/master/scripts/update-3.0.0-to-4.0.0.sh -o update_script.sh
 ```
 
 Make the script executable:
@@ -159,7 +164,7 @@ otherwise you need to download `runtipi-cli-linux-aarch64.tar.gz`.
 ### Download the new CLI in your `runtipi` directory
 
 ```bash
-curl -sSL https://github.com/runtipi/runtipi/releases/download/v4.0.0-beta.5/<asset-name> | tar -xz
+curl -sSL https://github.com/runtipi/runtipi/releases/download/v4.0.0/<asset-name> | tar -xz
 ```
 
 ### Remove the old CLI
