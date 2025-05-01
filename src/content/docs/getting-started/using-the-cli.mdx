@@ -80,19 +80,19 @@ it should prompt you to enter your new password.
 This command can be used to start and stop apps from the cli.
 
 ```bash
-./runtipi-cli app [command] <app>
+./runtipi-cli app [command] <app>:<store>
 ```
 
-**Example**: Start the code-server app
+**Example**: Start the code-server app from the migrated store
 
 ```bash
-./runtipi-cli app start code-server
+./runtipi-cli app start code-server:migrated
 ```
 
-**Example**: Stop the code-server app
+**Example**: Stop the code-server app from the migrated store
 
 ```bash
-./runtipi-cli app stop code-server
+./runtipi-cli app stop code-server:migrated
 ```
 
 ## Debug command
