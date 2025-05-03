@@ -7,9 +7,24 @@ Here is a look of the folder structure after installation:
 
 <FileTree>
   <FileTree.Folder name="runtipi" defaultOpen>
-    <FileTree.Folder name="app-data" />
-    <FileTree.Folder name="apps" />
-    <FileTree.Folder name="backups" />
+    <FileTree.Folder name="app-data" defaultOpen>
+      <FileTree.Folder name="migrated" defaultOpen>
+        <FileTree.Folder name="app1" />
+        <FileTree.Folder name="app2" />
+      </FileTree.Folder>
+    </FileTree.Folder>
+    <FileTree.Folder name="apps" defaultOpen>
+      <FileTree.Folder name="migrated" defaultOpen>
+        <FileTree.Folder name="app1" />
+        <FileTree.Folder name="app2" />
+      </FileTree.Folder>
+    </FileTree.Folder>
+    <FileTree.Folder name="backups" defaultOpen>
+      <FileTree.Folder name="migrated" defaultOpen>
+        <FileTree.Folder name="app1" />
+        <FileTree.Folder name="app2" />
+      </FileTree.Folder>
+    </FileTree.Folder>
     <FileTree.Folder name="data" />
     <FileTree.Folder name="logs" />
     <FileTree.Folder name="media" defaultClosed>
@@ -39,10 +54,19 @@ Here is a look of the folder structure after installation:
         <FileTree.Folder name="incomplete" />
       </FileTree.Folder>
     </FileTree.Folder>
-    <FileTree.Folder name="repos" />
+    <FileTree.Folder name="repos" defaultOpen>
+      <FileTree.Folder name="migrated" />
+      <FileTree.Folder name="other-app-store" />
+    </FileTree.Folder>
     <FileTree.Folder name="state" />
     <FileTree.Folder name="traefik" />
-    <FileTree.Folder name="user-config" />
+    <FileTree.Folder name="user-config" defaultOpen>
+      <FileTree.Folder name="migrated" defaultOpen>
+        <FileTree.Folder name="app1" />
+        <FileTree.Folder name="app2" />
+      </FileTree.Folder>
+      <FileTree.File name="tipi-compose.yml" />
+    </FileTree.Folder>
     <FileTree.File name="docker-compose.yml" />
     <FileTree.File name="runtipi-cli" />
     <FileTree.File name="VERSION" />
@@ -53,23 +77,19 @@ Here is a look of the folder structure after installation:
 
 ## App Data
 
-The `app-data` folder contains all the data of the apps.
-It is the default location if there is no `appDataPath` defined in the `settings.json` file. (see [Custom settings](/docs/getting-started/custom-settings))
-Each app has its own folder with the app name and all the data of the app are stored in this folder, for example `app-data/nextcloud/data`.
+The `app-data` folder contains all the data of the apps that are installed on your Runtipi instance. Each app store has its own subfolder (e.g., `migrated`), and each app has its own folder inside that app store folder.
+
+<Callout>
+  In version 4.0.0, Runtipi introduced multi app-store support. Apps that were migrated from earlier versions will be placed in the `migrated` app store folder.
+</Callout>
 
 ## Apps
 
-The `apps` folder contains all the apps that are installed on the device.
-Each app is a folder with the app name. The app folder contains the app's config file and its `docker-compose.yml` file.
-
-You can edit the config file to change the app's settings. However, those changes will be overwritten when the app is updated.
-If you want to make permanent changes to the app, see the [Customize app config](/docs/guides/customize-app-config) section.
+The `apps` folder contains all the applications that are installed on your Runtipi instance. Similar to the `app-data` folder, each app store has its own subfolder, and each app has its own folder inside that app store folder. This folder contains the app's configuration files (e.g., `docker-compose.yml`, `info.json`, etc.).
 
 ## Backups
 
-The `backups` folder contains all the backups of the apps.
-Each app has its own folder containing all the backups in the `.tar.gz` file format.
-This folder can be also used for backups of the entire Runtipi instance.
+The `backups` folder contains all the backups of the apps. Each app store has its own subfolder, and each app has its own folder containing all the backups in the `.tar.gz` file format. This folder can be also used for backups of the entire Runtipi instance.
 
 ## Data
 
@@ -111,9 +131,9 @@ The `traefik` folder contains all the configuration and certificates for the `ru
 
 ## User Config
 
-The `user-config` folder contains all user config.
-Every app has its own folder which can contain a custom `docker-compose.yml` and `app.env`. See [Customizing app config](https://runtipi.io/docs/guides/customize-app-config).
-Additionally you can also customize Runtipi's Docker Compose file using the `tipi-compose.yml` file. See [Customize Runtipi compose and traefik config](https://runtipi.io/docs/guides/customize-compose-and-traefik).
+The `user-config` folder contains all user config. Like the other folders, each app store has its own subfolder, and each app has its own folder which can contain a custom `docker-compose.yml` and `app.env`. See [Customizing app config](https://runtipi.io/docs/guides/customize-app-config).
+
+Additionally, you can also customize Runtipi's Docker Compose file using the `tipi-compose.yml` file at the root of the `user-config` folder. See [Customize Runtipi compose and traefik config](https://runtipi.io/docs/guides/customize-compose-and-traefik).
 
 ## Docker Compose
 
@@ -129,7 +149,7 @@ See [Using the CLI](https://runtipi.io/docs/getting-started/using-the-cli) for m
 
 ## Version
 
-This file just contains the Runtipi version in plain text, for example `v3.6.0`.
+This file just contains the Runtipi version in plain text, for example `v4.0.0`.
 
 ## Environment
 

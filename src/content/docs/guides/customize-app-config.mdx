@@ -17,7 +17,7 @@ An alternative approach to mounting a volume into an app would be to symlink you
 
 In this example we're going to add environment variables to the `Pihole` app and mount the `/cellar` volume into the `Jellyfin` app.
 
-To determine how to set environment variables to customize the `Pihole` container, we look at `runtipi/apps/pihole/docker-compose.yml`:
+To determine how to set environment variables to customize the `Pihole` container, we look at `runtipi/apps/<app-store>/pihole/docker-compose.yml`:
 
 ```yml
 ports:
@@ -37,22 +37,26 @@ From this, we know that we need to set the `NETWORK_INTERFACE` variable.
 
 ### Create the folders
 
-Create `user-config` folder within `runtipi` and a folder for each app:
+Create `user-config` folder within `runtipi` and a folder structure matching your app store and apps:
 
 ```bash
 cd runtipi
-mkdir user-config
-mkdir user-config/jellyfin
-mkdir user-config/pihole
+mkdir -p user-config/<app-store>/jellyfin
+mkdir -p user-config/<app-store>/pihole
 ```
+
+<Callout>
+  Replace `<app-store>` with your app store name. If you're using the default migrated app store, use `migrated`. To find the name of your app store,
+  check the `runtipi/apps` folder.
+</Callout>
 
 ### Create the custom config
 
 Create a `docker-compose.yml` for `jellyfin` and add this content:
 
 ```bash
-touch user-config/jellyfin/docker-compose.yml
-nano user-config/jellyfin/docker-compose.yml
+touch user-config/<app-store>/jellyfin/docker-compose.yml
+nano user-config/<app-store>/jellyfin/docker-compose.yml
 ```
 
 ```yml
@@ -69,8 +73,8 @@ services:
 Create an `app.env` for `pihole` and add this content:
 
 ```bash
-touch user-config/pihole/app.env
-nano user-config/pihole/app.env
+touch user-config/<app-store>/pihole/app.env
+nano user-config/<app-store>/pihole/app.env
 ```
 
 ```conf
@@ -87,14 +91,26 @@ You should end up with a structure like this:
 
 <FileTree>
   <FileTree.Folder name="runtipi" defaultOpen>
-    <FileTree.Folder name="app-data" />
-    <FileTree.Folder name="apps" />
-    <FileTree.Folder name="user-config" defaultOpen>
-      <FileTree.Folder name="jellyfin" defaultOpen>
-        <FileTree.File name="docker-compose.yml" />
+    <FileTree.Folder name="app-data" defaultOpen>
+      <FileTree.Folder name="<app-store>" defaultOpen>
+        <FileTree.Folder name="jellyfin" />
+        <FileTree.Folder name="pihole" />
       </FileTree.Folder>
-      <FileTree.Folder name="pihole" defaultOpen>
-        <FileTree.File name="app.env" />
+    </FileTree.Folder>
+    <FileTree.Folder name="apps" defaultOpen>
+      <FileTree.Folder name="<app-store>" defaultOpen>
+        <FileTree.Folder name="jellyfin" />
+        <FileTree.Folder name="pihole" />
+      </FileTree.Folder>
+    </FileTree.Folder>
+    <FileTree.Folder name="user-config" defaultOpen>
+      <FileTree.Folder name="<app-store>" defaultOpen>
+        <FileTree.Folder name="jellyfin" defaultOpen>
+          <FileTree.File name="docker-compose.yml" />
+        </FileTree.Folder>
+        <FileTree.Folder name="pihole" defaultOpen>
+          <FileTree.File name="app.env" />
+        </FileTree.Folder>
       </FileTree.Folder>
     </FileTree.Folder>
   </FileTree.Folder>
