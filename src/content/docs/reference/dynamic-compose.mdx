@@ -35,13 +35,13 @@ Converting an existing `docker-compose.yml` file to Runtipi's dynamic compose fo
 
 These are the most commonly used options when configuring a service:
 
-| Option      | Type                        | Description                           | Example                                                 |
-| ----------- | --------------------------- | ------------------------------------- | ------------------------------------------------------- |
-| name        | `string`                    | The name of the service and container | `"name": "nginx"`                                       |
-| image       | `string`                    | The Docker image to use               | `"image": "nginx:latest"`                               |
-| command     | `string` \| `string[]`      | The command to run in the container   | `"command": "/my/app"` or `"command": ["npm", "start"]` |
-| environment | `object`                    | Environment variables                 | `"environment": {"FOO": "bar"}`                         |
-| restart     | `string`                    | Container restart policy              | `"restart": "always"`                                   |
+| Option      | Type                   | Description                           | Example                                                 |
+| ----------- | ---------------------- | ------------------------------------- | ------------------------------------------------------- |
+| name        | `string`               | The name of the service and container | `"name": "nginx"`                                       |
+| image       | `string`               | The Docker image to use               | `"image": "nginx:latest"`                               |
+| command     | `string` \| `string[]` | The command to run in the container   | `"command": "/my/app"` or `"command": ["npm", "start"]` |
+| environment | `object`               | Environment variables                 | `"environment": {"FOO": "bar"}`                         |
+| restart     | `string`               | Container restart policy              | `"restart": "always"`                                   |
 
 ### Port Configuration
 
@@ -193,10 +193,10 @@ Example `logging` configuration:
 
 Options for managing service dependencies:
 
-| Option    | Type               | Description                                      | Example           |
-| --------- | ------------------ | ------------------------------------------------ | ----------------- |
+| Option    | Type                 | Description                                      | Example           |
+| --------- | -------------------- | ------------------------------------------------ | ----------------- |
 | dependsOn | `object` \| `string` | Service dependencies                             | See example below |
-| isMain    | `boolean`          | Indicates where traefik labels should be applied | `"isMain": true`  |
+| isMain    | `boolean`            | Indicates where traefik labels should be applied | `"isMain": true`  |
 
 Example `dependsOn` configuration:
 
@@ -208,6 +208,122 @@ Example `dependsOn` configuration:
 }
 ```
 
+### Architecture Overrides
+
+Options for architecture-specific configurations:
+
+| Option    | Type    | Description                                  | Example           |
+| --------- | ------- | -------------------------------------------- | ----------------- |
+| overrides | `array` | Architecture-specific service configurations | See example below |
+
+The `overrides` option allows you to specify different configurations for specific architectures at the top level of your dynamic compose configuration. This is useful when you need to use different Docker images or settings for different CPU architectures (like arm64 vs amd64).
+
+Example `overrides` configuration:
+
+```json
+"overrides": [
+  {
+    "architecture": "arm64",
+    "services": [
+      {
+        "name": "app",
+        "image": "myapp:arm64-latest",
+        "environment": {
+          "ARCHITECTURE": "arm64"
+        }
+      }
+    ]
+  }
+]
+```
+
+#### How Architecture Overrides Work
+
+When Runtipi starts a container, it automatically detects the current system architecture and applies any matching overrides from the `overrides` array. The system looks for overrides that match the current architecture, then merges those service-specific settings with the base service configuration.
+
+Important aspects of the override system:
+
+- You must include the `name` field in each service in the overrides to match with the base service
+- Only specify the properties that need to be different for each architecture
+- Properties from overrides are deep-merged with the base service configurations
+- Array properties (like volumes or ports) in overrides completely replace the base arrays rather than being appended
+
+#### Supported Architectures
+
+Runtipi supports the following architecture types for overrides:
+
+- `amd64`: Standard 64-bit x86 architecture (also known as x86_64)
+- `arm64`: 64-bit ARM architecture (also known as aarch64)
+
+#### Complete Example
+
+Here's a complete example showing how to use architecture overrides:
+
+```json
+{
+  "services": [
+    {
+      "name": "media-server",
+      "image": "mediaserver:latest",
+      "isMain": true,
+      "internalPort": 8096,
+      "volumes": [
+        {
+          "hostPath": "${APP_DATA_DIR}/config",
+          "containerPath": "/config"
+        },
+        {
+          "hostPath": "${RUNTIPI_MEDIA_DIR}",
+          "containerPath": "/media"
+        }
+      ]
+    }
+  ],
+  "overrides": [
+    {
+      "architecture": "arm64",
+      "services": [
+        {
+          "name": "media-server",
+          "image": "mediaserver:arm64-latest",
+          "environment": {
+            "ARM_SPECIFIC_VAR": "enabled"
+          }
+        }
+      ]
+    },
+    {
+      "architecture": "amd64",
+      "services": [
+        {
+          "name": "media-server",
+          "image": "mediaserver:amd64-latest",
+          "deploy": {
+            "resources": {
+              "reservations": {
+                "devices": [
+                  {
+                    "capabilities": ["gpu"]
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
+```
+
+In this example:
+
+- The base configuration defines common settings for the media-server service
+- On `arm64` systems, the service will use the ARM64-specific image and set an ARM-specific environment variable
+- On `amd64` systems, the service will use the AMD64-specific image and enable GPU acceleration
+- The name "media-server" is included in each override to match with the base service
+
 > **Note**: Some of these options are advanced features that should be used with caution as they can affect container security and stability. Always refer to Docker documentation when using advanced options like `privileged`, `capAdd`, or `securityOpt`.
 
 > **Tip**: For most applications, you'll only need the Basic Configuration and Port Configuration options. The other options are available for more complex use cases.
+
