@@ -67,7 +67,7 @@ export default async function RootLayout({
           feedback={{
             content: "Need help? Visit our forums",
           }}
-          docsRepositoryBase="https://github.com/runtipi/runtipi-docs"
+          docsRepositoryBase="https://github.com/runtipi/runtipi-docs/blob/main"
         >
           {children}
         </Layout>
