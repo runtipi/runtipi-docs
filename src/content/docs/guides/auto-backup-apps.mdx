@@ -206,7 +206,8 @@ The script takes 3 arguments:
 | `monthly`,`weekly`,`daily` | Set the name of the final backup, for example if you use `daily` the backup name will be `myapp-daily-date.tar.gz` | `daily` | no       |
 | `stop`,`ignore`            | Stop the app before backing up or backup anyway.                                                                   | `stop`  | no       |
 
-The script also allows you to change for how long you want to keep backups, this can be configured by chaning the following values:
+### Manage retention
+The script allows you to change for how long you want to keep backups, this can be configured by chaning the following values:
 
 ```bash
 dailyRetention=3
@@ -216,13 +217,15 @@ monthlyRetention=3
 
 Each number indicates the retention period for the backup, specifying how many cycles it should be kept before deletion. For instance, a daily backup will be deleted after 3 days, while a monthly backup will be deleted after 3 months etc.
 
+### Apps selection
+You can restrict the apps to backup with a list:
+- In the script, edit the `backupListPath` 
+- Enter the path to a file describing what apps you want to backup, each app id in a new line.
+
 <Callout type="info">
   Make sure to change the `runtipiPath` in the script to point to your actual
   Runtipi path.
 </Callout>
-
-Optionnaly, you can restrict the apps to backup with a list:
-Edit the `backupListPath` in the script with a path to a file describing what apps you want to backup, each app id in a new line.
 
 ### Make the script executable
 
