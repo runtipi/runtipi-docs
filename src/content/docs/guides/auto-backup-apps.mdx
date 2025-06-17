@@ -23,7 +23,7 @@ called `backup-apps.sh` and paste the following code:
 ```bash
 #!/bin/bash
 #
-# Usage: ./backup_runtipi_apps.sh [daily|weekly|monthly|yearly] [stop|ignore]
+# Usage: ./backup-apps.sh [daily|weekly|monthly|yearly] [stop|ignore]
 # Default parameters are "daily stop"
  
 # Specify your runtipi base path
@@ -58,13 +58,11 @@ appOrginalStatus='started'
 # Check for runtipi path value
 if [ -z "$runtipiPath" ]; then
     echo "Runtipi path not specified"
-    echo "Edit path, line 9 in $0"
     exit 1
 elif [ -d "$runtipiPath" ]; then
     echo "Runtipi path : $runtipiPath"
 else
     echo "Runtipi path not found : $runtipiPath"
-    echo "Edit path, line 9 in $0"
     exit 1
 fi
  
@@ -96,7 +94,7 @@ esac
 
 # Check Runtipi version
 runtipiVersion=$(cat $runtipiPath/VERSION)
-runtipiMajorVersion=$(echo $runtipiPath | cut -d. -f1 VERSION | sed 's/^v//')
+runtipiMajorVersion=$(echo $runtipiVersion | cut -d. -f1 VERSION | sed 's/^v//')
 if [ "$major_version" -lt 4 ]; then
     echo "Runtipi version is $runtipiVersion, this script require at least v4.0.0"
     exit 4
