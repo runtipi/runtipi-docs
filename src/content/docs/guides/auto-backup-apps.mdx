@@ -201,10 +201,10 @@ done
 
 The script takes 3 arguments:
 
-| Accepted Values                      | Description                                                                                                        | Default | Required |
-| ------------------------------------ | ------------------------------------------------------------------------------------------------------------------ | ------- | -------- |
-| `yearly`, `monthly`,`weekly`,`daily` | Set the name of the final backup, for example if you use `daily` the backup name will be `myapp-daily-date.tar.gz` | `daily` | no       |
-| `stop`,`ignore`                      | Stop the app before backing up or backup anyway.                                                                   | `stop`  | no       |
+| Accepted Values            | Description                                                                                                        | Default | Required |
+| -------------------------- | ------------------------------------------------------------------------------------------------------------------ | ------- | -------- |
+| `monthly`,`weekly`,`daily` | Set the name of the final backup, for example if you use `daily` the backup name will be `myapp-daily-date.tar.gz` | `daily` | no       |
+| `stop`,`ignore`            | Stop the app before backing up or backup anyway.                                                                   | `stop`  | no       |
 
 The script also allows you to change for how long you want to keep backups, this can be configured by chaning the following values:
 
@@ -212,7 +212,6 @@ The script also allows you to change for how long you want to keep backups, this
 dailyRetention=3
 weeklyRetention=3
 monthlyRetention=3
-yearlyRetention=3
 ```
 
 Each number indicates the retention period for the backup, specifying how many cycles it should be kept before deletion. For instance, a daily backup will be deleted after 3 days, while a monthly backup will be deleted after 3 months etc.
