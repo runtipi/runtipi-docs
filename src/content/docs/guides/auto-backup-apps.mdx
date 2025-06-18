@@ -117,7 +117,7 @@ do
     # List all installed apps
     for app in $backupList
     do
-        if [ -d $appsPath/$appStore/$app ]; then
+        if [ -d "$appsPath/$appStore/$app" ]; then
             echo "Starting backup apps from $appStore appstore."
             
             # Stop the app if it was asked
