@@ -30,3 +30,65 @@ When adding a new app to runtipi, you need to create a `config.json` file in the
 | **min_tipi_version**        | An app may require a newer version of Runtipi than you already have for some extra feature                                                                                                                                        | v3.0.0                                                                                                                                                                                                                            | no       |
 | **created_at**              | The date the app was created. You can use `new Date().getTime()` in your browser console to get the current timestamp                                                                                                             | 1724134938430                                                                                                                                                                                                                     | no       |
 | **updated_at**              | The date the app was last updated. You can use `new Date().getTime()` in your browser console to get the current timestamp                                                                                                        | 1724134938430                                                                                                                                                                                                                     | no       |
+
+Sometimes an app is requiring more info to run it such as passwords or username. You can leverage the `form_fields` property in the `config.json` file to ask such information. Let's take for example Nextcloud. The image requires a username and password. We can simply add two fields in the config.json that will be presented to the user before installing.
+
+```json
+{
+  "form_fields": [
+    {
+      "type": "text",
+      "label": "Username",
+      "max": 50,
+      "min": 3,
+      "required": true,
+      "env_variable": "NEXTCLOUD_ADMIN_USER"
+    },
+    {
+      "type": "password",
+      "label": "Password",
+      "max": 50,
+      "min": 3,
+      "required": true,
+      "env_variable": "NEXTCLOUD_ADMIN_PASSWORD"
+    }
+  ]
+}
+```
+
+You can choose between different types of fields. The app will automatically validate the user input before submitting.
+
+| Type         | Description                          | Example value                |
+| ------------ | ------------------------------------ | ---------------------------- |
+| **text**     | Just a string of text                | username                     |
+| **password** | Will be hidden on typing             | password                     |
+| **email**    | An email address                     | test@example.org             |
+| **number**   | Any number                           | 123                          |
+| **fqdn**     | Fully qualified domain name          | example.org                  |
+| **ip**       | Any valid ipv4 address               | 192.168.2.100                |
+| **fqdnip**   | Combination between ip and fqdn      | 192.168.2.100 or example.org |
+| **random**   | Generate a random value for the user | 2m3ffc0923rk93df9023f9       |
+| **boolean**  | A checkbox                           | true or false                |
+
+Here is also a table of what a `form_field` object requires:
+
+| Name              | Description                                                                                        | Example value                              | Required |
+| ----------------- | -------------------------------------------------------------------------------------------------- | ------------------------------------------ | -------- |
+| **type**          | The type of the form field to use, see above.                                                      | text                                       | yes      |
+| **label**         | The label to show the user.                                                                        | Nextcloud Username                         | yes      |
+| **hint**          | A small hint to show the user.                                                                     | The username you want to use for nextcloud | false    |
+| **placeholder**   | A placeholder for the form field                                                                   | user                                       | false    |
+| **default**       | Add a default value, used only if the required option is set to false                              | user                                       | false    |
+| **regex**         | Use a reggex pattern to verify the user input                                                      | ^[0-9]+.[0-9]+.[0-9]+$                     | false    |
+| **pattern_error** | The error to show when the regex pattern validation fails                                          | Invalid username                           | false    |
+| **min**           | The minium length for a text or password input                                                     | 5                                          | false    |
+| **max**           | The maximum length for a text or password input                                                    | 100                                        | false    |
+| **required**      | Wheter the form field is required or not                                                           | true                                       | yes      |
+| **env_variable**  | The name of the variable you'll use in your `docker-compose.yml` file.                             | NEXTCLOUD_USERNAME                         | yes      |
+| **options**       | Options for multiple select                                                                        | See bellow                                 | false    |
+| **encoding**      | Used only in addintion to random type. Specify the random value encoding. Can be `base64` or `hex` | base64                                     | false    |
+
+<Callout>
+  When using the field type random for a password or secret, the min value will be used to determine
+  the length of the string. If the min value is omitted the default length is 32 characters.
+</Callout>
