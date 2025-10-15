@@ -8,7 +8,6 @@ import "nextra-theme-docs/style.css";
 import "./globals.css";
 import { Head } from "./components/Head";
 import { ChatBubbleLeftRightIcon } from "@heroicons/react/24/solid";
-import { TopBanner } from "./components/TopBanner";
 
 export const metadata: Metadata = {
   title: "Runtipi",
@@ -70,7 +69,6 @@ export default async function RootLayout({
     >
       <Head />
       <body>
-        <TopBanner />
         <Layout
           navbar={navbar}
           pageMap={await getPageMap()}

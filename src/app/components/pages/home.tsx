@@ -152,7 +152,7 @@ export default async function Home() {
           Their contributions help us maintain and improve our project.
         </p>
         {/* lg:grid-cols-3 */}
-        <div className="m-8 grid place-items-center gap-8 lg:grid-cols-1">
+        <div className="m-8 grid place-items-stretch gap-8 lg:grid-cols-2">
           <a
             href="https://coderabbit.ai?utm_source=runtipi&utm_campaign=website"
             target="_blank"
@@ -170,6 +170,28 @@ export default async function Home() {
                 alt="CodeRabbit logo"
                 width="200"
                 className="mx-auto mt-4"
+              />
+            </Card>
+          </a>
+          <a
+            href="https://www.lambdatest.com/?utm_source=runtipi&utm_medium=sponsor"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <Card title="" footer={<p>lambdatest.com</p>}>
+              <div>
+                <h3 className="text-center text-xl font-bold text-neutral-800 underline dark:text-neutral-200">
+                  LambdaTest
+                </h3>
+                <p className="text-center text-gray-600 dark:text-gray-300">
+                  Browser testing via
+                </p>
+              </div>
+              <img
+                src="https://www.lambdatest.com/blue-logo.png"
+                alt="lambdatest logo"
+                style={{ height: 200, objectFit: "contain" }}
+                className="mx-auto mt-4 w-full"
               />
             </Card>
           </a>
