@@ -15,8 +15,8 @@ new backup feature.
 
 ### Create the backup script
 
-Create a new script file (`.sh` extension) in the `runtipi/scripts` folder (if the folder doesn't exist you can create it manually)
-called `backup-apps.sh` and paste the following code:
+Create a new script file (`.sh` extension) in the `/path/to/runtipi/scripts` folder (if the scripts folder doesn't exist you can create it manually)
+called `backup_runtipi_apps.sh` and paste the following code:
 
 ```bash
 #!/bin/bash
@@ -25,7 +25,7 @@ called `backup-apps.sh` and paste the following code:
 # Default parameters are "daily stop"
  
 # Specify your runtipi base path
-runtipiPath=""
+runtipiPath="/path/to/runtipi/"
 
 # Specify path to you backup reference list (optional)
 backupListPath=""
@@ -229,7 +229,7 @@ In order for cron to run the script we need to make it executable, this can easi
 following command:
 
 ```bash
-chmod +x backup-apps.sh
+chmod +x backup_runtipi_apps.sh
 ```
 
 <Callout type="info">
