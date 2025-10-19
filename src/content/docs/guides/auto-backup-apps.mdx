@@ -249,13 +249,13 @@ Then we can add our crontab line, in this example we will backup our apps every 
 
 ```bash
 # Every day from Tuesday to Sunday at 2 AM - daily
-0 2 * * 2-7 /path/to/runtipi/scripts/backup_runtipi_apps.sh daily
+0 2 * * 2-7 /path/to/runtipi/scripts/backup-apps.sh daily
 
 # Every Monday at 2 AM - weekly
-0 2 * * 1 /path/to/runtipi/scripts/backup_runtipi_apps.sh weekly
+0 2 * * 1 /path/to/runtipi/scripts/backup-apps.sh weekly
 
 # Every 1st day of the month at 3 AM - monthly
-0 3 1 * * /path/to/runtipi/scripts/backup_runtipi_apps.sh monthly
+0 3 1 * * /path/to/runtipi/scripts/backup-apps.sh monthly
 ```
 
 After adding our line we can save and exit and that's it! Now your apps will backup automatically!
