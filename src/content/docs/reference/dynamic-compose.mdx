@@ -31,17 +31,36 @@ Converting an existing `docker-compose.yml` file to Runtipi's dynamic compose fo
 
 ## Configuration Options Reference
 
+### Schema Configuration
+
+Top-level schema options:
+
+| Option        | Type     | Description                    | Example                |
+| ------------- | -------- | ------------------------------ | ---------------------- |
+| schemaVersion | `number` | Schema version (must be 2)     | `"schemaVersion": 2`   |
+| services      | `array`  | Array of service configurations | See service options below |
+| overrides     | `array`  | Architecture-specific overrides | See Architecture Overrides section |
+
 ### Basic Configuration
 
 These are the most commonly used options when configuring a service:
 
 | Option      | Type                   | Description                           | Example                                                 |
 | ----------- | ---------------------- | ------------------------------------- | ------------------------------------------------------- |
-| name        | `string`               | The name of the service and container | `"name": "nginx"`                                       |
-| image       | `string`               | The Docker image to use               | `"image": "nginx:latest"`                               |
+| name        | `string` (required)    | The name of the service and container | `"name": "nginx"`                                       |
+| image       | `string` (required)    | The Docker image to use               | `"image": "nginx:latest"`                               |
 | command     | `string` \| `string[]` | The command to run in the container   | `"command": "/my/app"` or `"command": ["npm", "start"]` |
-| environment | `object`               | Environment variables                 | `"environment": {"FOO": "bar"}`                         |
-| restart     | `string`               | Container restart policy              | `"restart": "always"`                                   |
+| environment | `array`                | Environment variables                 | See example below                                       |
+
+Example `environment` configuration:
+
+```json
+"environment": [
+  {"key": "FOO", "value": "bar"},
+  {"key": "PORT", "value": 8080},
+  {"key": "ENABLE_FEATURE", "value": true}
+]
+```
 
 ### Port Configuration
 
@@ -80,19 +99,26 @@ Example `volumes` configuration:
   "containerPath": "/container/path",
   "readOnly": false,
   "shared": false,
-  "private": false
+  "private": false,
+  "bind": {
+    "propagation": "rprivate"
+  }
 }]
 ```
+
+Volume bind propagation options: `rprivate`, `private`, `rshared`, `shared`, `rslave`, `slave`
 
 ### Network Configuration
 
 Options related to networking:
 
-| Option      | Type       | Description                   | Example                       |
-| ----------- | ---------- | ----------------------------- | ----------------------------- |
-| networkMode | `string`   | Custom network mode           | `"networkMode": "host"`       |
-| extraHosts  | `string[]` | Additional /etc/hosts entries | `"extraHosts": ["host1:ip1"]` |
-| hostname    | `string`   | Container hostname            | `"hostname": "mycontainer"`   |
+| Option           | Type                   | Description                   | Example                                    |
+| ---------------- | ---------------------- | ----------------------------- | ------------------------------------------ |
+| networkMode      | `string`               | Custom network mode           | `"networkMode": "host"`                    |
+| addToMainNetwork | `boolean`              | Add container to main network | `"addToMainNetwork": true`                 |
+| extraHosts       | `string[]`             | Additional /etc/hosts entries | `"extraHosts": ["host1:ip1"]`              |
+| hostname         | `string`               | Container hostname            | `"hostname": "mycontainer"`                |
+| dns              | `string` \| `string[]` | Custom DNS servers            | `"dns": "8.8.8.8"` or `"dns": ["8.8.8.8"]` |
 
 ### Health Check Configuration
 
@@ -110,8 +136,8 @@ Example `healthCheck` configuration:
   "retries": 3,
   "interval": "30s",
   "timeout": "10s",
-  "start_interval": "5s",
-  "start_period": "30s"
+  "startInterval": "5s",
+  "startPeriod": "30s"
 }
 ```
 
@@ -134,6 +160,18 @@ Example `deploy` configuration:
       "cpus": "0.5",
       "memory": "512M",
       "pids": 100
+    },
+    "reservations": {
+      "cpus": "0.25",
+      "memory": "256M",
+      "devices": [
+        {
+          "capabilities": ["gpu"],
+          "driver": "nvidia",
+          "count": 1,
+          "deviceIds": ["0"]
+        }
+      ]
     }
   }
 }
@@ -144,9 +182,13 @@ Example `ulimits` configuration:
 ```json
 "ulimits": {
   "nproc": {"soft": 10, "hard": 20},
-  "nofile": {"soft": 20, "hard": 30}
+  "nofile": {"soft": 20, "hard": 30},
+  "core": 1024,
+  "memlock": {"soft": 512, "hard": 1024}
 }
 ```
+
+Note: `ulimits` can be specified as a number for simple limits or as an object with `soft` and `hard` values. Supported ulimit types: `nproc`, `nofile`, `core`, `memlock`.
 
 ### Security Configuration
 
@@ -177,6 +219,7 @@ Additional options for fine-tuning:
 | sysctls         | `object`               | Sysctl settings                    | `"sysctls": {"net.core.somaxconn": 1024}`  |
 | logging         | `object`               | Logging configuration              | See example below                          |
 | devices         | `string[]`             | Device mappings                    | `"devices": ["/dev/ttyUSB0:/dev/ttyUSB0"]` |
+| extraLabels     | `object`               | Additional container labels        | `"extraLabels": {"com.example.key": "value"}` |
 
 Example `logging` configuration:
 
@@ -189,24 +232,37 @@ Example `logging` configuration:
 }
 ```
 
+Note: `sysctls` values must be numbers, and `extraLabels` values can be strings or booleans.
+
 ### Dependencies
 
 Options for managing service dependencies:
 
-| Option    | Type                 | Description                                      | Example           |
-| --------- | -------------------- | ------------------------------------------------ | ----------------- |
-| dependsOn | `object` \| `string` | Service dependencies                             | See example below |
-| isMain    | `boolean`            | Indicates where traefik labels should be applied | `"isMain": true`  |
+| Option    | Type                    | Description                                      | Example           |
+| --------- | ----------------------- | ------------------------------------------------ | ----------------- |
+| dependsOn | `object` \| `string[]`  | Service dependencies                             | See example below |
+| isMain    | `boolean`               | Indicates where traefik labels should be applied | `"isMain": true`  |
 
-Example `dependsOn` configuration:
+Example `dependsOn` configurations:
 
+Simple array format (waits for services to start):
+```json
+"dependsOn": ["db", "cache"]
+```
+
+Object format with conditions:
 ```json
 "dependsOn": {
   "db": {
     "condition": "service_healthy"
+  },
+  "cache": {
+    "condition": "service_started"
   }
 }
 ```
+
+Available conditions: `service_healthy`, `service_started`, `service_completed_successfully`
 
 ### Architecture Overrides
 
@@ -261,6 +317,7 @@ Here's a complete example showing how to use architecture overrides:
 
 ```json
 {
+  "schemaVersion": 2,
   "services": [
     {
       "name": "media-server",
@@ -276,6 +333,9 @@ Here's a complete example showing how to use architecture overrides:
           "hostPath": "${RUNTIPI_MEDIA_DIR}",
           "containerPath": "/media"
         }
+      ],
+      "environment": [
+        {"key": "TZ", "value": "UTC"}
       ]
     }
   ],
@@ -286,9 +346,9 @@ Here's a complete example showing how to use architecture overrides:
         {
           "name": "media-server",
           "image": "mediaserver:arm64-latest",
-          "environment": {
-            "ARM_SPECIFIC_VAR": "enabled"
-          }
+          "environment": [
+            {"key": "ARM_SPECIFIC_VAR", "value": "enabled"}
+          ]
         }
       ]
     },
