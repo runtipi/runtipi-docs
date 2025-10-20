@@ -87,21 +87,28 @@ interface DynamicServiceHealthCheck {
   interval?: string;
   timeout?: string;
   retries?: number;
-  start_period?: string;
-  start_interval?: string;
+  startPeriod?: string;
+  startInterval?: string;
+}
+
+interface DynamicServiceEnvironment {
+  key: string;
+  value: string | number | boolean;
 }
 
 interface DynamicService {
   name: string;
   image?: string;
   command?: string | string[];
-  environment?: Record<string, string>;
+  environment?: DynamicServiceEnvironment[];
   internalPort?: number;
   addPorts?: DynamicServicePort[];
   volumes?: DynamicServiceVolume[];
   networkMode?: string;
-  extraHosts?: string[] | Record<string, string>;
+  addToMainNetwork?: boolean;
+  extraHosts?: string[];
   hostname?: string;
+  dns?: string | string[];
   healthCheck?: DynamicServiceHealthCheck;
   deploy?: Record<string, unknown>;
   ulimits?: Record<string, unknown>;
@@ -119,14 +126,16 @@ interface DynamicService {
   stopSignal?: string;
   stopGracePeriod?: string;
   pid?: string;
-  sysctls?: Record<string, string>;
+  sysctls?: Record<string, number>;
   logging?: Record<string, unknown>;
-  devices?: string[] | Record<string, unknown>;
-  dependsOn?: Record<string, { condition: string }>;
+  devices?: string[];
+  dependsOn?: string[] | Record<string, { condition: string }>;
   isMain?: boolean;
+  extraLabels?: Record<string, string | boolean>;
 }
 
 interface DynamicComposeConfig {
+  schemaVersion: 2;
   services: DynamicService[];
 }
 
@@ -189,7 +198,10 @@ export const DockerComposeConverter = ({
       dynamicServices.push(convertService(serviceName, service));
     }
 
-    return { services: dynamicServices };
+    return { 
+      schemaVersion: 2,
+      services: dynamicServices 
+    };
   };
 
   const convertService = (
@@ -219,15 +231,19 @@ export const DockerComposeConverter = ({
 
     function processEnvironment() {
       if (service.environment) {
-        dynamicService.environment = {};
+        dynamicService.environment = [];
 
         if (Array.isArray(service.environment)) {
           for (const env of service.environment) {
             const [key, value] = env.split("=");
-            if (key && value) dynamicService.environment[key] = value;
+            if (key && value) {
+              dynamicService.environment.push({ key, value });
+            }
           }
         } else {
-          dynamicService.environment = service.environment;
+          for (const [key, value] of Object.entries(service.environment)) {
+            dynamicService.environment.push({ key, value });
+          }
         }
       }
     }
@@ -403,7 +419,16 @@ export const DockerComposeConverter = ({
     function processNetworking() {
       if (service.network_mode)
         dynamicService.networkMode = service.network_mode;
-      if (service.extra_hosts) dynamicService.extraHosts = service.extra_hosts;
+      if (service.extra_hosts) {
+        if (Array.isArray(service.extra_hosts)) {
+          dynamicService.extraHosts = service.extra_hosts;
+        } else {
+          // Convert object format to array format
+          dynamicService.extraHosts = Object.entries(service.extra_hosts).map(
+            ([host, ip]) => `${host}:${ip}`
+          );
+        }
+      }
       if (service.hostname) dynamicService.hostname = service.hostname;
     }
 
@@ -422,8 +447,8 @@ export const DockerComposeConverter = ({
           interval: service.healthcheck.interval,
           timeout: service.healthcheck.timeout,
           retries: service.healthcheck.retries,
-          start_period: service.healthcheck.start_period,
-          start_interval: service.healthcheck.start_interval,
+          startPeriod: service.healthcheck.start_period,
+          startInterval: service.healthcheck.start_interval,
         };
       }
     }
@@ -437,9 +462,24 @@ export const DockerComposeConverter = ({
       if (service.stop_grace_period)
         dynamicService.stopGracePeriod = service.stop_grace_period;
       if (service.pid) dynamicService.pid = service.pid;
-      if (service.sysctls) dynamicService.sysctls = service.sysctls;
+      
+      // Convert sysctls values from string to number
+      if (service.sysctls) {
+        dynamicService.sysctls = {};
+        for (const [key, value] of Object.entries(service.sysctls)) {
+          const numValue = typeof value === 'string' ? Number.parseInt(value, 10) : value;
+          if (!Number.isNaN(numValue)) {
+            dynamicService.sysctls[key] = numValue;
+          }
+        }
+      }
+      
       if (service.logging) dynamicService.logging = service.logging;
-      if (service.devices) dynamicService.devices = service.devices;
+      
+      // Only process devices if it's a string array
+      if (service.devices && Array.isArray(service.devices)) {
+        dynamicService.devices = service.devices;
+      }
     }
 
     function processSecurityOptions() {
@@ -464,21 +504,18 @@ export const DockerComposeConverter = ({
           typeof service.depends_on === "object" &&
           !Array.isArray(service.depends_on)
         ) {
+          // Keep as object format with conditions
           dynamicService.dependsOn = service.depends_on as Record<
             string,
             { condition: string }
           >;
         } else if (Array.isArray(service.depends_on)) {
-          dynamicService.dependsOn = {};
-          for (const dep of service.depends_on) {
-            if (typeof dep === "string") {
-              dynamicService.dependsOn[dep] = { condition: "service_started" };
-            }
-          }
+          // Keep as array format (preferred for simple dependencies)
+          dynamicService.dependsOn = service.depends_on.filter(
+            (dep): dep is string => typeof dep === "string"
+          );
         } else if (typeof service.depends_on === "string") {
-          dynamicService.dependsOn = {
-            [service.depends_on]: { condition: "service_started" },
-          };
+          dynamicService.dependsOn = [service.depends_on];
         }
       }
 
@@ -487,6 +524,16 @@ export const DockerComposeConverter = ({
         Object.keys(service.labels).some((key) => key.startsWith("traefik"))
       ) {
         dynamicService.isMain = true;
+      }
+      
+      // Process extraLabels (non-traefik labels)
+      if (service.labels) {
+        const nonTraefikLabels = Object.entries(service.labels).filter(
+          ([key]) => !key.startsWith("traefik")
+        );
+        if (nonTraefikLabels.length > 0) {
+          dynamicService.extraLabels = Object.fromEntries(nonTraefikLabels);
+        }
       }
     }
 

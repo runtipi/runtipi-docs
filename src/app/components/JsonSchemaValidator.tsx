@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Ajv from "ajv";
+import Ajv from "ajv/dist/2020";
 import betterAjvErrors from "better-ajv-errors";
 
 interface JsonSchemaValidatorProps {
@@ -28,6 +28,8 @@ export const JsonSchemaValidator = ({
     try {
       const parsedValue = JSON.parse(value);
       const ajv = new Ajv({ allErrors: true });
+      ajv.addKeyword("message");
+
       const validate = ajv.compile(schema);
       const valid = validate(parsedValue);
 
@@ -46,6 +48,7 @@ export const JsonSchemaValidator = ({
         setIsValid(false);
       }
     } catch (e) {
+      console.error(e);
       setError("Invalid JSON format");
       setIsValid(false);
     }

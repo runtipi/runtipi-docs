@@ -1,6 +1,6 @@
 import { Steps, Callout } from "nextra/components";
 import { JsonSchemaValidator, DockerComposeConverter } from "@/app/components";
-import { toJsonSchema, dynamicComposeSchema } from "@runtipi/common/schemas";
+import { toJsonSchema, dynamicComposeSchema, dynamicComposeSchemaArk } from "@runtipi/common/schemas";
 
 # Dynamic Compose Reference
 
@@ -13,7 +13,7 @@ For a step-by-step guide on creating dynamic compose files, see [Creating a dyna
 You can validate your dynamic compose configuration using the validator below:
 
 <JsonSchemaValidator
-  schema={toJsonSchema(dynamicComposeSchema)}
+  schema={dynamicComposeSchemaArk.toJsonSchema({ fallback: (ctx) => ctx.base })}
   placeholder="Paste your dynamic compose configuration here to validate it..."
 />
 

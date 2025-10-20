@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",
-    "@runtipi/common": "^0.6.0",
+    "@runtipi/common": "^1.0.0",
     "@tabler/icons-react": "^3.30.0",
     "@types/js-yaml": "^4.0.9",
     "ajv": "^8.17.1",
@@ -24,7 +24,7 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "tailwind-merge": "^3.0.2",
-    "zod-to-json-schema": "^3.24.5"
+    "zod": "^4.1.12"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
