@@ -6,8 +6,13 @@ import { CodeBracketIcon, WrenchIcon, InformationCircleIcon } from "@heroicons/r
 
 As of Runtipi version `v4.0.0`, you can create and use your own custom app stores alongside the official one. This feature allows you to create, maintain, and share your own collection of apps.
 
+
 <Callout type="info">
   This feature requires Runtipi version `v4.0.0` or above.
+</Callout>
+
+<Callout type="warning">
+  This feature is intended for users who are comfortable with GitHub and are willing to maintain and share their own app store. If you just want to install apps for yourself, we recommend using the "create custom app" feature instead.
 </Callout>
 
 ## Why create your own app store?
@@ -78,6 +83,8 @@ Here's the `docker-compose.json`
 
 ```json
 {
+  "schemaVersion": 2,
+  "$schema": "https://schemas.runtipi.io/dynamic-compose.json",
   "services": [
     {
       "name": "nginx",
@@ -89,11 +96,16 @@ Here's the `docker-compose.json`
 }
 ```
 
+<Callout type="info">
+  The schema will help you validate that your `docker-compose.json` file is correct.
+</Callout>
+
 And it's corresponding `config.json`:
 
 ```json
 {
   "name": "Nginx",
+  "min_tipi_version": "4.5.0",
   "available": true,
   "port": 8754,
   "exposable": true,
@@ -169,6 +181,13 @@ You can now try to install your new app.
 [![Update app store](/images/create-appstore/7-update-appstore.png)]()
 
 </Steps>
+
+## Maintenance
+
+After creating your app store, you'll need to maintain it by adding new apps, updating existing ones, and ensuring compatibility with new Runtipi versions.
+Runtipi sometime introduces new features or changes that may require updates to your apps. You'll find a warning in the Runtipi dashboard if any of your apps need attention.
+
+When migrating apps to a new schema version, make sure to bump the `min_tipi_version` field in the `config.json` file to the current Runtipi version.
 
 ## Best practices
 
