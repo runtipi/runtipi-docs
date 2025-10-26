@@ -1,121 +1,271 @@
 import { Callout } from "nextra/components";
 
-# Using the CLI
+# CLI reference
 
-The runtipi-cli is a command line tool that allows you to start, stop, restart, update, and manage Runtipi from the command line.
+The Runtipi CLI is a command-line tool for managing your Runtipi instance. Use it to control services, manage apps, and configure app stores.
 
-Usage:
-
-```bash
-./runtipi-cli command options
-```
-
-## Start Command
-
-To start Runtipi run the following command:
+## Synopsis
 
 ```bash
-sudo ./runtipi-cli start
+./runtipi-cli <command> [options] [arguments]
 ```
 
 <Callout type="info">
-  Runtipi is run as root in the examples because during the start process it
-  needs to check and eventually change the permissions of some files in the
-  `runtipi` folder. You can run the command without sudo if needed but you may
-  encounter permission issues.
+Most commands require `sudo` privileges to manage file permissions and Docker containers. Running without `sudo` may result in permission errors.
 </Callout>
 
-## Stop Command
+## Global options
 
-To stop Runtipi run the following command:
+The following options are available for multiple commands:
+
+- `--env-file <path>` - Use a custom .env file (relative or absolute path)
+- `--no-permissions` - Skip file permission checks (not recommended)
+- `--help` - Display help for any command
+
+## Core commands
+
+### `start`
+
+Start the Runtipi instance and all services.
+
+```bash
+sudo ./runtipi-cli start [--env-file <path>] [--no-permissions]
+```
+
+### `stop`
+
+Stop all Runtipi services.
 
 ```bash
 sudo ./runtipi-cli stop
 ```
 
-## Restart Command
+### `restart`
 
-To restart Runtipi from the command line run this command:
+Restart Runtipi services.
 
 ```bash
-sudo ./runtipi-cli restart
+sudo ./runtipi-cli restart [--env-file <path>] [--no-permissions]
 ```
 
-## Update
+This command checks permissions, copies files, and generates configuration without starting Docker containers.
 
-This command updates Runtipi to the latest version available.
+### `update`
 
-You can update to the latest version with this command:
+Update Runtipi to a specific version.
 
 ```bash
+sudo ./runtipi-cli update <version> [--env-file <path>] [--no-permissions]
+```
+
+**Examples:**
+
+```bash
+# Update to latest version
 sudo ./runtipi-cli update latest
-```
 
-If you want to update to a specific version you give the version number as an argument:
-
-```bash
+# Update to specific version
 sudo ./runtipi-cli update v2.0.7
 ```
 
 <Callout type="warning">
-  You can downgrade Runtipi to a previous version by running the update command
-  with the version you want to downgrade to. However, this is highly discouraged
-  as it may lead to breaking your install. Make sure you know what you are
-  doing.
+Downgrading to previous versions may break your installation. Always backup before downgrading.
 </Callout>
 
-## Reset password command
+## Utility commands
 
-This command is used to reset a forgotten admin password.
+### `version`
 
-To reset your password run the following command and visit the Runtipi rest page at `http://<your-ip>/reset-password`
-it should prompt you to enter your new password.
+Display CLI version information.
+
+```bash
+./runtipi-cli version
+```
+
+Shows version number, commit hash, and build date.
+
+### `installed`
+
+List all installed apps.
+
+```bash
+./runtipi-cli installed
+```
+
+### `reset-password`
+
+Reset the admin password.
 
 ```bash
 ./runtipi-cli reset-password
 ```
 
-## App management command
+After running this command, visit `http://<your-ip>/reset-password` to set a new password.
 
-This command can be used to start and stop apps from the cli.
+### `debug`
 
-```bash
-./runtipi-cli app [command] <app>:<store>
-```
-
-**Example**: Start the code-server app from the migrated store
-
-```bash
-./runtipi-cli app start code-server:migrated
-```
-
-**Example**: Stop the code-server app from the migrated store
-
-```bash
-./runtipi-cli app stop code-server:migrated
-```
-
-## Debug command
-
-This command is used to display useful information about the Runtipi installation. It can be used to troubleshoot issues.
-
-To use this command just run this:
+Display diagnostic information for troubleshooting.
 
 ```bash
 ./runtipi-cli debug
 ```
 
-## Help command
+### `help`
 
-This command is used to display help for an other command in Runtipi cli.
-
-To use this command just run this:
+Display help information.
 
 ```bash
-./runtipi-cli help start
+./runtipi-cli help [command]
 ```
 
-This will display the help for the start command.
+## App management
+
+Manage individual apps using the `app` subcommand. Apps are identified by `<app-id>:<store-name>`.
+
+### `app start`
+
+Start a specific app.
+
+```bash
+./runtipi-cli app start <app-id>:<store>
+```
+
+**Example:**
+```bash
+./runtipi-cli app start code-server:migrated
+```
+
+### `app stop`
+
+Stop a running app.
+
+```bash
+./runtipi-cli app stop <app-id>:<store>
+```
+
+### `app restart`
+
+Restart an app.
+
+```bash
+./runtipi-cli app restart <app-id>:<store>
+```
+
+### `app start-all`
+
+Start all installed apps.
+
+```bash
+./runtipi-cli app start-all
+```
+
+### `app update`
+
+Update an app to the latest version.
+
+```bash
+./runtipi-cli app update <app-id>:<store>
+```
+
+### `app uninstall`
+
+Remove an app and its configuration.
+
+```bash
+./runtipi-cli app uninstall <app-id>:<store>
+```
+
+### `app reset`
+
+Reset an app to its initial state.
+
+```bash
+./runtipi-cli app reset <app-id>:<store>
+```
+
+<Callout type="warning">
+This permanently deletes all app data and settings. Backup important data first.
+</Callout>
+
+## Backup & restore
+
+### `app backup`
+
+Create a backup of an app.
+
+```bash
+./runtipi-cli app backup <app-id>:<store>
+```
+
+### `app restore`
+
+Restore an app from a backup file.
+
+```bash
+./runtipi-cli app restore <app-id>:<store> <backup-filename>
+```
+
+**Example:**
+```bash
+./runtipi-cli app restore code-server:migrated backup-20241026-120000.tar.gz
+```
+
+### `app list-backups`
+
+List available backups for an app.
+
+```bash
+./runtipi-cli app list-backups <app-id>:<store>
+```
+
+### `app delete-backup`
+
+Delete a specific backup file.
+
+```bash
+./runtipi-cli app delete-backup <app-id>:<store> <backup-filename>
+```
+
+## Appstore management
+
+Manage app stores with the `appstore` subcommand.
+
+### `appstore list`
+
+List all configured app stores.
+
+```bash
+./runtipi-cli appstore list
+```
+
+### `appstore update`
+
+Update all app stores to fetch latest app information.
+
+```bash
+./runtipi-cli appstore update
+```
+
+### `appstore add`
+
+Add a new app store.
+
+```bash
+./runtipi-cli appstore add <name> <url>
+```
+
+**Example:**
+```bash
+./runtipi-cli appstore add my-store https://github.com/user/my-appstore
+```
+
+### `appstore remove`
+
+Remove an app store.
+
+```bash
+./runtipi-cli appstore remove <name>
+```
 
 import { Cards } from "nextra/components";
 import { ArrowPathIcon, WrenchIcon, ShieldExclamationIcon } from "@heroicons/react/24/outline";
