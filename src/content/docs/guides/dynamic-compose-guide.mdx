@@ -7,10 +7,15 @@ import { BookOpenIcon, CodeBracketIcon, PlusCircleIcon } from "@heroicons/react/
 
 In Runtipi version `v3.2.0` we added dynamic compose, a simplified and custom version of the `docker-compose.yml` file that allows for more control on how apps get deployed. For example, you can choose to only use the reverse proxy or only use ports. It also allows extra features like multiple appstores.
 
+<Callout type="info">
+  This guide covers **Schema Version 2**, the current and recommended version. If you're upgrading from an older version, see the [migration section](#migrating-from-schema-v1-to-v2) below.
+</Callout>
+
 Here is an example `docker-compose.json` file for a simple app like Nginx:
 
 ```json
 {
+  "schemaVersion": 2,
   "services": [
     {
       "name": "nginx",
@@ -23,6 +28,54 @@ Here is an example `docker-compose.json` file for a simple app like Nginx:
 ```
 
 And that's it, with just a few lines of config you can deploy an nginx app.
+
+## Migrating from Schema v1 to v2
+
+Schema version 2 introduces important structural changes to improve consistency and type safety. Here are the key differences:
+
+### Required `schemaVersion` field
+
+All dynamic compose files must now include the `schemaVersion` field set to `2`:
+
+```json
+{
+  "schemaVersion": 2,
+  "services": [...]
+}
+```
+
+### Environment variables structure change
+
+**v1 format (object):**
+```json
+{
+  "environment": {
+    "FOO": "bar",
+    "PASSWORD": "${MYAPP_PASSWORD}"
+  }
+}
+```
+
+**v2 format (array of key-value pairs):**
+```json
+{
+  "environment": [
+    {
+      "key": "FOO",
+      "value": "bar"
+    },
+    {
+      "key": "PASSWORD",
+      "value": "${MYAPP_PASSWORD}"
+    }
+  ]
+}
+```
+
+
+### Automatic migration
+
+Runtipi automatically migrates v1 schemas to v2 format when loading apps. However, it's recommended to update your `docker-compose.json` files manually to take advantage of the improved validation and error messages.
 
 ## Creating your first dynamic compose file
 
@@ -40,15 +93,16 @@ First create the `docker-compose.json` next to the `docker-compose.yml` file in 
 
 ### Defining the services
 
-Now add your `services` array which defines all your services:
+Now add the `schemaVersion` field and your `services` array which defines all your services:
 
 ```json
 {
+  "schemaVersion": 2,
   "services": []
 }
 ```
 
-The `services` key is the same as in the `docker-compose.yml`. Inside this array you can add multiple apps.
+The `schemaVersion` field indicates which version of the dynamic compose schema you're using (always use `2`). The `services` key is the same as in the `docker-compose.yml`. Inside this array you can add multiple apps.
 
 ### Adding a service
 
@@ -56,6 +110,7 @@ Let's add a service called `myapp`:
 
 ```json
 {
+  "schemaVersion": 2,
   "services": [
     {
       "name": "myapp"
@@ -72,6 +127,7 @@ Add your Docker image. For this example we'll use `myapp:latest`:
 
 ```json
 {
+  "schemaVersion": 2,
   "services": [
     {
       "name": "app",
@@ -87,6 +143,7 @@ If your service exposes a web UI, add the port and main service configuration:
 
 ```json
 {
+  "schemaVersion": 2,
   "services": [
     {
       "name": "myapp",
@@ -106,6 +163,7 @@ To store app data, you can bind mount directories. For example, to mount `${APP_
 
 ```json
 {
+  "schemaVersion": 2,
   "services": [
     {
       "name": "myapp",
@@ -115,7 +173,7 @@ To store app data, you can bind mount directories. For example, to mount `${APP_
       "volumes": [
         {
           "hostPath": "${APP_DATA_DIR}/data/myapp",
-          "containerPath": "data",
+          "containerPath": "/data",
           "readOnly": false
         }
       ]
@@ -128,10 +186,11 @@ The `volumes` key is an array where you can define multiple volume mounts.
 
 ### Adding environment variables
 
-Environment variables can be added easily using this format:
+Environment variables in schema v2 use an array format with `key` and `value` pairs:
 
 ```json
 {
+  "schemaVersion": 2,
   "services": [
     {
       "name": "myapp",
@@ -141,20 +200,26 @@ Environment variables can be added easily using this format:
       "volumes": [
         {
           "hostPath": "${APP_DATA_DIR}/data/myapp",
-          "containerPath": "data",
+          "containerPath": "/data",
           "readOnly": false
         }
       ],
-      "environment": {
-        "FOO": "bar",
-        "PASSWORD": "${MYAPP_PASSWORD}"
-      }
+      "environment": [
+        {
+          "key": "FOO",
+          "value": "bar"
+        },
+        {
+          "key": "PASSWORD",
+          "value": "${MYAPP_PASSWORD}"
+        }
+      ]
     }
   ]
 }
 ```
 
-You can add as many environment variables as needed and use values from form fields as you normally would.
+You can add as many environment variables as needed and use values from form fields as you normally would. Note that `value` can be a string, number, or boolean.
 
 ### Adding multiple ports
 
@@ -162,6 +227,7 @@ Many apps require multiple ports for features like APIs or setup UIs. Add additi
 
 ```json
 {
+  "schemaVersion": 2,
   "services": [
     {
       "name": "myapp",
@@ -171,14 +237,20 @@ Many apps require multiple ports for features like APIs or setup UIs. Add additi
       "volumes": [
         {
           "hostPath": "${APP_DATA_DIR}/data/myapp",
-          "containerPath": "data",
+          "containerPath": "/data",
           "readOnly": false
         }
       ],
-      "environment": {
-        "FOO": "bar",
-        "PASSWORD": "${MYAPP_PASSWORD}"
-      },
+      "environment": [
+        {
+          "key": "FOO",
+          "value": "bar"
+        },
+        {
+          "key": "PASSWORD",
+          "value": "${MYAPP_PASSWORD}"
+        }
+      ],
       "addPorts": [
         {
           "containerPort": 8080,
@@ -196,7 +268,7 @@ Many apps require multiple ports for features like APIs or setup UIs. Add additi
 }
 ```
 
-Create an `addPorts` array and define your container and host ports. Specify if the port is UDP or TCP - if not defined, TCP is assumed. For ports that need both TCP and UDP:
+Create an `addPorts` array and define your container and host ports as **numbers** (not strings). Specify if the port is UDP or TCP - if not defined, TCP is assumed. For ports that need both TCP and UDP:
 
 ```json
 "addPorts": [
@@ -219,6 +291,7 @@ Add container health monitoring with a healthcheck:
 
 ```json
 {
+  "schemaVersion": 2,
   "services": [
     {
       "name": "myapp",
@@ -228,14 +301,20 @@ Add container health monitoring with a healthcheck:
       "volumes": [
         {
           "hostPath": "${APP_DATA_DIR}/data/myapp",
-          "containerPath": "data",
+          "containerPath": "/data",
           "readOnly": false
         }
       ],
-      "environment": {
-        "FOO": "bar",
-        "PASSWORD": "${MYAPP_PASSWORD}"
-      },
+      "environment": [
+        {
+          "key": "FOO",
+          "value": "bar"
+        },
+        {
+          "key": "PASSWORD",
+          "value": "${MYAPP_PASSWORD}"
+        }
+      ],
       "addPorts": [
         {
           "containerPort": 8080,
@@ -265,6 +344,7 @@ If your service depends on other services (like a database), add the `dependsOn`
 
 ```json
 {
+  "schemaVersion": 2,
   "services": [
     {
       "name": "myapp",
@@ -274,14 +354,20 @@ If your service depends on other services (like a database), add the `dependsOn`
       "volumes": [
         {
           "hostPath": "${APP_DATA_DIR}/data/myapp",
-          "containerPath": "data",
+          "containerPath": "/data",
           "readOnly": false
         }
       ],
-      "environment": {
-        "FOO": "bar",
-        "PASSWORD": "${MYAPP_PASSWORD}"
-      },
+      "environment": [
+        {
+          "key": "FOO",
+          "value": "bar"
+        },
+        {
+          "key": "PASSWORD",
+          "value": "${MYAPP_PASSWORD}"
+        }
+      ],
       "addPorts": [
         {
           "containerPort": 8080,
@@ -310,50 +396,15 @@ If your service depends on other services (like a database), add the `dependsOn`
 }
 ```
 
-For simple dependencies without conditions, you can use the shorter format:
+For simple dependencies without conditions, you can use the shorter array format:
 
 ```json
-"dependsOn": "service1"
+"dependsOn": ["service1", "service2"]
 ```
 
 ### Other configuration options
 
-You can also add these common options:
-
-Custom command:
-
-```json
-"command": "/my/app"
-```
-
-Custom network mode:
-
-```json
-"networkMode": "host"
-```
-
-Process limits:
-
-```json
-"ulimits": {
-  "nproc": {
-    "soft": 10,
-    "hard": 20
-  },
-  "nofile": {
-    "soft": 20,
-    "hard": 30
-  }
-}
-```
-
-Extra hosts:
-
-```json
-"extraHosts": [
-  "somehost:someotherhost"
-]
-```
+For additional configuration options like custom commands, network modes, resource limits, and more, see the [Dynamic Compose Reference](/docs/reference/dynamic-compose) documentation.
 
 </Steps>
 
