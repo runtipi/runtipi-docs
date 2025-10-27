@@ -1,9 +1,22 @@
 # Custom environment variables
 
-When running CLI commands, you can override any environment variable by providing a custom .env file.
-It can be useful on certain complex setups.
+There are two ways to provide custom environment variables to Runtipi:
 
-To do so, create a file named `.env.local` in your server. You can then use the `--env-file` option when running CLI commands. The path can be relative to the runtipi-cli or absolute.
+## 1. Auto-loaded environment file
+
+Place a `tipi.env` file in your `user-config` directory and it will be automatically loaded when running CLI commands. This is the recommended way to set custom environment variables.
+
+```bash
+# Path: runtipi/user-config/tipi.env
+PORT=8081
+DOMAIN=example.com
+```
+
+## 2. Command-line environment file
+
+When running CLI commands, you can override any environment variable by providing a custom .env file using the `--env-file` flag. This can be useful for testing or complex setups.
+
+To use this method, create a .env file anywhere on your system and use the `--env-file` option when running CLI commands. The path can be relative to the runtipi-cli or absolute.
 
 ```bash
 sudo ./runtipi-cli start --env-file ./.env.local
@@ -12,5 +25,7 @@ sudo ./runtipi-cli start --env-file ./.env.local
 ```bash
 sudo ./runtipi-cli start --env-file /home/pi/.env.local
 ```
+
+Note: Variables defined in the command-line environment file will override those in the auto-loaded environment file.
 
 See [Environment variables](/docs/reference/environment-variables) for a list of all environment variables used by runtipi.
