@@ -1,0 +1,16 @@
+@keyframes hero {
+  from {
+    translate: 0 8rem;
+  }
+  to {
+    translate: 0 0;
+  }
+}
+
+.hero {
+  animation-name: hero;
+  animation-duration: 1500ms;
+  animation-delay: 500ms;
+  animation-timing-function: ease-in-out;
+  animation-fill-mode: forwards;
+}

@@ -1,8 +1,9 @@
 import Image from "next/image";
-import hero_light from "../../../public/images/hero.png";
-import hero_mobile_light from "../../../public/images/hero-mobile.png";
-import hero_dark from "../../../public/images/hero-dark.png";
-import hero_mobile_dark from "../../../public/images/hero-mobile-dark.png";
+import heroLight from "@public/images/hero.png";
+import heroMobileLight from "@public/images/hero-mobile.png";
+import heroDark from "@public/images/hero-dark.png";
+import heroMobileDark from "@public/images/hero-mobile-dark.png";
+import "./browser.css";
 
 export function Browser() {
   return (
@@ -11,7 +12,7 @@ export function Browser() {
         viewBox={`0 0 ${1203} ${753}`}
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        className="m-8 hidden size-full max-h-[753px] max-w-[1203px] lg:block"
+        className="hero hidden size-full max-h-[753px] max-w-[1203px] lg:block"
       >
         <g clipPath="url(#path0)">
           <path
@@ -128,13 +129,13 @@ export function Browser() {
             clipPath="url(#roundedBottom)"
           >
             <Image
-              src={hero_light}
-              alt="Screenshot of Tipi&apos;s dashboard"
+              src={heroLight}
+              alt="Screenshot of Tipi's dashboard"
               className="h-full object-cover dark:hidden"
             />
             <Image
-              src={hero_dark}
-              alt="Screenshot of Tipi&apos;s dashboard"
+              src={heroDark}
+              alt="Screenshot of Tipi's dashboard"
               className="hidden h-full object-cover dark:block"
             />
           </foreignObject>
@@ -155,7 +156,7 @@ export function Browser() {
         viewBox={`0 0 ${433} ${882}`}
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        className="m-8 size-full max-h-[882px] max-w-[433px] lg:hidden"
+        className="hero size-full max-h-[882px] max-w-[433px] lg:hidden"
       >
         <path
           d="M2 73C2 32.6832 34.6832 0 75 0H357C397.317 0 430 32.6832 430 73V809C430 849.317 397.317 882 357 882H75C34.6832 882 2 849.317 2 809V73Z"
@@ -199,13 +200,13 @@ export function Browser() {
           clipPath="url(#roundedCorners)"
         >
           <Image
-            src={hero_mobile_light}
-            alt="Screenshot of Tipi&apos;s dashboard"
+            src={heroMobileLight}
+            alt="Screenshot of Tipi's dashboard"
             className="size-full object-cover dark:hidden"
           />
           <Image
-            src={hero_mobile_dark}
-            alt="Screenshot of Tipi&apos;s dashboard"
+            src={heroMobileDark}
+            alt="Screenshot of Tipi's dashboard"
             className="hidden size-full object-cover dark:block"
           />
         </foreignObject>

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import React from "react";
-import { AppLogo } from "./AppLogo";
+import { AppLogo } from "./app-logo";
 
 type App = {
   name: string;

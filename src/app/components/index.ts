@@ -1,3 +1,3 @@
-export { JsonSchemaValidator } from "./JsonSchemaValidator";
-export { DockerComposeConverter } from "./DockerComposeConverter";
-export { TopBanner } from "./TopBanner";
+export { JsonSchemaValidator } from "./json-schema-validator";
+export { DockerComposeConverter } from "./docker-compose-converter";
+export { TopBanner } from "./top-banner";

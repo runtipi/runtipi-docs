@@ -1,13 +1,13 @@
-import type { Metadata } from "next";
-import { Footer, Layout, Navbar, ThemeSwitch } from "nextra-theme-docs";
-import Image from "next/image";
-import logoImg from "../../public/tipi.png";
-import { getPageMap } from "nextra/page-map";
 import { GeistSans } from "geist/font/sans";
+import type { Metadata } from "next";
+import Image from "next/image";
+import { Footer, Layout, Navbar } from "nextra-theme-docs";
 import "nextra-theme-docs/style.css";
+import { getPageMap } from "nextra/page-map";
+import { Head } from "@/app/components/head";
+import logoImg from "@public/tipi.png";
 import "./globals.css";
-import { Head } from "./components/Head";
-import { ChatBubbleLeftRightIcon } from "@heroicons/react/24/solid";
+import { ChatBubbleLeftRightIcon } from "@heroicons/react/16/solid";
 
 export const metadata: Metadata = {
   title: "Runtipi",
@@ -35,22 +35,30 @@ const navbar = (
     >
       <ChatBubbleLeftRightIcon className="size-6" />
     </a>
-    <ThemeSwitch lite className="cursor-pointer" />
   </Navbar>
 );
 
 const footer = (
   <Footer>
-    <div className="flex w-full items-center justify-between">
-      <div className="grow">Runtipi - Homeserver management made easy</div>
-      <a
-        href="https://www.flaticon.com/free-icons/tipi"
-        title="tipi icons"
-        target="_blank"
-        rel="noreferrer"
-      >
-        Tipi logo created by Freepik - Flaticon
-      </a>
+    <div className="flex w-full flex-col">
+      <div className="mb-9 flex w-full items-center justify-between">
+        <div className="text-sm md:text-base">
+          Runtipi - Homeserver management made easy
+        </div>
+        <a
+          href="https://www.flaticon.com/free-icons/tipi"
+          title="Tipi icons"
+          target="_blank"
+          rel="noreferrer"
+          className="text-sm md:text-base"
+        >
+          Tipi logo created by Freepik - Flaticon
+        </a>
+      </div>
+      <div className="text-center text-sm md:text-base">
+        Released under the GPL-3.0 license. Copyright &copy;{" "}
+        {new Date().getFullYear()} Runtipi.
+      </div>
     </div>
   </Footer>
 );
