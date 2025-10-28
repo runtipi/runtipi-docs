@@ -1,0 +1,130 @@
+import { Callout, Steps, Cards } from "nextra/components";
+import { RocketLaunchIcon, CommandLineIcon, CubeIcon, ArrowRightIcon } from "@heroicons/react/24/outline";
+
+# Quick Start
+
+Get up and running with Runtipi in under 10 minutes. This guide will take you from installation to running your first self-hosted app.
+
+<Callout emoji="⏱️">
+  **Time to complete:** ~10 minutes
+</Callout>
+
+## What is Runtipi?
+
+Runtipi is a home server management tool that makes self-hosting as easy as installing apps on your phone. No Docker expertise required, no complex configuration files—just a simple web interface to install and manage services.
+
+## Before You Begin
+
+Make sure you have:
+- A 64-bit Linux server (Ubuntu 18.04+ recommended) or a Raspberry Pi
+- At least 4GB of RAM
+- 10GB of free disk space
+- Terminal/SSH access to your server
+
+<Callout type="info">
+  Running on a VPS? Check our [security considerations](/docs/security/vps-security) first.
+</Callout>
+
+## Installation
+
+<Steps>
+
+### Install Runtipi
+
+Copy and paste this command into your server terminal:
+
+```bash
+curl -L https://setup.runtipi.io | bash
+```
+
+This will download and install Runtipi along with Docker (if not already installed). The process takes 2-5 minutes.
+
+<Callout type="warning">
+  If you already have Docker installed, make sure you have Docker Compose plugin. Check with: `docker compose version`
+</Callout>
+
+### Access the Dashboard
+
+Once installation is complete, open your browser and navigate to:
+
+```
+http://your-server-ip
+```
+
+Replace `your-server-ip` with your server's local IP address (e.g., `192.168.1.100`).
+
+<Callout emoji="💡">
+  **Don't know your server's IP?** Run `hostname -I` in your terminal.
+</Callout>
+
+### Create Your Account
+
+You'll see the Runtipi welcome screen. Create your admin account by:
+1. Entering your desired username
+2. Creating a strong password
+3. Providing your email (used for notifications)
+
+### Install Your First App
+
+Now for the fun part! Let's install an app:
+
+1. Click on **"App Store"** in the navigation
+2. Browse the available apps
+3. Choose an app to install (we recommend starting with **File Browser** or **Nextcloud**)
+4. Click **"Install"**
+5. Configure any required settings (most apps work with defaults)
+6. Click **"Install"** to confirm
+
+The app will download and start automatically. You can monitor the installation progress on the app's details page.
+
+### Access Your App
+
+Once installed, you can access your app in two ways:
+
+- **From the Dashboard**: Click "Open" on the app card
+- **Direct URL**: `http://your-server-ip:PORT` (the port is shown on the app details page)
+
+</Steps>
+
+## 🎉 Success!
+
+Congratulations! You've just self-hosted your first application with Runtipi.
+
+## What's Next?
+
+Now that you have Runtipi running, here are some logical next steps:
+
+<Cards>
+  <Cards.Card
+    icon={<CubeIcon />}
+    title="Explore More Apps"
+    href="/docs/apps-available"
+  />
+  <Cards.Card
+    icon={<CommandLineIcon />}
+    title="Learn the Basics"
+    href="/docs/learn"
+  />
+  <Cards.Card
+    icon={<RocketLaunchIcon />}
+    title="Expose Apps to Internet"
+    href="/docs/guides/expose-your-apps"
+  />
+  <Cards.Card
+    icon={<ArrowRightIcon />}
+    title="Secure Your Setup"
+    href="/docs/security"
+  />
+</Cards>
+
+### Popular Next Steps:
+
+- **For security-conscious users**: Set up [backups](/docs/security/backup-and-restore) and [enable HTTPS](/docs/guides/local-certificate)
+- **For advanced users**: Learn about [custom configurations](/docs/guides/customize-app-config) and [environment variables](/docs/getting-started/custom-environment-variables)
+- **For networking enthusiasts**: Set up [custom domains](/docs/guides/linking-a-domain-to-your-dashboard) and [expose apps safely](/docs/guides/expose-apps-with-cloudflare-tunnels)
+
+## Need Help?
+
+- Check our [Troubleshooting](/docs/troubleshooting) section
+- Visit our [Community Forums](https://forums.runtipi.io/)
+- Join our [Discord](https://discord.gg/Bu9qEPnHsc)

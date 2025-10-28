@@ -1,20 +1,21 @@
 import { AppScreenshot } from "@/app/components/AppScreenshot";
 import { Cards, Callout } from "nextra/components";
-import { WrenchIcon, LightBulbIcon } from "@heroicons/react/24/outline";
+import { RocketLaunchIcon, LightBulbIcon, BookOpenIcon, WrenchIcon } from "@heroicons/react/24/outline";
 
 # Introduction
 
 <AppScreenshot />
 
-<Callout emoji="🚨">
-  These docs might be incomplete in some areas and are a continuous work in progress. Please
-  help us by contributing to the project or by providing feedback.
+<Callout emoji="�">
+  **New to Runtipi?** Start with our [Quick Start Guide](/docs/quick-start) to get up and running in 10 minutes!
 </Callout>
 
-Runtipi is an open source personal homeserver orchestrator that enables you to manage and run multiple services on a single server.
+Runtipi is an open-source home server manager that enables you to run and control multiple services on a single server.
 It is based on Docker and comes with a user-friendly web interface that simplifies service management.
-With runtipi, you no longer need to worry about manual configuration or networking.
+With Runtipi, you no longer need to worry about manual configuration or networking.
 Install Runtipi on your server and use the web interface to add and manage services.
+
+## Why Runtipi?
 
 At its core, Runtipi is designed to be easy to use and accessible for everyone.
 Whether you are an experienced developer or a beginner, Runtipi allows you to focus on the services you want to run without the need for extensive technical knowledge.
@@ -23,26 +24,51 @@ The project's philosophy is to democratize the ability to self-host services by 
 Runtipi comes with an extensive library of services in the [App Store](/docs/apps-available).
 If you cannot find what you need, you can request new services, and the community can work together to develop them.
 
-Runtipi is in continuous development, so issues may occur. Nevertheless, the community is continuously working to improve the project, and everyone is welcome to contribute.
+## Get Started
 
-To get started with runtipi, follow the installation instructions, and enjoy hosting your own services effortlessly.
-
-If you need more personalized help, visit our [forums](https://forums.runtipi.io/) to get help from the community.
+Choose your path:
 
 <Cards>
   <Cards.Card
-    icon={<LightBulbIcon />}
-    title="Why use Runtipi?"
-    href="/docs/getting-started/why-runtipi"
-  />
+    icon={<RocketLaunchIcon />}
+    title="Quick Start"
+    href="/docs/quick-start"
+  >
+    Get Runtipi running in 10 minutes
+  </Cards.Card>
   <Cards.Card
     icon={<LightBulbIcon />}
-    title="Apps available"
+    title="Learn"
+    href="/docs/learn"
+  >
+    Understand how Runtipi works
+  </Cards.Card>
+  <Cards.Card
+    icon={<BookOpenIcon />}
+    title="Browse Apps"
     href="/docs/apps-available"
-  />
+  >
+    Explore available applications
+  </Cards.Card>
   <Cards.Card
     icon={<WrenchIcon />}
-    title="Installation"
-    href="/docs/getting-started/installation"
-  />
+    title="Guides"
+    href="/docs/guides"
+  >
+    Step-by-step tutorials
+  </Cards.Card>
 </Cards>
+
+## Community & Support
+
+Runtipi is in continuous development, and issues may occur. Nevertheless, the community is continuously working to improve the project, and everyone is welcome to contribute.
+
+Need help? Our community is here for you:
+
+- **Forums**: [forums.runtipi.io](https://forums.runtipi.io/) - Get personalized help
+- **Discord**: [Join our Discord](https://discord.gg/Bu9qEPnHsc) - Real-time chat
+- **GitHub**: [Report bugs or request features](https://github.com/runtipi/runtipi/issues)
+
+<Callout type="info">
+  These docs are continuously evolving. If you find something unclear or missing, please help us improve by [contributing](https://github.com/runtipi/runtipi-docs) or providing feedback!
+</Callout>

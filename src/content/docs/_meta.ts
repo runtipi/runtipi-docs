@@ -1,20 +1,35 @@
 export default {
+  "quick-start": {
+    title: "🚀 Quick Start",
+    theme: {
+      sidebar: true,
+    },
+  },
   introduction: {
     title: "Introduction",
   },
   "apps-available": {
     title: "Apps Available",
   },
+  learn: {
+    title: "📖 Learn",
+  },
   "getting-started": {
     title: "Getting Started",
   },
   guides: {
-    title: "Guides",
+    title: "📚 Guides",
   },
   reference: {
-    title: "Reference",
+    title: "🔧 Configuration",
+  },
+  security: {
+    title: "🔒 Security & Maintenance",
+  },
+  troubleshooting: {
+    title: "🐛 Troubleshooting",
   },
   contributing: {
-    title: "Contributing",
+    title: "👨‍💻 For Developers",
   },
 };

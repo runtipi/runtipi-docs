@@ -1,0 +1,76 @@
+import { Cards, Callout } from "nextra/components";
+import { ShieldCheckIcon, LockClosedIcon, ArrowPathIcon, ServerIcon } from "@heroicons/react/24/outline";
+
+# Security & Maintenance
+
+Keep your Runtipi instance secure and running smoothly with these guides.
+
+<Callout type="warning">
+  Self-hosting comes with security responsibilities. Take the time to understand and implement these practices.
+</Callout>
+
+## Security
+
+Protect your server and data from unauthorized access.
+
+<Cards>
+  <Cards.Card
+    icon={<ShieldCheckIcon />}
+    title="Server Hardening"
+    href="/docs/security/server-hardening"
+  />
+  <Cards.Card
+    icon={<ServerIcon />}
+    title="VPS Security Considerations"
+    href="/docs/security/vps-security"
+  />
+  <Cards.Card
+    icon={<LockClosedIcon />}
+    title="User Management"
+    href="/docs/security/user-management"
+  />
+</Cards>
+
+## Backup & Restore
+
+Protect your data with regular backups.
+
+<Cards>
+  <Cards.Card
+    icon={<ArrowPathIcon />}
+    title="Backup and Restore"
+    href="/docs/guides/backup-and-restore"
+  />
+  <Cards.Card
+    icon={<ArrowPathIcon />}
+    title="Automated Backups"
+    href="/docs/guides/auto-backup-apps"
+  />
+</Cards>
+
+## Updates & Maintenance
+
+Keep Runtipi and your apps up to date.
+
+<Cards>
+  <Cards.Card
+    icon={<ArrowPathIcon />}
+    title="Updating Runtipi"
+    href="/docs/security/updating"
+  />
+  <Cards.Card
+    icon={<ArrowPathIcon />}
+    title="Auto-Updates with Cron"
+    href="/docs/guides/auto-update-with-cron"
+  />
+  <Cards.Card
+    icon={<ArrowPathIcon />}
+    title="Breaking Changes & Migrations"
+    href="/docs/reference/breaking-updates"
+  />
+  <Cards.Card
+    icon={<ArrowPathIcon />}
+    title="Release Notes"
+    href="/docs/reference/release-notes"
+  />
+</Cards>

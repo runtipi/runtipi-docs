@@ -1,0 +1,73 @@
+import { Cards } from "nextra/components";
+import { CodeBracketIcon, WrenchIcon, CubeIcon } from "@heroicons/react/24/outline";
+
+# For Developers
+
+Welcome, developers! This section contains everything you need to contribute to Runtipi or create your own apps.
+
+## Getting Started
+
+<Cards>
+  <Cards.Card
+    icon={<WrenchIcon />}
+    title="Development Setup"
+    href="/docs/developers/running-locally"
+  />
+  <Cards.Card
+    icon={<CodeBracketIcon />}
+    title="Running CLI Locally"
+    href="/docs/developers/running-the-cli-locally"
+  />
+</Cards>
+
+## Contributing
+
+<Cards>
+  <Cards.Card
+    icon={<CubeIcon />}
+    title="Creating Apps"
+    href="/docs/developers/creating-apps"
+  />
+  <Cards.Card
+    icon={<CodeBracketIcon />}
+    title="Project Architecture"
+    href="/docs/reference/architecture"
+  />
+</Cards>
+
+## Resources
+
+- **GitHub Repository**: [runtipi/runtipi](https://github.com/runtipi/runtipi)
+- **App Store Repository**: [runtipi/runtipi-appstore](https://github.com/runtipi/runtipi-appstore)
+- **Discord**: Join our [Discord server](https://discord.gg/Bu9qEPnHsc)
+- **Forums**: [forums.runtipi.io](https://forums.runtipi.io)
+
+## Contributing Guidelines
+
+We welcome contributions! Before you start:
+
+1. Read our [Code of Conduct](https://github.com/runtipi/runtipi/blob/main/CODE_OF_CONDUCT.md)
+2. Check [existing issues](https://github.com/runtipi/runtipi/issues) to avoid duplicates
+3. For major changes, open an issue first to discuss your ideas
+4. Follow the project's code style and conventions
+5. Write clear commit messages
+6. Add tests for new features
+7. Update documentation as needed
+
+## Development Stack
+
+Runtipi is built with:
+
+- **Frontend**: React, Next.js, TypeScript, TailwindCSS
+- **Backend**: Node.js, TypeScript, tRPC
+- **Database**: PostgreSQL
+- **Containerization**: Docker, Docker Compose
+- **Reverse Proxy**: Traefik
+- **Package Manager**: Bun
+
+## Quick Links
+
+- [Architecture Overview](/docs/reference/architecture)
+- [Folder Structure](/docs/reference/folder-structure)
+- [Environment Variables](/docs/reference/environment-variables)
+- [Dynamic Compose Reference](/docs/reference/dynamic-compose)

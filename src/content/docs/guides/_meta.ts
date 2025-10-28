@@ -1,41 +1,57 @@
 export default {
-	"customize-app-config": {
-		title: "Customize app config",
-	},
-	"customize-compose-and-traefik": {
-		title: "Customize Runtipi compose and traefik config",
+	"--- Networking": {
+		type: "separator",
+		title: "Networking",
 	},
 	"expose-your-apps": {
-		title: "Expose your apps",
+		title: "Expose Apps to Internet",
 	},
 	"expose-apps-with-cloudflare-tunnels": {
-		title: "Expose your apps using Cloudflare tunnels",
-	},
-	"dns-challenge-cloudflare": {
-		title: "Setup a DNS challenge with Cloudflare",
-	},
-	"linking-a-domain-to-your-dashboard": {
-		title: "Linking a domain to your dashboard",
+		title: "Expose with Cloudflare Tunnels",
 	},
 	"local-certificate": {
-		title: "Local SSL certificate",
+		title: "Local SSL Certificates",
 	},
-	uninstalling: {
-		title: "Uninstalling",
+	"dns-challenge-cloudflare": {
+		title: "DNS Challenge (Cloudflare)",
+	},
+	"linking-a-domain-to-your-dashboard": {
+		title: "Custom Domain for Dashboard",
+	},
+	"--- Customization": {
+		type: "separator",
+		title: "Customization",
+	},
+	"customize-app-config": {
+		title: "Customize App Config",
+	},
+	"customize-compose-and-traefik": {
+		title: "Customize Docker Compose & Traefik",
+	},
+	"--- Backup & Maintenance": {
+		type: "separator",
+		title: "Backup & Maintenance",
 	},
 	"backup-and-restore": {
-		title: "Backup and restore",
-	},
-	"auto-update-with-cron": {
-		title: "Auto update your instance with cron",
+		title: "Backup and Restore",
 	},
 	"auto-backup-apps": {
-		title: "Auto backup your apps using cron",
+		title: "Auto-Backup with Cron",
+	},
+	"auto-update-with-cron": {
+		title: "Auto-Update with Cron",
+	},
+	"--- Advanced": {
+		type: "separator",
+		title: "Advanced",
 	},
 	"create-your-own-app-store": {
-		title: "Create your own app store",
+		title: "Create Custom App Store",
 	},
 	"dynamic-compose-guide": {
-		title: "Creating a dynamic compose file",
+		title: "Dynamic Compose Files",
+	},
+	uninstalling: {
+		title: "Uninstalling Runtipi",
 	},
 };

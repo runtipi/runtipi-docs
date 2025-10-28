@@ -1,0 +1,99 @@
+import { Cards } from "nextra/components";
+import { GlobeAltIcon, WrenchIcon, ArrowPathIcon, CubeIcon } from "@heroicons/react/24/outline";
+
+# Guides
+
+Step-by-step tutorials to help you configure and customize your Runtipi installation.
+
+## Networking
+
+Learn how to expose your apps and configure networking.
+
+<Cards>
+  <Cards.Card
+    icon={<GlobeAltIcon />}
+    title="Expose Apps to Internet"
+    href="/docs/guides/expose-your-apps"
+  />
+  <Cards.Card
+    icon={<GlobeAltIcon />}
+    title="Cloudflare Tunnels"
+    href="/docs/guides/expose-apps-with-cloudflare-tunnels"
+  />
+  <Cards.Card
+    icon={<GlobeAltIcon />}
+    title="Local SSL Certificates"
+    href="/docs/guides/local-certificate"
+  />
+  <Cards.Card
+    icon={<GlobeAltIcon />}
+    title="DNS Challenge (Cloudflare)"
+    href="/docs/guides/dns-challenge-cloudflare"
+  />
+  <Cards.Card
+    icon={<GlobeAltIcon />}
+    title="Custom Domain for Dashboard"
+    href="/docs/guides/linking-a-domain-to-your-dashboard"
+  />
+</Cards>
+
+## Customization
+
+Customize your apps and Runtipi configuration.
+
+<Cards>
+  <Cards.Card
+    icon={<WrenchIcon />}
+    title="Customize App Config"
+    href="/docs/guides/customize-app-config"
+  />
+  <Cards.Card
+    icon={<WrenchIcon />}
+    title="Customize Docker Compose & Traefik"
+    href="/docs/guides/customize-compose-and-traefik"
+  />
+</Cards>
+
+## Backup & Maintenance
+
+Keep your data safe and your system up to date.
+
+<Cards>
+  <Cards.Card
+    icon={<ArrowPathIcon />}
+    title="Backup and Restore"
+    href="/docs/guides/backup-and-restore"
+  />
+  <Cards.Card
+    icon={<ArrowPathIcon />}
+    title="Auto-Backup with Cron"
+    href="/docs/guides/auto-backup-apps"
+  />
+  <Cards.Card
+    icon={<ArrowPathIcon />}
+    title="Auto-Update with Cron"
+    href="/docs/guides/auto-update-with-cron"
+  />
+</Cards>
+
+## Advanced
+
+For power users who want full control.
+
+<Cards>
+  <Cards.Card
+    icon={<CubeIcon />}
+    title="Create Custom App Store"
+    href="/docs/guides/create-your-own-app-store"
+  />
+  <Cards.Card
+    icon={<CubeIcon />}
+    title="Dynamic Compose Files"
+    href="/docs/guides/dynamic-compose-guide"
+  />
+  <Cards.Card
+    icon={<WrenchIcon />}
+    title="Uninstalling Runtipi"
+    href="/docs/guides/uninstalling"
+  />
+</Cards>

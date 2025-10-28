@@ -1,0 +1,354 @@
+import { Callout } from "nextra/components";
+
+# VPS Security Considerations
+
+If you intend to self-host Runtipi on a VPS (Virtual Private Server), you need to understand the security implications and take proper precautions.
+
+<Callout type="warning">
+  **Important**: When you install Runtipi on a VPS, it is immediately accessible via the internet through its public IP address. This makes it vulnerable to attacks if not properly secured.
+</Callout>
+
+## Why VPS Hosting Requires Extra Care
+
+Unlike a home server behind your router:
+- **No firewall by default**: Your VPS is directly exposed to the internet
+- **Public IP address**: Anyone can find and access your server
+- **Known targets**: Cloud IPs are continuously scanned by bots
+- **Higher risk**: Common attacks include brute force, port scanning, and DDoS
+
+## Before You Install
+
+### 1. Choose a Secure VPS Provider
+
+Look for providers that offer:
+- DDoS protection
+- Built-in firewall (Security Groups)
+- Snapshot/backup functionality
+- SSH key authentication
+- Two-factor authentication for account access
+
+**Recommended providers**: DigitalOcean, Linode, Vultr, Hetzner, OVH
+
+### 2. Initial Server Hardening
+
+**Must-do steps before installing Runtipi:**
+
+<Callout>
+  Follow this excellent guide: [Initial Ubuntu Server Setup](https://www.tecmint.com/initial-ubuntu-server-setup-guide/)
+</Callout>
+
+**Quick checklist:**
+- ✅ Create a non-root user with sudo privileges
+- ✅ Disable root login via SSH
+- ✅ Set up SSH key authentication
+- ✅ Disable password authentication
+- ✅ Configure a firewall (UFW or iptables)
+- ✅ Enable automatic security updates
+- ✅ Change default SSH port (optional but recommended)
+
+## Firewall Configuration
+
+### Using UFW (Ubuntu)
+
+**1. Install and enable UFW:**
+```bash
+sudo apt update
+sudo apt install ufw
+sudo ufw enable
+```
+
+**2. Allow SSH (critical - do this FIRST or you'll lock yourself out!):**
+```bash
+sudo ufw allow 22/tcp
+# Or if you changed SSH port:
+sudo ufw allow YOUR_SSH_PORT/tcp
+```
+
+**3. For Runtipi, you need to decide on your access strategy:**
+
+#### Option A: VPN Access Only (Most Secure ⭐ Recommended)
+```bash
+# Only allow SSH
+sudo ufw allow 22/tcp
+
+# Do NOT open ports 80/443
+# Access Runtipi through VPN only
+```
+
+Then install a VPN like [Tailscale](https://tailscale.com/) or [WireGuard](https://www.wireguard.com/).
+
+#### Option B: Cloudflare Tunnel (Secure)
+```bash
+# Only allow SSH
+sudo ufw allow 22/tcp
+
+# Do NOT open ports 80/443
+# Use Cloudflare Tunnel for app access
+```
+
+Guide: [Expose Apps with Cloudflare Tunnels](/docs/guides/expose-apps-with-cloudflare-tunnels)
+
+#### Option C: Direct Exposure (Less Secure)
+```bash
+# Allow SSH
+sudo ufw allow 22/tcp
+
+# Allow HTTP and HTTPS
+sudo ufw allow 80/tcp
+sudo ufw allow 443/tcp
+```
+
+<Callout type="warning">
+  With Option C, your Runtipi dashboard will be accessible to anyone on the internet. You MUST:
+  - Use a **very strong password** (20+ characters)
+  - Enable **two-factor authentication** if available
+  - Consider IP whitelisting (only allow specific IPs)
+  - Monitor logs regularly for suspicious activity
+</Callout>
+
+**4. Check firewall status:**
+```bash
+sudo ufw status verbose
+```
+
+## SSH Hardening
+
+### 1. Use SSH Keys Only
+
+**Generate a key pair on your local machine:**
+```bash
+ssh-keygen -t ed25519 -C "your_email@example.com"
+```
+
+**Copy to your server:**
+```bash
+ssh-copy-id username@your-server-ip
+```
+
+**Test it works, then disable password authentication:**
+```bash
+sudo nano /etc/ssh/sshd_config
+```
+
+Find and change:
+```
+PasswordAuthentication no
+PermitRootLogin no
+```
+
+**Restart SSH:**
+```bash
+sudo systemctl restart sshd
+```
+
+### 2. Change Default SSH Port (Optional)
+
+This reduces automated attacks:
+
+```bash
+sudo nano /etc/ssh/sshd_config
+```
+
+Change:
+```
+Port 22
+```
+To:
+```
+Port 2847  # Choose any port 1024-65535
+```
+
+**Update firewall:**
+```bash
+sudo ufw allow 2847/tcp
+sudo ufw delete allow 22/tcp
+sudo systemctl restart sshd
+```
+
+**Connect with:**
+```bash
+ssh -p 2847 username@your-server-ip
+```
+
+## IP Whitelisting
+
+If you have a static IP at home/work, whitelist only those IPs:
+
+```bash
+# Remove general rules
+sudo ufw delete allow 80/tcp
+sudo ufw delete allow 443/tcp
+
+# Allow only your IP
+sudo ufw allow from YOUR_HOME_IP to any port 80
+sudo ufw allow from YOUR_HOME_IP to any port 443
+```
+
+<Callout type="info">
+  Most home connections have dynamic IPs that change. This method won't work if your IP changes frequently.
+</Callout>
+
+## Fail2Ban - Automatic Banning
+
+Fail2Ban monitors logs and automatically bans IPs with too many failed login attempts.
+
+**Install:**
+```bash
+sudo apt install fail2ban
+```
+
+**Configure:**
+```bash
+sudo cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local
+sudo nano /etc/fail2ban/jail.local
+```
+
+**Enable SSH protection:**
+```ini
+[sshd]
+enabled = true
+port = ssh
+filter = sshd
+logpath = /var/log/auth.log
+maxretry = 3
+bantime = 3600
+```
+
+**Start Fail2Ban:**
+```bash
+sudo systemctl enable fail2ban
+sudo systemctl start fail2ban
+```
+
+**Check banned IPs:**
+```bash
+sudo fail2ban-client status sshd
+```
+
+## Monitoring & Alerts
+
+### 1. Install Uptime Monitoring
+
+Use a service like:
+- [UptimeRobot](https://uptimerobot.com/) (free)
+- [Uptime Kuma](/docs/apps-available) (self-hosted)
+- [Healthchecks.io](https://healthchecks.io/)
+
+### 2. Monitor SSH Login Attempts
+
+**Check auth logs regularly:**
+```bash
+sudo tail -f /var/log/auth.log
+```
+
+**See failed login attempts:**
+```bash
+sudo grep "Failed password" /var/log/auth.log | tail -20
+```
+
+### 3. Set Up Email Alerts
+
+Configure your server to email you on SSH logins:
+
+```bash
+echo 'echo "SSH Login: $(whoami) from $(echo $SSH_CONNECTION | awk '\''{print $1}'\'')" | mail -s "SSH Alert" your@email.com' | sudo tee -a /etc/profile
+```
+
+## Regular Maintenance
+
+### Weekly Tasks
+- [ ] Check auth logs for suspicious activity
+- [ ] Review fail2ban banned IPs
+- [ ] Verify backups are running
+- [ ] Check disk space usage
+
+### Monthly Tasks
+- [ ] Update system packages: `sudo apt update && sudo apt upgrade`
+- [ ] Update Runtipi: `sudo ./runtipi-cli update latest`
+- [ ] Review user accounts and access
+- [ ] Test backup restoration
+
+## VPS Provider-Specific Features
+
+### DigitalOcean
+- Enable Cloud Firewalls
+- Set up automated snapshots
+- Use Reserved IPs
+
+### Vultr
+- Enable firewall in control panel
+- Use snapshots for backups
+
+### Hetzner
+- Use Firewall service
+- Enable automated backups
+
+### Linode
+- Configure Cloud Firewalls
+- Enable backup service
+
+## Recommended: Use a VPN
+
+The most secure way to access Runtipi on a VPS is through a VPN. This keeps Runtipi completely private while still allowing remote access.
+
+### Tailscale (Easiest)
+
+**1. Install on VPS:**
+```bash
+curl -fsSL https://tailscale.com/install.sh | sh
+sudo tailscale up
+```
+
+**2. Install on your devices** (phone, laptop, etc.)
+
+**3. Access Runtipi via Tailscale IP:**
+```
+http://100.x.x.x
+```
+
+No need to open ports 80/443 to the public!
+
+### WireGuard (More Control)
+
+[WireGuard setup guide](https://www.wireguard.com/quickstart/)
+
+## If You're Already Compromised
+
+Signs your server might be compromised:
+- Unknown processes running
+- Unexpected high CPU/network usage
+- Files modified
+- Unknown user accounts
+- SSH login from unknown IPs
+
+**Immediate actions:**
+1. Take server offline or isolate it
+2. Create a snapshot/backup
+3. Review all logs
+4. Consider rebuilding from scratch
+5. Report to your VPS provider
+
+## Summary Checklist
+
+Before running Runtipi on a VPS:
+
+- [ ] SSH keys only (no password auth)
+- [ ] Firewall configured and enabled
+- [ ] Non-root user created
+- [ ] Root login disabled
+- [ ] Fail2Ban installed and running
+- [ ] Automatic updates enabled
+- [ ] Backups configured
+- [ ] Strong passwords everywhere
+- [ ] Monitoring set up
+- [ ] VPN or Cloudflare Tunnel configured (recommended)
+
+<Callout type="info">
+  **Still unsure?** Consider running Runtipi on a home server behind your router instead. It's much more secure for beginners.
+</Callout>
+
+## Next Steps
+
+- [Server Hardening Guide](/docs/security/server-hardening)
+- [Set Up Cloudflare Tunnel](/docs/guides/expose-apps-with-cloudflare-tunnels)
+- [Backup Configuration](/docs/guides/backup-and-restore)

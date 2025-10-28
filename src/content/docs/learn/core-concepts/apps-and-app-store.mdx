@@ -1,0 +1,243 @@
+import { Callout } from "nextra/components";
+
+# Apps & the App Store
+
+Understanding how Runtipi apps work will help you make the most of the platform and even create your own apps.
+
+## What is an App in Runtipi?
+
+A Runtipi app is a pre-configured Docker container (or set of containers) that can be installed with one click. Think of it like an app on your smartphone, but running on your server instead.
+
+Each app includes:
+- **The software itself** (e.g., Nextcloud, Jellyfin, etc.)
+- **Pre-configured settings** that work out of the box
+- **Automatic networking** via Traefik
+- **Data persistence** so your files survive restarts
+- **Optional customization** for advanced users
+
+## The App Store
+
+The Runtipi App Store is a curated collection of self-hosted applications. Unlike the Apple App Store or Google Play, it's:
+
+- **Open source** - Anyone can contribute apps
+- **Free** - All apps are free to install
+- **Privacy-focused** - Apps run on your server, not someone else's cloud
+- **Community-driven** - Apps are maintained by volunteers
+
+### App Store Repository
+
+The App Store is actually a separate GitHub repository: [`runtipi/runtipi-appstore`](https://github.com/runtipi/runtipi-appstore)
+
+When you browse apps in Runtipi, it's pulling the list from this repository. You can even create your own custom app store!
+
+## App Architecture
+
+Every app in the store has this structure:
+
+```
+app-name/
+├── config.json          # App metadata and configuration options
+├── docker-compose.yml   # Container configuration
+├── metadata/
+│   ├── logo.jpg        # App icon
+│   └── description.md  # Long description
+└── scripts/            # Optional install/uninstall scripts
+```
+
+### config.json
+
+Defines the app's:
+- **Name and description**
+- **Version**
+- **Required ports**
+- **Configurable options** (shown in the UI)
+- **Dependencies** (if it needs other apps)
+- **Architecture support** (x86/ARM)
+
+Example snippet:
+```json
+{
+  "name": "Nextcloud",
+  "port": 8080,
+  "available": true,
+  "exposable": true,
+  "form_fields": [
+    {
+      "type": "text",
+      "label": "Admin Username",
+      "env_variable": "NEXTCLOUD_ADMIN_USER"
+    }
+  ]
+}
+```
+
+### docker-compose.yml
+
+Standard Docker Compose file with special template variables:
+
+```yaml
+services:
+  nextcloud:
+    image: nextcloud:latest
+    ports:
+      - ${APP_PORT}:80
+    environment:
+      - NEXTCLOUD_ADMIN_USER=${NEXTCLOUD_ADMIN_USER}
+    volumes:
+      - ${APP_DATA_DIR}/data:/var/www/html
+```
+
+<Callout type="info">
+  Runtipi replaces template variables like `${APP_PORT}` and `${APP_DATA_DIR}` automatically during installation.
+</Callout>
+
+## App Lifecycle
+
+### Installation
+1. You click "Install" in the dashboard
+2. Runtipi downloads the app definition
+3. You configure any required settings
+4. Runtipi generates the final docker-compose file
+5. Docker pulls the container image(s)
+6. The app starts running
+7. Traefik routes traffic to it
+
+### Running
+- App runs continuously in the background
+- Data is saved to `app-data/app-name/`
+- You can start, stop, or restart anytime
+- Logs are available for debugging
+
+### Updates
+- App updates are managed by the container image
+- Runtipi can pull new image versions
+- Your data persists across updates
+- Some apps support automatic updates
+
+### Uninstallation
+- Runtipi stops the containers
+- Container images are removed
+- **Your data remains** in `app-data/` (unless you choose to delete it)
+
+<Callout type="warning">
+  Uninstalling an app doesn't delete your data by default. You must manually delete the app's folder in `app-data/` if you want to remove everything.
+</Callout>
+
+## App Categories
+
+Apps in the store are organized by category:
+
+- **Media**: Plex, Jellyfin, Navidrome, Photoprism
+- **File Management**: Nextcloud, File Browser, Syncthing
+- **Productivity**: Bookstack, Vikunja, StandardNotes
+- **Network**: Pi-hole, AdGuard Home, WireGuard
+- **Automation**: Home Assistant, n8n, Huginn
+- **Development**: GitLab, Gitea, Code Server
+- **Security**: Vaultwarden, Authentik, Keycloak
+- **Monitoring**: Uptime Kuma, Netdata, Grafana
+
+<Callout>
+  Browse the full catalog: [Available Apps](/docs/apps-available)
+</Callout>
+
+## App Data & Persistence
+
+All app data is stored in the `app-data/` directory in your Runtipi installation:
+
+```
+runtipi/
+└── app-data/
+    ├── nextcloud/
+    │   ├── data/          # Your files
+    │   ├── config/        # App configuration
+    │   └── database/      # SQLite or other data
+    ├── jellyfin/
+    │   ├── media/         # Your movies/music
+    │   └── config/
+    └── ...
+```
+
+**Key Points:**
+- This directory survives app restarts and updates
+- **Back this up regularly** - it's your actual data
+- Can be very large (depending on apps)
+- Each app has its own isolated folder
+
+## Architecture Support
+
+Not all apps work on all processor architectures:
+
+### x86_64 / amd64
+- Most common for desktops and servers
+- Full app compatibility
+- Best performance
+
+### ARM64
+- Raspberry Pi 4/5, some SBCs
+- Many apps supported
+- Some apps unavailable (Runtipi hides them automatically)
+
+<Callout type="info">
+  Runtipi automatically detects your architecture and only shows compatible apps.
+</Callout>
+
+## Exposable vs Non-Exposable Apps
+
+Some apps are marked as "non-exposable" in their config:
+
+### Exposable ✅
+- **Can be safely exposed** to the internet (with proper security)
+- Examples: Nextcloud, File Browser, Bookstack
+- Have built-in authentication
+- Designed for public access
+
+### Non-Exposable ❌
+- **Should NOT be exposed** to the internet
+- Examples: Database admins, development tools, system utilities
+- Lack authentication or have weak security
+- Only for local/network use
+
+The dashboard prevents you from accidentally exposing dangerous apps.
+
+## Custom App Stores
+
+Advanced users can create private app stores:
+
+1. Fork the [runtipi-appstore](https://github.com/runtipi/runtipi-appstore) repository
+2. Add your custom apps
+3. Configure Runtipi to use your repository
+4. Your private apps appear in the dashboard
+
+Guide: [Create Your Own App Store](/docs/guides/create-your-own-app-store)
+
+## Dependencies
+
+Some apps require other apps to function:
+
+**Example:** A web app might need:
+- **PostgreSQL** database (dependency)
+- **Redis** for caching (dependency)
+
+Runtipi handles this by:
+- Installing dependencies automatically
+- Linking containers through Docker networks
+- Managing startup order
+
+## App Permissions & Security
+
+Apps run with:
+- **Limited permissions** (not root when possible)
+- **Isolated networks** (can't see other containers unless configured)
+- **Read-only filesystems** where appropriate
+- **Resource limits** (can be configured)
+
+<Callout type="warning">
+  Despite isolation, apps still have access to their data directories. Only install apps from trusted sources.
+</Callout>
+
+## Next Steps
+
+- [Browse Available Apps](/docs/apps-available)
+- [Learn about Networking](/docs/learn/core-concepts/networking)
+- [Create Your Own App](/docs/developers/creating-apps)
+- [Customize App Configuration](/docs/guides/customize-app-config)
