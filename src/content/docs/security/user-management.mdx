@@ -1,0 +1,32 @@
+# User Management
+
+Set up safe access for you and your collaborators.
+
+## Overview
+
+- Time: ~10–15 minutes
+- Difficulty: Beginner → Intermediate
+- Prerequisites: Basic Linux user/group management
+
+## Principles
+
+- Least privilege: only grant what’s needed
+- Separate admin and non-admin accounts
+- Use SSH keys and rotate them when people come and go
+
+## Recommended setup
+
+- Create a dedicated user to manage Runtipi
+- Add that user to a group with necessary permissions
+- Use `sudo` for administrative actions; log and review occasionally
+
+## Access rotation
+
+- Keep an inventory of who has access
+- Remove SSH keys when access is no longer needed
+- Rotate secrets used by apps that store credentials
+
+## Next Steps
+
+- Server hardening: [/docs/security/server-hardening](/docs/security/server-hardening)
+- Updating safely: [/docs/security/updating](/docs/security/updating)

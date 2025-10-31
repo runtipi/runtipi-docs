@@ -1,12 +1,12 @@
 import { Callout } from "nextra/components";
 
-# How Runtipi Works
+# How Runtipi works
 
 Understanding how Runtipi works will help you make the most of it and troubleshoot issues when they arise.
 
-## The Big Picture
+## The big picture
 
-Runtipi is a orchestration layer on top of Docker that simplifies self-hosting. Think of it as the "App Store" experience for your server—but instead of apps running on your phone, they run in isolated containers on your server.
+Runtipi is a layer on top of Docker that simplifies self-hosting. Think of it as the "App Store" experience for your server but instead of apps running on your phone, they run in isolated containers on your server.
 
 ```
 ┌─────────────────────────────────────────┐
@@ -24,7 +24,7 @@ Runtipi is a orchestration layer on top of Docker that simplifies self-hosting. 
 └─────────────┬───────────────────────────┘
               │ Commands
 ┌─────────────▼───────────────────────────┐
-│          Docker Engine                   │
+│          Docker Engine                  │
 │  (Runs containers, manages networking)  │
 └─────────────┬───────────────────────────┘
               │ Runs
@@ -34,16 +34,16 @@ Runtipi is a orchestration layer on top of Docker that simplifies self-hosting. 
 └─────────────────────────────────────────┘
 ```
 
-## Key Components
+## Key components
 
-### 1. **Runtipi Dashboard**
+### 1. Runtipi dashboard
 The web interface you interact with. It's a React application that runs in a Docker container and communicates with the backend to:
 - Display available apps
 - Show app status (running, stopped, installing)
 - Let you configure app settings
 - Manage system settings
 
-### 2. **Runtipi CLI**
+### 2. Runtipi CLI
 A command-line tool (`runtipi-cli`) for administrative tasks:
 - Starting/stopping Runtipi
 - Updating to newer versions
@@ -51,58 +51,77 @@ A command-line tool (`runtipi-cli`) for administrative tasks:
 - Viewing logs
 - Debugging issues
 
-### 3. **App Store**
+### 3. App Store
 A repository (separate from Runtipi itself) containing app definitions. Each app has:
 - `config.json`: Metadata, requirements, and exposed settings
-- `docker-compose.yml`: Container configuration
+- `docker-compose.json`: Container configuration
 - Additional files: logos, descriptions, documentation
 
-### 4. **Traefik (Reverse Proxy)**
+### 4. Traefik (reverse proxy)
 Handles all incoming web traffic and routes it to the right app. It also:
 - Generates SSL certificates automatically
 - Handles domain routing
 - Manages internal networking between containers
 
-### 5. **PostgreSQL Database**
+### 5. PostgreSQL database
 Stores Runtipi's configuration:
 - User accounts
 - App installations and settings
 - System configuration
 - App states
 
-## How App Installation Works
+## How app installation works
 
 When you click "Install" on an app, here's what happens:
 
-1. **Download**: Runtipi downloads the app definition from the App Store repository
+1. **Download**: Runtipi downloads the app definition from the App Store repository and stores it on your server
 2. **Configuration**: Your settings are merged with the app's default configuration
 3. **Compose Generation**: A Docker Compose file is generated with your specific settings
 4. **Container Pull**: Docker downloads the app's container image(s)
-5. **Network Setup**: Traefik is configured to route traffic to the app
-6. **Start**: The app container starts running
+5. **Start**: The app container starts running
+6. **Network Setup**: Traefik reads the labels set in the compose file and configures routing
 7. **Health Check**: Runtipi monitors the app to ensure it started successfully
 
-## Data Flow
+## Data flow
 
 ### Installing an App
-```
-User clicks "Install" → Dashboard sends request → Backend processes
-→ Downloads app config → Generates docker-compose.yml → Docker pulls images
-→ Traefik configured → Containers start → Status shown in Dashboard
+
+```mermaid
+sequenceDiagram
+    participant User as 👤 User
+    participant Dashboard
+    participant Backend
+    participant Docker
+    participant Traefik
+
+    User->>Dashboard: Click Install
+    Dashboard->>Backend: Send request
+    Backend->>Backend: Copies app files
+    Backend->>Backend: Merge user config
+    Backend->>Docker: Generate compose.yml
+    Docker->>Docker: Pull images
+    Docker->>Docker: Start compose stack
+    Traefik->>Docker: Read container labels
+    Traefik->>Traefik: Configure routes automatically
+    Dashboard->>User: Show status ✅
 ```
 
-### Accessing an App
-```
-Browser request → Traefik (port 80/443) → Identifies target app
-→ Routes to correct container → App responds → Traefik returns response
+### Accessing an app
+
+```mermaid
+sequenceDiagram
+    participant Browser
+    participant Traefik
+    participant Container as App Container
+
+    Browser->>Traefik: HTTP/HTTPS Request (port 80/443)
+    Traefik->>Traefik: Identify target app
+    Traefik->>Container: Route request to correct container
+    Container->>Container: Process request
+    Container-->>Traefik: Response
+    Traefik-->>Browser: Return response
 ```
 
-### Updating Runtipi
-```
-User runs: sudo ./runtipi-cli update latest
-→ CLI downloads new version → Stops current services
-→ Updates files → Restarts services → Runs migrations if needed
-```
 
 ## File Structure
 
@@ -115,7 +134,7 @@ runtipi/
 │   ├── nextcloud/
 │   ├── filebrowser/
 │   └── ...
-├── apps/                 # App definitions from App Store
+├── apps/                 # App definitions and generated compose files
 ├── state/                # Runtipi's internal state
 ├── traefik/              # Reverse proxy configuration
 ├── user-config/          # Your custom configurations
@@ -126,32 +145,15 @@ runtipi/
   **Important**: The `app-data` directory contains all your app data. Back this up regularly!
 </Callout>
 
-## Security Model
-
-Runtipi implements several security measures:
-
-1. **Container Isolation**: Each app runs in its own container with limited access
-2. **Internal Network**: Apps communicate through a private Docker network
-3. **User Permissions**: The dashboard requires authentication
-4. **HTTPS**: Optional but easy to enable for encrypted connections
-5. **No Root**: Apps don't run as root inside containers (when possible)
-
-## What Makes Runtipi Different?
-
-Unlike raw Docker or other tools:
+## What makes Runtipi different?
 
 - **No manual networking**: Traefik handles all routing automatically
-- **No YAML editing**: Configuration through web UI
-- **Automatic updates**: Both Runtipi and apps can auto-update
+- **No YAML editing**: Configuration through web UI. Customizations are possible but not required
+- **Easy management**: Start/stop apps with a click even from mobile
+- **Automatic updates**: Apps can be updated with minimal effort
 - **App ecosystem**: Curated apps that work out of the box
-- **Beginner-friendly**: Abstracts Docker complexity
+- **Beginner-friendly**: Abstracts docker and networking complexity
 
 <Callout>
-  Runtipi doesn't lock you in—all apps are standard Docker containers. You can export the compose files and run them independently if needed.
+  Runtipi doesn't lock you in. All apps are standard Docker containers. You can export the compose files and run them independently if needed. All the generated files are stored in the `apps/` directory.
 </Callout>
-
-## Next Steps
-
-- Learn about [Apps & the App Store](/docs/learn/core-concepts/apps-and-app-store)
-- Understand [Networking & Reverse Proxy](/docs/learn/core-concepts/networking)
-- Dive deeper into the [Architecture](/docs/reference/architecture)

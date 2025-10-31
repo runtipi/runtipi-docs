@@ -1,0 +1,166 @@
+import { Callout } from "nextra/components";
+
+# Apps & the App Store
+
+Understanding how Runtipi apps work will help you make the most of the platform and even create your own apps.
+
+## What is an App in Runtipi?
+
+A Runtipi app is a pre-configured Docker container (or set of containers) that can be installed with one click. Think of it like an app on your smartphone, but running on your server instead.
+
+Each app includes:
+- **The software itself** (e.g., Nextcloud, Jellyfin, etc.)
+- **Pre-configured settings** opinionated, that work out of the box
+- **Automatic networking** via Traefik
+- **Data persistence** so your files survive restarts and can be safely backed up
+- **Optional customization** for advanced users
+
+## The App Store
+
+An app store is a collection of apps that you can browse and install from the Runtipi dashboard.
+The runtipi team manages an official "default" app store, but anyone can create their own custom app store repository and add apps to it.
+
+You can see this as a marketplace of blueprints for self-hosted applications that are ready to run with minimal setup and that you can customize as needed.
+
+### App Store repository
+
+An App Store is actually a separate Git repository: [`runtipi/runtipi-appstore`](https://github.com/runtipi/runtipi-appstore)
+
+When you browse apps in Runtipi, it's pulling the list from this repository.
+
+## App Architecture
+
+Every app in the store has this structure:
+
+```
+app-name/
+├── config.json          # App metadata and configuration options
+├── docker-compose.json  # Container configuration
+├── metadata/
+│   ├── logo.jpg        # App icon
+└── └── description.md  # Long description
+```
+
+### config.json
+
+Defines the app's:
+- **Name and description**
+- **Version**
+- **Configurable options** (shown in the UI)
+- **Architecture support** (x86/ARM)
+- And more...
+
+For more options, check out the full specs [config.json](/docs/reference/config-json).
+
+```json
+{
+  "name": "Nextcloud",
+  "port": 8080,
+  "available": true,
+  "exposable": true,
+  "form_fields": [
+    {
+      "type": "text",
+      "label": "Admin Username",
+      "env_variable": "NEXTCLOUD_ADMIN_USER"
+    }
+  ]
+}
+```
+
+
+
+### docker-compose.json
+
+Defines the actual Docker container(s) to run the app. This is similar to a standard `docker-compose.yml` file but uses JSON format and supports template variables for dynamic configuration.
+
+```yaml
+{
+  "schemaVersion": 2,
+  "$schema": "https://schemas.runtipi.io/v2/dynamic-compose.json",
+  "services": [
+    {
+      "name": "nginx",
+      "image": "nginx:1.29.2",
+      "isMain": true,
+      "internalPort": 80
+    }
+  ]
+}
+```
+
+For a full reference, see [docker-compose.json](/docs/reference/dynamic-compose)
+
+## App Lifecycle
+
+### Running
+- App runs continuously in the background
+- Data is persisted to `app-data/repo-name/app-name/`
+- You can start, stop, or restart anytime
+- Logs are available for debugging
+
+### Updates
+- When the app store has a new version, Runtipi notifies you
+- You can update with one click
+- Data and config are preserved during updates
+- Rollback to a backup if needed
+
+### Uninstallation
+- Runtipi stops the containers
+- Container images are removed
+- **Your data gets deleted** in `app-data/`
+
+<Callout type="warning">
+  Uninstalling an app deletes all its data permanently. Make sure to back up anything important before uninstalling! Backups are not deleted during uninstallation.
+</Callout>
+
+## App Data & persistence
+
+All app data is stored in the `app-data/` directory in your Runtipi installation:
+
+```
+runtipi/
+└── app-data/
+    ├── nextcloud/
+    │   ├── data/          # Your files
+    │   ├── config/        # App configuration
+    │   └── database/      # SQLite or other data
+    ├── jellyfin/
+    │   ├── media/         # Your movies/music
+    │   └── config/
+    └── ...
+```
+
+**Key Points:**
+- This directory survives app restarts and updates
+- **Back this up regularly** - it's your actual data
+- Can be very large (depending on apps)
+- Each app has its own isolated folder
+
+## Architecture Support
+
+Not all apps work on all processor architectures:
+
+### x86_64 / amd64
+- Most common for desktops and servers
+- Most apps supported
+
+### ARM64
+- Raspberry Pi 4/5, some SBCs
+- Many apps supported
+- Some apps unavailable (Runtipi hides them automatically)
+
+<Callout type="info">
+  Runtipi automatically detects your architecture and only shows compatible apps.
+</Callout>
+
+## Custom App Stores
+
+Advanced users can create private app stores:
+
+1. Fork the [runtipi-appstore](https://github.com/runtipi/runtipi-appstore) repository
+2. Add your custom apps
+3. Configure Runtipi to use your repository
+4. Your private apps appear in the dashboard
+
+Guide: [Create Your Own App Store](/docs/guides/create-your-own-app-store)

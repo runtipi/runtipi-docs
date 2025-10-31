@@ -1,0 +1,33 @@
+# App Installation Failures
+
+Diagnose and resolve problems when apps fail to install or start.
+
+## Overview
+
+- Time: 5–20 minutes (depends on app)
+- Difficulty: Beginner → Intermediate
+- Prerequisites: Access to container logs
+
+## Symptoms
+
+- App shows as failed to install
+- Container repeatedly restarts (CrashLoop)
+- Health checks fail
+
+## Common causes & fixes
+
+- Missing environment variables → Check app config and required secrets
+- Port conflicts → Change the host port or stop the conflicting service
+- Insufficient resources → Check CPU/RAM and container limits
+- Image not found or unauthorized → Verify app store source and credentials
+
+## What to check
+
+- Logs: `docker logs -f <container>`
+- Compose: `docker compose ps` and `docker compose logs <service>`
+- Network: container can reach dependencies (DB, APIs)
+
+## Next Steps
+
+- App model overview: [/docs/learn/core-concepts/apps-and-app-store](/docs/learn/core-concepts/apps-and-app-store)
+- FAQ and common errors: [/docs/troubleshooting](/docs/troubleshooting)

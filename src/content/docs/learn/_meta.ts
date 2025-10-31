@@ -3,12 +3,24 @@ export default {
     title: "Overview",
   },
   "why-runtipi": {
-    title: "Why Self-Host with Runtipi?",
+    title: "Why self-host with Runtipi?",
   },
   "how-it-works": {
-    title: "How Runtipi Works",
+    title: "How Runtipi works",
   },
-  "core-concepts": {
-    title: "Core Concepts",
+  "apps-and-app-store": {
+    title: "Apps & the App Store",
+  },
+  networking: {
+    title: "Networking",
+  },
+  "reverse-proxy": {
+    title: "Reverse proxy",
+  },
+  "docker-basics": {
+    title: "Docker Basics",
+  },
+  "data-storage": {
+    title: "Data & storage",
   },
 };

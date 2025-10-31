@@ -1,35 +1,32 @@
 export default {
-  "quick-start": {
-    title: "🚀 Quick Start",
-    theme: {
-      sidebar: true,
-    },
-  },
   introduction: {
     title: "Introduction",
+  },
+  "quick-start": {
+    title: "Quick start",
   },
   "apps-available": {
     title: "Apps Available",
   },
   learn: {
-    title: "📖 Learn",
+    title: "Learn",
   },
   "getting-started": {
-    title: "Getting Started",
+    title: "Getting started",
   },
   guides: {
-    title: "📚 Guides",
-  },
-  reference: {
-    title: "🔧 Configuration",
+    title: "Guides",
   },
   security: {
-    title: "🔒 Security & Maintenance",
+    title: "Security & maintenance",
   },
   troubleshooting: {
-    title: "🐛 Troubleshooting",
+    title: "Troubleshooting",
+  },
+  reference: {
+    title: "Reference",
   },
   contributing: {
-    title: "👨‍💻 For Developers",
+    title: "For developers",
   },
 };

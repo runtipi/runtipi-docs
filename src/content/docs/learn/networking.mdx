@@ -1,0 +1,53 @@
+import { Callout, Tabs } from "nextra/components";
+
+# Networking explained
+
+One of the most challenging aspects of self-hosting is networking. This guide breaks down the concepts in plain English so you can make informed decisions about exposing your apps.
+
+## The three levels of access
+
+When you install an app with Runtipi, you need to decide who can access it. There are three levels:
+
+### 1. Local network access
+
+**Who can access?** Anyone on your home/office network (same Wi-Fi/LAN).
+
+**Use case:** Accessing apps from your phone, laptop, or other devices at home.
+
+**Security:** Secure as long as you trust everyone on your network.
+
+<Callout type="info">
+  **This is the default settings if you don't change anything.** Runtipi makes it easy to access apps locally without extra configuration.
+</Callout>
+
+<Callout type="warning">
+  If you run on a VPS or cloud server, "local network" means anyone who can access that server over the internet.
+</Callout>
+
+---
+
+### 2. VPN access
+
+A common way to securely access your apps remotely is via a VPN. You can run you own VPN server using tools like Tailscale or NetBird
+that are available in the Runtipi App Store.
+
+**Who can access?** Only devices connected to your VPN.
+
+**Use case:** Securely accessing apps from outside your home (work, vacation) as if you were on your local network.
+
+**Security:** Very secure. VPN encrypts traffic and restricts access to authorized users only.
+
+<Callout type="info">
+  This is the most secure way to access your apps remotely. Consider using Tailscale or WireGuard for easy VPN setup.
+</Callout>
+
+---
+
+### 3. Internet access (Exposed)
+
+**Who can access?** Anyone on the internet
+
+**Use case:** Accessing apps from anywhere (work, vacation, etc.) or sharing with friends.
+
+**Security:** Requires careful setup, you're opening your server to the world.
+

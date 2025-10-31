@@ -1,0 +1,48 @@
+# Server hardening
+
+Practical steps to lock down the server that runs Runtipi.
+
+## Overview
+
+- Time: ~20–30 minutes
+- Difficulty: Intermediate
+- Prerequisites: SSH access, basic Linux operations
+
+## Baseline security
+
+- Keep the OS updated (security patches)
+- Use strong, unique passwords or SSH keys only
+- Disable root SSH login and password auth if possible
+- Set the correct timezone and NTP for accurate logs
+
+## SSH hardening
+
+- Use key-based auth and disable password auth in `sshd_config`
+- Change the default SSH port only if it helps your threat model
+- Install `fail2ban` or equivalent to block brute-force attempts
+
+## Firewall
+
+- Allow only required inbound ports (e.g., 22 for SSH, 80/443 for HTTP/HTTPS)
+- Deny by default; open explicitly for services you need
+
+## File system & users
+
+- Create a non-root user for daily operations
+- Limit `sudo` to specific users and log usage
+- Keep app data under predictable directories with correct permissions
+
+## Monitoring & alerts
+
+- Watch disk, CPU, memory
+- Alert on unusual login attempts or service restarts
+
+<Callout emoji="✅">
+	Security is layers. Even small improvements compound: keys over passwords, firewall on, updates applied.
+</Callout>
+
+## Next Steps
+
+- VPS security overview: [/docs/security/vps-security](/docs/security/vps-security)
+- User management: [/docs/security/user-management](/docs/security/user-management)
+- Updating Runtipi safely: [/docs/security/updating](/docs/security/updating)

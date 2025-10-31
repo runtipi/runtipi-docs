@@ -11,12 +11,12 @@ Get up and running with Runtipi in under 10 minutes. This guide will take you fr
 
 ## What is Runtipi?
 
-Runtipi is a home server management tool that makes self-hosting as easy as installing apps on your phone. No Docker expertise required, no complex configuration files—just a simple web interface to install and manage services.
+Runtipi is a home server management tool that makes self-hosting as easy as installing apps on your phone. Just a simple web interface to install and manage all kind of services.
 
 ## Before You Begin
 
 Make sure you have:
-- A 64-bit Linux server (Ubuntu 18.04+ recommended) or a Raspberry Pi
+- A 64-bit Linux server (Ubuntu 22.04+ recommended) or a Raspberry Pi
 - At least 4GB of RAM
 - 10GB of free disk space
 - Terminal/SSH access to your server
@@ -53,46 +53,38 @@ http://your-server-ip
 
 Replace `your-server-ip` with your server's local IP address (e.g., `192.168.1.100`).
 
-<Callout emoji="💡">
-  **Don't know your server's IP?** Run `hostname -I` in your terminal.
-</Callout>
-
 ### Create Your Account
 
 You'll see the Runtipi welcome screen. Create your admin account by:
 1. Entering your desired username
 2. Creating a strong password
-3. Providing your email (used for notifications)
 
 ### Install Your First App
 
-Now for the fun part! Let's install an app:
-
 1. Click on **"App Store"** in the navigation
 2. Browse the available apps
-3. Choose an app to install (we recommend starting with **File Browser** or **Nextcloud**)
+3. Choose an app to install (we recommend starting with **Nginx**)
 4. Click **"Install"**
-5. Configure any required settings (most apps work with defaults)
-6. Click **"Install"** to confirm
+5. Choose a port you want the app to run on
 
-The app will download and start automatically. You can monitor the installation progress on the app's details page.
+The app will download and start automatically.
 
 ### Access Your App
 
 Once installed, you can access your app in two ways:
 
-- **From the Dashboard**: Click "Open" on the app card
+- **From the Dashboard**: Click "Open" on the app details page
 - **Direct URL**: `http://your-server-ip:PORT` (the port is shown on the app details page)
 
 </Steps>
 
-## 🎉 Success!
+## Success!
 
 Congratulations! You've just self-hosted your first application with Runtipi.
 
 ## What's Next?
 
-Now that you have Runtipi running, here are some logical next steps:
+Now that you have Runtipi running, here are some next steps:
 
 <Cards>
   <Cards.Card
@@ -116,12 +108,6 @@ Now that you have Runtipi running, here are some logical next steps:
     href="/docs/security"
   />
 </Cards>
-
-### Popular Next Steps:
-
-- **For security-conscious users**: Set up [backups](/docs/security/backup-and-restore) and [enable HTTPS](/docs/guides/local-certificate)
-- **For advanced users**: Learn about [custom configurations](/docs/guides/customize-app-config) and [environment variables](/docs/getting-started/custom-environment-variables)
-- **For networking enthusiasts**: Set up [custom domains](/docs/guides/linking-a-domain-to-your-dashboard) and [expose apps safely](/docs/guides/expose-apps-with-cloudflare-tunnels)
 
 ## Need Help?
 

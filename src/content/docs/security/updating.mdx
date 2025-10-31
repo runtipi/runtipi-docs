@@ -1,0 +1,37 @@
+# Updating Runtipi Safely
+
+A simple process to update with confidence and recover quickly if needed.
+
+## Overview
+
+- Time: ~10–20 minutes
+- Difficulty: Beginner → Intermediate
+- Prerequisites: Backups in place and verified
+
+## Before you update
+
+- Read release notes: [/docs/reference/release-notes](/docs/reference/release-notes)
+- Check for breaking updates: [/docs/reference/breaking-updates](/docs/reference/breaking-updates)
+- Take a fresh backup of data and configs
+
+## Update process
+
+1. Announce maintenance window if this is a shared server
+2. Stop services if required by the release notes
+3. Apply the update (pull images, update configs)
+4. Start services and watch logs for migrations
+
+<Callout type="warning">
+	If an update includes a database migration, let it finish before restarting.
+</Callout>
+
+## Rollback plan
+
+- Keep the previous version’s compose/config handy
+- Restore from the pre-update backup if needed
+- Verify app health after rollback
+
+## Next Steps
+
+- Backup and restore guide: [/docs/guides/backup-and-restore](/docs/guides/backup-and-restore)
+- Architecture overview: [/docs/reference/architecture](/docs/reference/architecture)

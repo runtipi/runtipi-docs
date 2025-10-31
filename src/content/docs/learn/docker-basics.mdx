@@ -1,0 +1,38 @@
+import { Callout } from "nextra/components";
+
+# Docker basics for Runtipi users
+
+A friendly intro to Docker so you can run and troubleshoot Runtipi with confidence.
+
+## What is Docker
+
+Docker lets apps run in small, self-contained boxes called containers. Each app gets everything it needs (binaries, libraries, config) without touching the rest of your system.
+You can start, stop, and update containers without breaking other apps.
+
+## How Runtipi uses Docker
+
+- Uses Docker compose to define app stacks declaratively.
+- Groups related containers on a shared network so they can talk to each other safely.
+- Setup labels and environment variables for networking, data storage, and more.
+
+## Common docker commands
+
+These commands help you look around and fix basic issues.
+
+```bash
+# List containers
+docker ps -a
+
+# View logs for a container
+docker logs -f <container-name>
+
+# Restart a container
+docker restart <container-name>
+```
+
+## Troubleshooting
+
+- Container won’t start: check `docker logs <name>` for the error.
+- Port already in use: change or free the port and restart the service.
+- Can’t reach the app: confirm the container is running
+- Disk full: check `docker system df` and clean unused images/volumes.
