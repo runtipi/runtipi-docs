@@ -3,7 +3,7 @@ export default {
     title: "Overview",
   },
   "why-runtipi": {
-    title: "Why self-host with Runtipi?",
+    title: "Why Runtipi?",
   },
   "how-it-works": {
     title: "How Runtipi works",
@@ -17,10 +17,7 @@ export default {
   "reverse-proxy": {
     title: "Reverse proxy",
   },
-  "docker-basics": {
-    title: "Docker Basics",
-  },
-  "data-storage": {
-    title: "Data & storage",
+  troubleshooting: {
+    title: "Troubleshooting",
   },
 };

@@ -1,5 +1,4 @@
 import { Callout } from "nextra/components";
-import { Cards } from "nextra/components";
 import { ClockIcon, FolderIcon, ServerIcon } from "@heroicons/react/24/outline";
 
 # Backup and restore
@@ -28,7 +27,7 @@ tar -xzvf runtipi.tar.gz -C .
 Start Runtipi on your second server using the CLI
 
 ```bash
-cd Runtipi && sudo ./runtipi-cli start
+cd runtipi && sudo ./runtipi-cli start
 ```
 
 <Callout>
@@ -39,21 +38,3 @@ cd Runtipi && sudo ./runtipi-cli start
 </Callout>
 
 You're ready to go! Make sure any shared folder or manual network config you may have performed on your first server is re-applied again on your new server.
-
-<Cards>
-  <Cards.Card
-    icon={<ClockIcon />}
-    title="Auto Backup Apps"
-    href="/docs/guides/auto-backup-apps"
-  />
-  <Cards.Card
-    icon={<ServerIcon />}
-    title="Folder Structure"
-    href="/docs/reference/folder-structure"
-  />
-  <Cards.Card
-    icon={<FolderIcon />}
-    title="Custom Settings"
-    href="/docs/getting-started/custom-settings"
-  />
-</Cards>

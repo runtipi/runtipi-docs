@@ -2,7 +2,7 @@ export default {
   overview: {
     title: "Overview",
   },
-  "--- Networking": {
+  "###": {
     type: "separator",
     title: "Networking",
   },
@@ -10,7 +10,7 @@ export default {
     title: "Expose apps to internet",
   },
   "expose-apps-with-cloudflare-tunnels": {
-    title: "Expose with Cloudflare TUnnels",
+    title: "Expose with Cloudflare tunnels",
   },
   "local-certificate": {
     title: "Local SSL certificates",
@@ -30,6 +30,12 @@ export default {
   },
   "customize-compose-and-traefik": {
     title: "Customize docker compose & traefik",
+  },
+  "custom-settings": {
+    title: "Custom settings",
+  },
+  "custom-environment-variables": {
+    title: "Custom environment variables",
   },
   "--- Backup & Maintenance": {
     type: "separator",

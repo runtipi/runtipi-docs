@@ -10,26 +10,26 @@ Runtipi is a layer on top of Docker that simplifies self-hosting. Think of it as
 
 ```
 ┌─────────────────────────────────────────┐
-│         Your Web Browser                │
+│         Your web browser                │
 └─────────────┬───────────────────────────┘
               │ Access via HTTP/HTTPS
 ┌─────────────▼───────────────────────────┐
-│     Runtipi Dashboard (Web UI)          │
+│     Runtipi dashboard (web UI)          │
 │  (Shows apps, manages installations)    │
 └─────────────┬───────────────────────────┘
               │ Controls
 ┌─────────────▼───────────────────────────┐
-│      Runtipi Backend & CLI              │
+│      Runtipi backend & CLI              │
 │  (Processes requests, manages Docker)   │
 └─────────────┬───────────────────────────┘
               │ Commands
 ┌─────────────▼───────────────────────────┐
-│          Docker Engine                  │
+│          Docker engine                  │
 │  (Runs containers, manages networking)  │
 └─────────────┬───────────────────────────┘
               │ Runs
 ┌─────────────▼───────────────────────────┐
-│      Your Apps (Containers)             │
+│      Your apps (Containers)             │
 │   Nextcloud | File Browser | etc.       │
 └─────────────────────────────────────────┘
 ```
@@ -48,7 +48,6 @@ A command-line tool (`runtipi-cli`) for administrative tasks:
 - Starting/stopping Runtipi
 - Updating to newer versions
 - Managing backups
-- Viewing logs
 - Debugging issues
 
 ### 3. App Store
@@ -76,11 +75,11 @@ When you click "Install" on an app, here's what happens:
 
 1. **Download**: Runtipi downloads the app definition from the App Store repository and stores it on your server
 2. **Configuration**: Your settings are merged with the app's default configuration
-3. **Compose Generation**: A Docker Compose file is generated with your specific settings
-4. **Container Pull**: Docker downloads the app's container image(s)
+3. **Compose generation**: A Docker compose file is generated with your specific settings
+4. **Container pull**: Docker downloads the app's container image(s)
 5. **Start**: The app container starts running
-6. **Network Setup**: Traefik reads the labels set in the compose file and configures routing
-7. **Health Check**: Runtipi monitors the app to ensure it started successfully
+6. **Network setup**: Traefik reads the labels set in the compose file and configures routing
+7. **Health check**: Runtipi monitors the app to ensure it started successfully
 
 ## Data flow
 
@@ -125,7 +124,7 @@ sequenceDiagram
 
 ## File Structure
 
-Runtipi stores everything in its installation directory (typically where you ran the install script):
+Runtipi stores everything in its installation directory (where you ran the install script):
 
 ```
 runtipi/

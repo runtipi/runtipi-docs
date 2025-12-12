@@ -5,6 +5,9 @@ export default {
   "folder-structure": {
     title: "Folder Structure",
   },
+  "using-the-cli": {
+    title: "Using the CLI",
+  },
   "third-party-services": {
     title: "Third-party services",
   },

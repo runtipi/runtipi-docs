@@ -4,7 +4,7 @@ import { Callout } from "nextra/components";
 
 Understanding how Runtipi apps work will help you make the most of the platform and even create your own apps.
 
-## What is an App in Runtipi?
+## What is an app in Runtipi?
 
 A Runtipi app is a pre-configured Docker container (or set of containers) that can be installed with one click. Think of it like an app on your smartphone, but running on your server instead.
 
@@ -24,7 +24,7 @@ You can see this as a marketplace of blueprints for self-hosted applications tha
 
 ### App Store repository
 
-An App Store is actually a separate Git repository: [`runtipi/runtipi-appstore`](https://github.com/runtipi/runtipi-appstore)
+An App Store is actually a separate git repository: [`runtipi/runtipi-appstore`](https://github.com/runtipi/runtipi-appstore)
 
 When you browse apps in Runtipi, it's pulling the list from this repository.
 
@@ -91,7 +91,7 @@ Defines the actual Docker container(s) to run the app. This is similar to a stan
 
 For a full reference, see [docker-compose.json](/docs/reference/dynamic-compose)
 
-## App Lifecycle
+## App lifecycle
 
 ### Running
 - App runs continuously in the background
@@ -114,7 +114,7 @@ For a full reference, see [docker-compose.json](/docs/reference/dynamic-compose)
   Uninstalling an app deletes all its data permanently. Make sure to back up anything important before uninstalling! Backups are not deleted during uninstallation.
 </Callout>
 
-## App Data & persistence
+## App data & persistence
 
 All app data is stored in the `app-data/` directory in your Runtipi installation:
 
@@ -137,7 +137,7 @@ runtipi/
 - Can be very large (depending on apps)
 - Each app has its own isolated folder
 
-## Architecture Support
+## Architecture support
 
 Not all apps work on all processor architectures:
 
@@ -153,14 +153,3 @@ Not all apps work on all processor architectures:
 <Callout type="info">
   Runtipi automatically detects your architecture and only shows compatible apps.
 </Callout>
-
-## Custom App Stores
-
-Advanced users can create private app stores:
-
-1. Fork the [runtipi-appstore](https://github.com/runtipi/runtipi-appstore) repository
-2. Add your custom apps
-3. Configure Runtipi to use your repository
-4. Your private apps appear in the dashboard
-
-Guide: [Create Your Own App Store](/docs/guides/create-your-own-app-store)

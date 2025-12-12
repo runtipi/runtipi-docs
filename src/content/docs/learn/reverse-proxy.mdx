@@ -40,7 +40,7 @@ http://jellyfin.local  → Traefik → Jellyfin container
 SSL encrypts the connection between your browser and the server. You want this for:
 
 - **Security**: Data can't be intercepted (passwords, personal files, etc.)
-- **Privacy**: Your ISP can't see what you're doing
+- **Privacy**: Nobody can see what data you're sending/receiving
 
 ### HTTP vs HTTPS
 
@@ -99,7 +99,7 @@ graph TD
     A -->|YES| C["Choose a method"]
 
     C --> D["🔒 Option 1: Cloudflare Tunnel"]
-    D --> D1["✅ Most secure<br/>✅ No port forwarding"]
+    D --> D1["✅ Most secure<br/>✅ No port forwarding<br />⚠️ Requires strong app security"]
 
     C --> E["🔐 Option 2: VPN<br/>Tailscale/NetBird"]
     E --> E1["✅ Very secure<br/>✅ Works like local<br/>⚠️ Requires VPN client"]
@@ -109,7 +109,7 @@ graph TD
 ```
 
 Guides:
-- [Expose with Cloudflare Tunnels](/docs/guides/expose-apps-with-cloudflare-tunnels)
+- [Expose with Cloudflare tunnels](/docs/guides/expose-apps-with-cloudflare-tunnels)
 - [Expose your apps (port forwarding)](/docs/guides/expose-your-apps)
 
 ## Exposure scenarios
@@ -128,7 +128,7 @@ Guides:
 **Solution:** Cloudflare Tunnel or VPN
 - Secure, encrypted access from anywhere
 - No exposed ports
-- Guide: [Expose with Cloudflare Tunnels](/docs/guides/expose-apps-with-cloudflare-tunnels)
+- Guide: [Expose with Cloudflare tunnels](/docs/guides/expose-apps-with-cloudflare-tunnels)
 
 ### Scenario 3: Online blog
 **Need:** Share blog with public internet

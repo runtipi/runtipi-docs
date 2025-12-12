@@ -1,7 +1,7 @@
 import { Callout, Steps, Cards } from "nextra/components";
 import { RocketLaunchIcon, CommandLineIcon, CubeIcon, ArrowRightIcon } from "@heroicons/react/24/outline";
 
-# Quick Start
+# Quick start
 
 Get up and running with Runtipi in under 10 minutes. This guide will take you from installation to running your first self-hosted app.
 
@@ -13,17 +13,22 @@ Get up and running with Runtipi in under 10 minutes. This guide will take you fr
 
 Runtipi is a home server management tool that makes self-hosting as easy as installing apps on your phone. Just a simple web interface to install and manage all kind of services.
 
-## Before You Begin
+## Before you begin
 
-Make sure you have:
+Make sure you have at least:
 - A 64-bit Linux server (Ubuntu 22.04+ recommended) or a Raspberry Pi
 - At least 4GB of RAM
 - 10GB of free disk space
 - Terminal/SSH access to your server
 
-<Callout type="info">
-  Running on a VPS? Check our [security considerations](/docs/security/vps-security) first.
-</Callout>
+### VPS users
+
+If you intend to self-host stuff on a VPS consider if it is a good or bad idea. Whether you use Runtipi or not, it is most of the time a bad idea. Except if you put the correct security measures in place.
+
+When you install Runtipi on a VPS it is immediately vulnerable and open to the world through its public IP. The same goes for all apps you will install down the line through their respective ports.
+
+If you still want to run on a VPS, follow our [security guide for VPS](/docs/security/vps-security) to minimize risks.
+
 
 ## Installation
 
@@ -43,7 +48,7 @@ This will download and install Runtipi along with Docker (if not already install
   If you already have Docker installed, make sure you have Docker Compose plugin. Check with: `docker compose version`
 </Callout>
 
-### Access the Dashboard
+### Access the dashboard
 
 Once installation is complete, open your browser and navigate to:
 
@@ -53,13 +58,7 @@ http://your-server-ip
 
 Replace `your-server-ip` with your server's local IP address (e.g., `192.168.1.100`).
 
-### Create Your Account
-
-You'll see the Runtipi welcome screen. Create your admin account by:
-1. Entering your desired username
-2. Creating a strong password
-
-### Install Your First App
+### Install your first app
 
 1. Click on **"App Store"** in the navigation
 2. Browse the available apps
@@ -69,48 +68,49 @@ You'll see the Runtipi welcome screen. Create your admin account by:
 
 The app will download and start automatically.
 
-### Access Your App
+### Access your app
 
 Once installed, you can access your app in two ways:
 
 - **From the Dashboard**: Click "Open" on the app details page
 - **Direct URL**: `http://your-server-ip:PORT` (the port is shown on the app details page)
 
-</Steps>
-
 ## Success!
 
 Congratulations! You've just self-hosted your first application with Runtipi.
 
-## What's Next?
+</Steps>
+
+
+## What's next?
 
 Now that you have Runtipi running, here are some next steps:
 
 <Cards>
   <Cards.Card
     icon={<CubeIcon />}
-    title="Explore More Apps"
+    title="Explore apps"
     href="/docs/apps-available"
   />
   <Cards.Card
     icon={<CommandLineIcon />}
-    title="Learn the Basics"
+    title="Learn the basics"
     href="/docs/learn"
   />
   <Cards.Card
     icon={<RocketLaunchIcon />}
-    title="Expose Apps to Internet"
+    title="Expose apps to internet"
     href="/docs/guides/expose-your-apps"
   />
   <Cards.Card
     icon={<ArrowRightIcon />}
-    title="Secure Your Setup"
+    title="Secure your setup"
     href="/docs/security"
   />
 </Cards>
 
 ## Need Help?
 
-- Check our [Troubleshooting](/docs/troubleshooting) section
+- Check our [Troubleshooting](/docs/learn/troubleshooting) section
 - Visit our [Community Forums](https://forums.runtipi.io/)
 - Join our [Discord](https://discord.gg/Bu9qEPnHsc)

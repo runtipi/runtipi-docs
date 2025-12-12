@@ -11,17 +11,11 @@ export default {
   learn: {
     title: "Learn",
   },
-  "getting-started": {
-    title: "Getting started",
-  },
   guides: {
     title: "Guides",
   },
   security: {
     title: "Security & maintenance",
-  },
-  troubleshooting: {
-    title: "Troubleshooting",
   },
   reference: {
     title: "Reference",
