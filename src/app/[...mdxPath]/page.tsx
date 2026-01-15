@@ -20,7 +20,7 @@ export default async function Page(props: Props) {
   const result = await importPage(params.mdxPath);
   const { default: MDXContent, toc, metadata } = result;
   return (
-    <Wrapper toc={toc} metadata={metadata}>
+    <Wrapper sourceCode="https://github.com/runtipi/runtipi" toc={toc} metadata={metadata}>
       <MDXContent {...props} params={params} />
     </Wrapper>
   );
