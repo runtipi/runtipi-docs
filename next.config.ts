@@ -16,18 +16,4 @@ export default withNextra({
       },
     ],
   },
-  // async redirects() {
-  //   return [
-  //     {
-  //       source: "/docs/getting-started/why-runtipi",
-  //       destination: "/docs/learn/why-runtipi",
-  //       permanent: true,
-  //     },
-  //     {
-  //       source: "/docs/contributing/:path*",
-  //       destination: "/docs/developers/:path*",
-  //       permanent: true,
-  //     },
-  //   ];
-  // },
 });
