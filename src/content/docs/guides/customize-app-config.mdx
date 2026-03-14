@@ -37,7 +37,7 @@ From this, we know that we need to set the `NETWORK_INTERFACE` variable.
 
 ### Create the folders
 
-Create `user-config` folder within `runtipi` and a folder structure matching your app store and apps:
+Create the `user-config` folder within `runtipi` and a folder structure matching your app store and apps:
 
 ```bash
 cd runtipi
@@ -119,10 +119,10 @@ You should end up with a structure like this:
 ### Restart the apps and test
 
 ```bash
-./runtipi-cli app stop jellyfin
-./runtipi-cli app stop pihole
-./runtipi-cli app start jellyfin
-./runtipi-cli app start pihole
+./runtipi-cli app stop jellyfin:<app-store>
+./runtipi-cli app start jellyfin:<app-store>
+./runtipi-cli app stop pihole:<app-store>
+./runtipi-cli app start pihole:<app-store>
 ```
 
 </Steps>

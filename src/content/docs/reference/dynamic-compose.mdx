@@ -1,77 +1,335 @@
 import { Steps, Callout } from "nextra/components";
 import { JsonSchemaValidator, DockerComposeConverter } from "@/app/components";
-import { toJsonSchema, dynamicComposeSchema, dynamicComposeSchemaArk } from "@runtipi/common/schemas";
+import {
+  toJsonSchema,
+  dynamicComposeSchema,
+  dynamicComposeSchemaArk,
+} from "@runtipi/common/schemas";
 
 # Dynamic Compose Reference
 
-In Runtipi version `v3.2.0` we added dynamic compose, a simplified and custom version of the `docker-compose.yml` file that allows for more control on how apps get deployed. For example, you can choose to only use the reverse proxy or only use ports. It also allows extra features like multiple appstores.
+Dynamic compose is Runtipi's app definition format for describing services, ports, volumes, and routing metadata. The preferred format is a standard `docker-compose.yml` file enhanced with `x-runtipi` metadata.
 
-For a step-by-step guide on creating dynamic compose files, see [Creating a dynamic compose file](/docs/guides/dynamic-compose-guide).
+## Quick Example
 
-## Try it out
+```yaml
+services:
+  myapp:
+    image: myapp:latest
+    volumes:
+      - ${APP_DATA_DIR}/data:/data
+    environment:
+      - FOO=bar
+      - PASSWORD=${MYAPP_PASSWORD}
+    x-runtipi:
+      is_main: true
+      internal_port: 80
 
-You can validate your dynamic compose configuration using the validator below:
+x-runtipi:
+  schema_version: 2
+```
+
+This is all you need to deploy a web app with automatic Traefik routing, networking, and data persistence.
+
+## `x-runtipi` Metadata Reference
+
+Runtipi extends standard Docker Compose with `x-runtipi` metadata at two levels: **top-level** (document root) and **service-level** (per service).
+
+### Top-level `x-runtipi`
+
+Placed at the root of `docker-compose.yml`, alongside `services`:
+
+| Option           | Type     | Required | Description                                           |
+| ---------------- | -------- | -------- | ----------------------------------------------------- |
+| `schema_version` | `number` | Yes      | Must be `2`                                           |
+| `overrides`      | `array`  | No       | Architecture-specific service overrides (see [Architecture Overrides](#architecture-overrides)) |
+
+```yaml
+x-runtipi:
+  schema_version: 2
+```
+
+### Service-level `x-runtipi`
+
+Placed inside a service definition:
+
+| Option              | Type               | Required | Description                                                          |
+| ------------------- | ------------------ | -------- | -------------------------------------------------------------------- |
+| `is_main`           | `boolean`          | No       | Marks this service as the main app entry point (receives Traefik routing labels) |
+| `internal_port`     | `number \| string` | No       | The port the service listens on (used for Traefik routing)           |
+| `add_to_main_network` | `boolean`        | No       | Adds the service to Runtipi's shared network for cross-app communication |
+
+```yaml
+services:
+  app:
+    image: myapp:latest
+    x-runtipi:
+      is_main: true
+      internal_port: 8080
+```
+
+## Standard Docker Compose Features
+
+Everything else in your `docker-compose.yml` uses **standard Docker Compose syntax**. You don't need to learn any custom format for volumes, environment variables, ports, healthchecks, etc. Here are some commonly used options:
+
+### Volumes
+
+```yaml
+services:
+  app:
+    image: myapp:latest
+    volumes:
+      - ${APP_DATA_DIR}/config:/config
+      - ${APP_DATA_DIR}/data:/data:ro
+```
+
+Use `${APP_DATA_DIR}` for app-specific persistent data and `${RUNTIPI_MEDIA_DIR}` for shared media directories.
+
+### Environment Variables
+
+```yaml
+services:
+  app:
+    image: myapp:latest
+    environment:
+      - TZ=${TZ}
+      - DB_PASSWORD=${MYAPP_DB_PASSWORD}
+```
+
+You can reference variables defined in the app's `config.json` form fields using `${VARIABLE_NAME}`.
+
+### Ports
+
+For additional ports beyond the main `internal_port` (which is handled by Traefik), expose them directly:
+
+```yaml
+services:
+  app:
+    image: myapp:latest
+    ports:
+      - "${APP_PORT}:8080/tcp"
+      - "25565:25565/udp"
+```
+
+### Health Checks
+
+```yaml
+services:
+  app:
+    image: myapp:latest
+    healthcheck:
+      test: curl --fail http://localhost:8080 || exit 1
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+```
+
+### Dependencies
+
+```yaml
+services:
+  app:
+    image: myapp:latest
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: postgres:16
+    healthcheck:
+      test: pg_isready -U postgres
+      interval: 10s
+      timeout: 5s
+      retries: 5
+```
+
+### Resource Limits
+
+```yaml
+services:
+  app:
+    image: myapp:latest
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 512M
+        reservations:
+          devices:
+            - capabilities: [gpu]
+              driver: nvidia
+              count: 1
+```
+
+### Security Options
+
+```yaml
+services:
+  app:
+    image: myapp:latest
+    privileged: true
+    cap_add:
+      - NET_ADMIN
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges
+    read_only: true
+    user: "1000:1000"
+```
+
+### Other Options
+
+All standard Docker Compose options are supported, including `command`, `entrypoint`, `working_dir`, `network_mode`, `extra_hosts`, `hostname`, `dns`, `tty`, `stdin_open`, `stop_signal`, `stop_grace_period`, `pid`, `sysctls`, `logging`, `devices`, `labels`, `shm_size`, `ulimits`, and more. Refer to the [Docker Compose documentation](https://docs.docker.com/reference/compose-file/) for the full specification.
+
+## Architecture Overrides
+
+You can provide architecture-specific service overrides in the top-level `x-runtipi` metadata. This is useful when you need different Docker images or settings for arm64 vs amd64.
+
+```yaml
+services:
+  media-server:
+    image: mediaserver:latest
+    volumes:
+      - ${APP_DATA_DIR}/config:/config
+      - ${RUNTIPI_MEDIA_DIR}:/media
+    environment:
+      - TZ=UTC
+    x-runtipi:
+      is_main: true
+      internal_port: 8096
+
+x-runtipi:
+  schema_version: 2
+  overrides:
+    - architecture: arm64
+      services:
+        media-server:
+          image: mediaserver:arm64-latest
+          environment:
+            - ARM_SPECIFIC_VAR=enabled
+    - architecture: amd64
+      services:
+        media-server:
+          image: mediaserver:amd64-latest
+          deploy:
+            resources:
+              reservations:
+                devices:
+                  - capabilities: [gpu]
+```
+
+### How Overrides Work
+
+- Runtipi detects the system architecture and applies matching overrides
+- Service names in overrides must match the base service names
+- Only specify properties that differ per architecture
+- Properties are deep-merged with the base configuration
+- Array properties (like volumes or ports) in overrides **replace** the base arrays entirely
+
+### Supported Architectures
+
+- `amd64`: Standard 64-bit x86 (x86_64)
+- `arm64`: 64-bit ARM (aarch64)
+
+## Complete Example
+
+Here's a full example of a web app with a database:
+
+```yaml
+services:
+  app:
+    image: myapp:2.1.0
+    volumes:
+      - ${APP_DATA_DIR}/data:/data
+    environment:
+      - DATABASE_URL=postgresql://postgres:${MYAPP_DB_PASSWORD}@myapp-db:5432/myapp
+      - SECRET_KEY=${MYAPP_SECRET_KEY}
+    healthcheck:
+      test: curl --fail http://localhost:8080/health || exit 1
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    depends_on:
+      myapp-db:
+        condition: service_healthy
+    x-runtipi:
+      is_main: true
+      internal_port: 8080
+
+  myapp-db:
+    image: postgres:16
+    volumes:
+      - ${APP_DATA_DIR}/db:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=myapp
+      - POSTGRES_PASSWORD=${MYAPP_DB_PASSWORD}
+    healthcheck:
+      test: pg_isready -U postgres
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+x-runtipi:
+  schema_version: 2
+```
+
+---
+
+## Legacy JSON Format (`docker-compose.json`)
+
+<Callout type="warning">
+  The JSON format (`docker-compose.json`) is legacy and maintained for backward
+  compatibility only. Legacy files are automatically converted internally. **New
+  apps should use `docker-compose.yml`** with `x-runtipi` metadata as documented
+  above.
+</Callout>
+
+The legacy format uses a custom JSON structure instead of standard Docker Compose YAML. Key differences from the YAML format:
+
+- Uses camelCase property names (`isMain`, `internalPort`, `addToMainNetwork`) instead of `x-runtipi` metadata
+- Services are an array with a `name` field instead of a map
+- Environment variables use `[{key, value}]` array format instead of `KEY=value` strings
+- Volumes use `{hostPath, containerPath}` objects instead of `host:container` strings
+- Additional ports use `addPorts` with `{containerPort, hostPort, tcp, udp}` objects
+
+### Legacy JSON Validator
+
+You can validate legacy JSON configurations using the validator below:
 
 <JsonSchemaValidator
   schema={dynamicComposeSchemaArk.toJsonSchema({ fallback: (ctx) => ctx.base })}
-  placeholder="Paste your dynamic compose configuration here to validate it..."
+  placeholder="Paste your legacy docker-compose.json configuration here to validate it..."
 />
 
-## Docker Compose to Dynamic Config Converter
+### Legacy Configuration Options Reference
 
-Converting an existing `docker-compose.yml` file to Runtipi's dynamic compose format can be time-consuming and error-prone. We've created a tool to help you automatically convert your Docker Compose files to the dynamic compose format.
+#### Schema Configuration
 
-<DockerComposeConverter placeholder="Paste your docker-compose.yml content here to convert it to dynamic compose format..." />
+| Option        | Type     | Description                     |
+| ------------- | -------- | ------------------------------- |
+| schemaVersion | `number` | Schema version (must be 2)      |
+| services      | `array`  | Array of service configurations |
+| overrides     | `array`  | Architecture-specific overrides |
 
-<Callout type="warning">
-  The converter works for most cases, but please review the converted
-  configuration to ensure it meets your needs. Some advanced features may not be
-  fully supported.
-</Callout>
-
-## Configuration Options Reference
-
-### Schema Configuration
-
-Top-level schema options:
-
-| Option        | Type     | Description                    | Example                |
-| ------------- | -------- | ------------------------------ | ---------------------- |
-| schemaVersion | `number` | Schema version (must be 2)     | `"schemaVersion": 2`   |
-| services      | `array`  | Array of service configurations | See service options below |
-| overrides     | `array`  | Architecture-specific overrides | See Architecture Overrides section |
-
-### Basic Configuration
-
-These are the most commonly used options when configuring a service:
+#### Basic Configuration
 
 | Option      | Type                   | Description                           | Example                                                 |
 | ----------- | ---------------------- | ------------------------------------- | ------------------------------------------------------- |
 | name        | `string` (required)    | The name of the service and container | `"name": "nginx"`                                       |
 | image       | `string` (required)    | The Docker image to use               | `"image": "nginx:latest"`                               |
 | command     | `string` \| `string[]` | The command to run in the container   | `"command": "/my/app"` or `"command": ["npm", "start"]` |
-| environment | `array`                | Environment variables                 | See example below                                       |
+| environment | `array`                | Environment variables                 | `[{"key": "FOO", "value": "bar"}]`                      |
 
-Example `environment` configuration:
+#### Port Configuration
 
-```json
-"environment": [
-  {"key": "FOO", "value": "bar"},
-  {"key": "PORT", "value": 8080},
-  {"key": "ENABLE_FEATURE", "value": true}
-]
-```
+| Option       | Type     | Description                            |
+| ------------ | -------- | -------------------------------------- |
+| internalPort | `number` | The main port exposed by the container |
+| addPorts     | `array`  | Additional ports to expose             |
 
-### Port Configuration
-
-Options related to exposing ports:
-
-| Option       | Type     | Description                            | Example              |
-| ------------ | -------- | -------------------------------------- | -------------------- |
-| internalPort | `number` | The main port exposed by the container | `"internalPort": 80` |
-| addPorts     | `array`  | Additional ports to expose             | See example below    |
-
-Example `addPorts` configuration:
+Example `addPorts`:
 
 ```json
 "addPorts": [{
@@ -83,15 +341,7 @@ Example `addPorts` configuration:
 }]
 ```
 
-### Volume Configuration
-
-Options for mounting volumes:
-
-| Option  | Type    | Description             | Example           |
-| ------- | ------- | ----------------------- | ----------------- |
-| volumes | `array` | List of volume mappings | See example below |
-
-Example `volumes` configuration:
+#### Volume Configuration
 
 ```json
 "volumes": [{
@@ -106,29 +356,17 @@ Example `volumes` configuration:
 }]
 ```
 
-Volume bind propagation options: `rprivate`, `private`, `rshared`, `shared`, `rslave`, `slave`
+#### Network Configuration
 
-### Network Configuration
+| Option           | Type                   | Description                   |
+| ---------------- | ---------------------- | ----------------------------- |
+| networkMode      | `string`               | Custom network mode           |
+| addToMainNetwork | `boolean`              | Add container to main network |
+| extraHosts       | `string[]`             | Additional /etc/hosts entries |
+| hostname         | `string`               | Container hostname            |
+| dns              | `string` \| `string[]` | Custom DNS servers            |
 
-Options related to networking:
-
-| Option           | Type                   | Description                   | Example                                    |
-| ---------------- | ---------------------- | ----------------------------- | ------------------------------------------ |
-| networkMode      | `string`               | Custom network mode           | `"networkMode": "host"`                    |
-| addToMainNetwork | `boolean`              | Add container to main network | `"addToMainNetwork": true`                 |
-| extraHosts       | `string[]`             | Additional /etc/hosts entries | `"extraHosts": ["host1:ip1"]`              |
-| hostname         | `string`               | Container hostname            | `"hostname": "mycontainer"`                |
-| dns              | `string` \| `string[]` | Custom DNS servers            | `"dns": "8.8.8.8"` or `"dns": ["8.8.8.8"]` |
-
-### Health Check Configuration
-
-Options for container health monitoring:
-
-| Option      | Type     | Description                          | Example           |
-| ----------- | -------- | ------------------------------------ | ----------------- |
-| healthCheck | `object` | Container health check configuration | See example below |
-
-Example `healthCheck` configuration:
+#### Health Check Configuration
 
 ```json
 "healthCheck": {
@@ -141,249 +379,56 @@ Example `healthCheck` configuration:
 }
 ```
 
-### Resource Configuration
+#### Resource Configuration
 
-Options for container resource limits and deployment:
+| Option  | Type     | Description                      |
+| ------- | -------- | -------------------------------- |
+| deploy  | `object` | Resource limits and reservations |
+| ulimits | `object` | Resource limits                  |
+| shmSize | `string` | Size of /dev/shm                 |
 
-| Option  | Type     | Description                      | Example            |
-| ------- | -------- | -------------------------------- | ------------------ |
-| deploy  | `object` | Resource limits and reservations | See example below  |
-| ulimits | `object` | Resource limits                  | See example below  |
-| shmSize | `string` | Size of /dev/shm                 | `"shmSize": "2gb"` |
+#### Security Configuration
 
-Example `deploy` configuration:
+| Option      | Type       | Description                            |
+| ----------- | ---------- | -------------------------------------- |
+| privileged  | `boolean`  | Run container with elevated privileges |
+| capAdd      | `string[]` | Add container capabilities             |
+| capDrop     | `string[]` | Drop container capabilities            |
+| securityOpt | `string[]` | Security options                       |
+| readOnly    | `boolean`  | Mount root filesystem as read only     |
+| user        | `string`   | Username or UID                        |
 
-```json
-"deploy": {
-  "resources": {
-    "limits": {
-      "cpus": "0.5",
-      "memory": "512M",
-      "pids": 100
-    },
-    "reservations": {
-      "cpus": "0.25",
-      "memory": "256M",
-      "devices": [
-        {
-          "capabilities": ["gpu"],
-          "driver": "nvidia",
-          "count": 1,
-          "deviceIds": ["0"]
-        }
-      ]
-    }
-  }
-}
-```
+#### Advanced Configuration
 
-Example `ulimits` configuration:
+| Option          | Type                   | Description                        |
+| --------------- | ---------------------- | ---------------------------------- |
+| entrypoint      | `string` \| `string[]` | Container entrypoint               |
+| workingDir      | `string`               | Working directory inside container |
+| tty             | `boolean`              | Allocate a pseudo-TTY              |
+| stdinOpen       | `boolean`              | Keep STDIN open                    |
+| stopSignal      | `string`               | Signal to stop the container       |
+| stopGracePeriod | `string`               | Time to wait to stop container     |
+| pid             | `string`               | PID namespace                      |
+| sysctls         | `object`               | Sysctl settings                    |
+| logging         | `object`               | Logging configuration              |
+| devices         | `string[]`             | Device mappings                    |
+| extraLabels     | `object`               | Additional container labels        |
 
-```json
-"ulimits": {
-  "nproc": {"soft": 10, "hard": 20},
-  "nofile": {"soft": 20, "hard": 30},
-  "core": 1024,
-  "memlock": {"soft": 512, "hard": 1024}
-}
-```
+#### Dependencies
 
-Note: `ulimits` can be specified as a number for simple limits or as an object with `soft` and `hard` values. Supported ulimit types: `nproc`, `nofile`, `core`, `memlock`.
+| Option    | Type                   | Description                                      |
+| --------- | ---------------------- | ------------------------------------------------ |
+| dependsOn | `object` \| `string[]` | Service dependencies                             |
+| isMain    | `boolean`              | Indicates where traefik labels should be applied |
 
-### Security Configuration
+### Docker Compose to Legacy JSON Converter
 
-Options related to container security:
+If you need to convert an existing `docker-compose.yml` to the legacy JSON format:
 
-| Option      | Type       | Description                            | Example                                |
-| ----------- | ---------- | -------------------------------------- | -------------------------------------- |
-| privileged  | `boolean`  | Run container with elevated privileges | `"privileged": true`                   |
-| capAdd      | `string[]` | Add container capabilities             | `"capAdd": ["NET_ADMIN"]`              |
-| capDrop     | `string[]` | Drop container capabilities            | `"capDrop": ["NET_ADMIN"]`             |
-| securityOpt | `string[]` | Security options                       | `"securityOpt": ["no-new-privileges"]` |
-| readOnly    | `boolean`  | Mount root filesystem as read only     | `"readOnly": true`                     |
-| user        | `string`   | Username or UID                        | `"user": "1000:1000"`                  |
+<DockerComposeConverter placeholder="Paste your docker-compose.yml content here to convert it to the legacy JSON format..." />
 
-### Advanced Configuration
-
-Additional options for fine-tuning:
-
-| Option          | Type                   | Description                        | Example                                    |
-| --------------- | ---------------------- | ---------------------------------- | ------------------------------------------ |
-| entrypoint      | `string` \| `string[]` | Container entrypoint               | `"entrypoint": "./entrypoint.sh"`          |
-| workingDir      | `string`               | Working directory inside container | `"workingDir": "/app"`                     |
-| tty             | `boolean`              | Allocate a pseudo-TTY              | `"tty": true`                              |
-| stdinOpen       | `boolean`              | Keep STDIN open                    | `"stdinOpen": true`                        |
-| stopSignal      | `string`               | Signal to stop the container       | `"stopSignal": "SIGTERM"`                  |
-| stopGracePeriod | `string`               | Time to wait to stop container     | `"stopGracePeriod": "10s"`                 |
-| pid             | `string`               | PID namespace                      | `"pid": "host"`                            |
-| sysctls         | `object`               | Sysctl settings                    | `"sysctls": {"net.core.somaxconn": 1024}`  |
-| logging         | `object`               | Logging configuration              | See example below                          |
-| devices         | `string[]`             | Device mappings                    | `"devices": ["/dev/ttyUSB0:/dev/ttyUSB0"]` |
-| extraLabels     | `object`               | Additional container labels        | `"extraLabels": {"com.example.key": "value"}` |
-
-Example `logging` configuration:
-
-```json
-"logging": {
-  "driver": "json-file",
-  "options": {
-    "max-size": "10m"
-  }
-}
-```
-
-Note: `sysctls` values must be numbers, and `extraLabels` values can be strings or booleans.
-
-### Dependencies
-
-Options for managing service dependencies:
-
-| Option    | Type                    | Description                                      | Example           |
-| --------- | ----------------------- | ------------------------------------------------ | ----------------- |
-| dependsOn | `object` \| `string[]`  | Service dependencies                             | See example below |
-| isMain    | `boolean`               | Indicates where traefik labels should be applied | `"isMain": true`  |
-
-Example `dependsOn` configurations:
-
-Simple array format (waits for services to start):
-```json
-"dependsOn": ["db", "cache"]
-```
-
-Object format with conditions:
-```json
-"dependsOn": {
-  "db": {
-    "condition": "service_healthy"
-  },
-  "cache": {
-    "condition": "service_started"
-  }
-}
-```
-
-Available conditions: `service_healthy`, `service_started`, `service_completed_successfully`
-
-### Architecture Overrides
-
-Options for architecture-specific configurations:
-
-| Option    | Type    | Description                                  | Example           |
-| --------- | ------- | -------------------------------------------- | ----------------- |
-| overrides | `array` | Architecture-specific service configurations | See example below |
-
-The `overrides` option allows you to specify different configurations for specific architectures at the top level of your dynamic compose configuration. This is useful when you need to use different Docker images or settings for different CPU architectures (like arm64 vs amd64).
-
-Example `overrides` configuration:
-
-```json
-"overrides": [
-  {
-    "architecture": "arm64",
-    "services": [
-      {
-        "name": "app",
-        "image": "myapp:arm64-latest",
-        "environment": {
-          "ARCHITECTURE": "arm64"
-        }
-      }
-    ]
-  }
-]
-```
-
-#### How Architecture Overrides Work
-
-When Runtipi starts a container, it automatically detects the current system architecture and applies any matching overrides from the `overrides` array. The system looks for overrides that match the current architecture, then merges those service-specific settings with the base service configuration.
-
-Important aspects of the override system:
-
-- You must include the `name` field in each service in the overrides to match with the base service
-- Only specify the properties that need to be different for each architecture
-- Properties from overrides are deep-merged with the base service configurations
-- Array properties (like volumes or ports) in overrides completely replace the base arrays rather than being appended
-
-#### Supported Architectures
-
-Runtipi supports the following architecture types for overrides:
-
-- `amd64`: Standard 64-bit x86 architecture (also known as x86_64)
-- `arm64`: 64-bit ARM architecture (also known as aarch64)
-
-#### Complete Example
-
-Here's a complete example showing how to use architecture overrides:
-
-```json
-{
-  "schemaVersion": 2,
-  "services": [
-    {
-      "name": "media-server",
-      "image": "mediaserver:latest",
-      "isMain": true,
-      "internalPort": 8096,
-      "volumes": [
-        {
-          "hostPath": "${APP_DATA_DIR}/config",
-          "containerPath": "/config"
-        },
-        {
-          "hostPath": "${RUNTIPI_MEDIA_DIR}",
-          "containerPath": "/media"
-        }
-      ],
-      "environment": [
-        {"key": "TZ", "value": "UTC"}
-      ]
-    }
-  ],
-  "overrides": [
-    {
-      "architecture": "arm64",
-      "services": [
-        {
-          "name": "media-server",
-          "image": "mediaserver:arm64-latest",
-          "environment": [
-            {"key": "ARM_SPECIFIC_VAR", "value": "enabled"}
-          ]
-        }
-      ]
-    },
-    {
-      "architecture": "amd64",
-      "services": [
-        {
-          "name": "media-server",
-          "image": "mediaserver:amd64-latest",
-          "deploy": {
-            "resources": {
-              "reservations": {
-                "devices": [
-                  {
-                    "capabilities": ["gpu"]
-                  }
-                ]
-              }
-            }
-          }
-        }
-      ]
-    }
-  ]
-}
-```
-
-In this example:
-
-- The base configuration defines common settings for the media-server service
-- On `arm64` systems, the service will use the ARM64-specific image and set an ARM-specific environment variable
-- On `amd64` systems, the service will use the AMD64-specific image and enable GPU acceleration
-- The name "media-server" is included in each override to match with the base service
-
-> **Note**: Some of these options are advanced features that should be used with caution as they can affect container security and stability. Always refer to Docker documentation when using advanced options like `privileged`, `capAdd`, or `securityOpt`.
-
-> **Tip**: For most applications, you'll only need the Basic Configuration and Port Configuration options. The other options are available for more complex use cases.
-
+<Callout type="warning">
+  The converter works for most cases, but please review the converted
+  configuration to ensure it meets your needs. Some advanced features may not be
+  fully supported.
+</Callout>

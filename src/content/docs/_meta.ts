@@ -20,7 +20,7 @@ export default {
   reference: {
     title: "Reference",
   },
-  contributing: {
+  developers: {
     title: "For developers",
   },
 };

@@ -92,8 +92,8 @@ esac
 
 # Check Runtipi version
 runtipiVersion=$(cat $runtipiPath/VERSION)
-runtipiMajorVersion=$(echo $runtipiVersion | cut -d. -f1 VERSION | sed 's/^v//')
-if [ "$major_version" -lt 4 ]; then
+runtipiMajorVersion=$(echo $runtipiVersion | cut -d. -f1 | sed 's/^v//')
+if [ "$runtipiMajorVersion" -lt 4 ]; then
     echo "Runtipi version is $runtipiVersion, this script require at least v4.0.0"
     exit 4
 fi

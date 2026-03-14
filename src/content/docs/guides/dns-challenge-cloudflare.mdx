@@ -10,12 +10,12 @@ bad security practice. With a DNS challenge you can get trusted ssl certificates
 
 ## Requirements
 
-- A Runtipi instace
+- A Runtipi instance
 - A domain name connected to cloudflare
 
 ## Setting up the DNS challenge
 
-So lets get started setting up the DNS challenge.
+So let's get started setting up the DNS challenge.
 
 <Steps>
 
@@ -31,7 +31,7 @@ To begin with we need to set up two DNS records in our cloudflare dashboard, one
   height={565}
 />
 
-And the other one should like this:
+And the other one should look like this:
 
 <br />
 <Image
@@ -42,7 +42,7 @@ And the other one should like this:
 />
 
 <Callout>
-  Make sure to replace `10.0.0.15` with the ip adress of your Runtipi server.
+  Make sure to replace `10.0.0.15` with the IP address of your Runtipi server.
 </Callout>
 
 ### Obtain your API key
@@ -56,7 +56,6 @@ the `Zone Resources` section. Finally click `Continue to summary` and then `Crea
 We need to give the token to traefik in order to do that we need to create a custom compose with the following contents:
 
 ```yaml
-version: "3.9"
 services:
   runtipi-reverse-proxy:
     environment:
@@ -67,7 +66,7 @@ Make sure to replace the `yourtoken` part with the actual token you got in the p
 
 <Callout>
   If you don't know how to create a custom compose file you can check the guide
-  [here](customize-compose-and-traefik.mdx).
+  [here](/docs/guides/customize-compose-and-traefik).
 </Callout>
 
 ### Edit the traefik config
@@ -97,12 +96,12 @@ certificatesResolvers:
         delayBeforeCheck: 0
 ```
 
-Make sure to replace the `email@example.com` with your actual email adress so Let's Encrypt can notify you if something is wrong.
+Make sure to replace the `email@example.com` with your actual email address so Let's Encrypt can notify you if something is wrong.
 
 <Callout>
   Make sure that you have enabled the option to persist the traefik config. If
   you are not sure how to do it check the guide
-  [here](customize-compose-and-traefik.mdx).
+  [here](/docs/guides/customize-compose-and-traefik).
 </Callout>
 
 ### Restart Runtipi and test

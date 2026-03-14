@@ -7,26 +7,27 @@ A step-by-step guide to build, test, and submit an app.
 ## 1) Understand the app model
 
 - Each app declares services, environment, volumes, and routing
-- The `config.json` defines metadata and inputs
-- See the reference: [/docs/reference/config-json](/docs/reference/config-json)
+- The `config.json` defines metadata and install-time inputs
+- The preferred app source file is `docker-compose.yml` with `x-runtipi` metadata — see the [Dynamic Compose Reference](/docs/reference/dynamic-compose)
+- The `config.json` reference: [config.json options](/docs/reference/config-json)
 
 ## 2) Scaffold your app
 
-- Start from a minimal Compose file for your service(s)
-- Add a reverse proxy label/route if the app needs web access
+- Start from a minimal `docker-compose.yml` for your service(s)
+- Use `x-runtipi.is_main` and `x-runtipi.internal_port` for the main web service instead of writing Traefik labels by hand
 - Map persistent data to a volume
 
 ## 3) Define `config.json`
 
 - Name, description, category
 - Required environment variables (with safe defaults if possible)
-- Ports, volumes, health checks
+- Ports, install form fields, and compatibility metadata
 
 ## 4) Test locally
 
-- Validate config: `docker compose config`
-- Run the app: `docker compose up -d`
-- Verify logs and health; fix issues before submission
+- Validate your `config.json` and dynamic compose file against the docs references
+- Add the app to a test app store or custom app store and install it in a local Runtipi instance
+- Verify install, startup, logs, backups, and update behavior before submission
 
 ## 5) Submit to the app store
 
@@ -35,10 +36,13 @@ A step-by-step guide to build, test, and submit an app.
 - Expect a quick review cycle for clarity and security
 
 <Callout emoji="💡">
-  Keep secrets out of the repo. Use environment variables and document what users must provide.
+  Keep secrets out of the repo. Use environment variables and document what
+  users must provide.
 </Callout>
 
 ## Next Steps
 
 - Example apps (browse the store)
-- Full reference: [/docs/reference/config-json](/docs/reference/config-json)
+- [Dynamic Compose Reference](/docs/reference/dynamic-compose) — all `x-runtipi` options
+- [config.json Reference](/docs/reference/config-json) — app metadata and form fields
+- [Create your own App Store](/docs/guides/create-your-own-app-store) — step-by-step tutorial

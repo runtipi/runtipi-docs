@@ -5,4 +5,7 @@ export default {
   "creating-apps": {
     title: "Creating Apps",
   },
+  contributing: {
+    title: "Contributing",
+  },
 };

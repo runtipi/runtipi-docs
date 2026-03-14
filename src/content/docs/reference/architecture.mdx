@@ -15,6 +15,7 @@ Runtipi is built using a modern web architecture and emphasizes on end-to-end ty
 - [Docker](https://www.docker.com/) - Containerization
 - [TypeScript](https://www.typescriptlang.org/) - Typed superset of JavaScript
 - [NestJS](https://nestjs.com/) - Node.js framework
+- [React Router](https://reactrouter.com/) - Frontend application framework
 - [Drizzle-ORM](https://orm.drizzle.team/) - Type safe ORM
 - [PostgreSQL](https://www.postgresql.org/) - Database
 - [RabbitMQ](https://www.rabbitmq.com/) - Message broker
@@ -22,7 +23,7 @@ Runtipi is built using a modern web architecture and emphasizes on end-to-end ty
 ## Reverse Proxy
 
 Traefik is used as a reverse proxy and load balancer. It is configured to automatically detect new services and configure them to receive traffic from the internet.
-Each service is automatically configured to be able to receive an SSL certificate from [Let's Encrypt](https://letsencrypt.org/) using the [HTTP Challenge](https://letsencrypt.org/docs/challenge-types/#http-01-challenge).
+Each service can be configured for automatic HTTPS, and protected apps use Traefik forward-auth to delegate authentication back to Runtipi.
 
 ## Applications
 

@@ -5,8 +5,9 @@ In this guide we will show you how to run Runtipi locally on your machine. This 
 ## Prerequisites
 
 - Docker desktop version 28 or later. Instructions: [Install Docker Engine](https://docs.docker.com/engine/install/)
-- Docker-compose
-- Node version 22+
+- Docker Compose plugin (`docker compose`)
+- Node.js 22+
+- Bun 1.3+
 
 ## Prepare
 
@@ -14,11 +15,10 @@ Once you have forked the repository and cloned it on your local machine you can 
 
 ## Install dependencies
 
-runtipi uses `pnpm` as a package manager and monorepo orchestrator. Install it with
-`npm i -g pnpm`
+runtipi uses `bun` workspaces for dependency management.
 
 Install the project dependencies
-`pnpm i`
+`bun install`
 
 ## Edit the environment variables
 
@@ -26,5 +26,5 @@ You need to copy `.env.example` to `.env`
 
 ## Run runtipi
 
-1. Start the app with `npm run start:dev` from the root folder
-2. Visit `localhost:3000` in your browser
+1. Start the development stack with `bun run start:dev` from the repository root
+2. Visit `http://localhost:3000` in your browser

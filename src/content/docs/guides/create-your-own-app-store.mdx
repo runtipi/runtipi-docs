@@ -1,18 +1,23 @@
 import { Steps, Callout, FileTree, Cards } from "nextra/components";
 import { JsonSchemaValidator } from "@/app/components";
-import { CodeBracketIcon, WrenchIcon, InformationCircleIcon } from "@heroicons/react/24/outline";
+import {
+  CodeBracketIcon,
+  WrenchIcon,
+  InformationCircleIcon,
+} from "@heroicons/react/24/outline";
 
 # Create your own app store
 
 As of Runtipi version `v4.0.0`, you can create and use your own custom app stores alongside the official one. This feature allows you to create, maintain, and share your own collection of apps.
-
 
 <Callout type="info">
   This feature requires Runtipi version `v4.0.0` or above.
 </Callout>
 
 <Callout type="warning">
-  This feature is intended for users who are comfortable with GitHub and are willing to maintain and share their own app store. If you just want to install apps for yourself, we recommend using the "create custom app" feature instead.
+  This feature is intended for users who are comfortable with GitHub and are
+  willing to maintain and share their own app store. If you just want to install
+  apps for yourself, we recommend using the "create custom app" feature instead.
 </Callout>
 
 ## Why create your own app store?
@@ -72,32 +77,30 @@ Open the cloned repository in your favorite code editor. Inside the `apps` direc
 Each app should be in its own folder inside the `apps` directory. The folder name should match the app's ID in the `config.json` file. For each app, you'll need:
 
 1. A `config.json` file with app metadata (name, description, version, etc.)
-2. A `docker-compose.json` file defining the app's services using the dynamic compose format
+2. A `docker-compose.yml` file defining the app's services with `x-runtipi` metadata
 3. A `metadata` folder containing at least a `logo.jpg` image and a `description.md` file
 
 We will add Nginx as an example app.
 
-First create a new folder in the `apps` directory called `nginx`. Inside this folder, create two files: `docker-compose.json` and `config.json`.
+First create a new folder in the `apps` directory called `nginx`. Inside this folder, create `docker-compose.yml` and `config.json`.
 
-Here's the `docker-compose.json`
+Here's the `docker-compose.yml`
 
-```json
-{
-  "schemaVersion": 2,
-  "$schema": "https://schemas.runtipi.io/dynamic-compose.json",
-  "services": [
-    {
-      "name": "nginx",
-      "image": "nginx:1.25.3",
-      "isMain": true,
-      "internalPort": 80
-    }
-  ]
-}
+```yaml
+services:
+  nginx:
+    image: nginx:1.25.3
+    x-runtipi:
+      is_main: true
+      internal_port: 80
+
+x-runtipi:
+  schema_version: 2
 ```
 
 <Callout type="info">
-  The schema will help you validate that your `docker-compose.json` file is correct.
+  New apps should use `docker-compose.yml`. Legacy `docker-compose.json` files
+  are still supported, but they are converted internally.
 </Callout>
 
 And it's corresponding `config.json`:
@@ -127,8 +130,9 @@ And it's corresponding `config.json`:
 ```
 
 <Callout type="info">
-  See the [config.json options reference](/docs/reference/config-json) and the [Dynamic Compose](/docs/reference/dynamic-compose) reference
-  for a complete list of available options.
+  See the [config.json options reference](/docs/reference/config-json) for app
+  metadata and the [Dynamic Compose Reference](/docs/reference/dynamic-compose)
+  for all `x-runtipi` options.
 </Callout>
 
 Add a `description.md` file in the `metadata` folder with a description of your app. This will be displayed in the Runtipi dashboard.
@@ -140,13 +144,13 @@ The final folder structure should look like this:
   <FileTree.Folder name="my-store" defaultOpen>
     <FileTree.Folder name="apps" defaultOpen>
       <FileTree.Folder name="nginx" defaultOpen>
+        <FileTree.File name="config.json" />
+        <FileTree.File name="docker-compose.yml" />
         <FileTree.Folder name="metadata" defaultOpen>
           <FileTree.File name="description.md" />
           <FileTree.File name="logo.jpg" />
         </FileTree.Folder>
       </FileTree.Folder>
-      <FileTree.File name="config.json" />
-      <FileTree.File name="docker-compose.json" />
     </FileTree.Folder>
   </FileTree.Folder>
 </FileTree>
@@ -198,17 +202,17 @@ Here are some best practices to follow when creating your own app store:
 - **Test your apps thoroughly** before publishing them
 - **Include comprehensive documentation** in your app descriptions
 - **Regularly update your apps** to keep them secure and compatible with the latest version of Runtipi
-- **Use dynamic compose format** which is required for Runtipi v4.0.0 and above
+- **Use `docker-compose.yml` with `x-runtipi`** for new apps
 
 ## Troubleshooting
 
 If you encounter issues with your custom app store:
 
-- Ensure your app's `config.json` and `docker-compose.json` files are valid using the validation tools
+- Ensure your app's `config.json` and `docker-compose.yml` files are valid using the validation tools
 - Verify that the folder structure matches what Runtipi expects
 - Check that the `id` field in `config.json` matches the folder name
 - Make sure you're using the dynamic compose format correctly
-- Look for errors in the Runtipi logs (located in `runtipi/logs`)
+- Look for errors in the Runtipi logs (located in `runtipi/logs` by default)
 
 ## Sharing your app store
 
@@ -233,4 +237,3 @@ Consider documenting your app store with a README.md file in the repository root
     href="/docs/apps-available"
   />
 </Cards>
-

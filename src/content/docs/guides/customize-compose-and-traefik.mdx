@@ -88,7 +88,7 @@ providers:
     watch: true
     exposedByDefault: false
   file:
-    directory: /root/.config/dynamic
+    directory: /etc/traefik/dynamic
     watch: true
 
 entryPoints:
@@ -124,32 +124,31 @@ which can be done easily by editing the `settings.json` file.
 
 <Steps>
 
-### Modify the the settings
+### Modify the settings
 
-Open the `runtipi/state/settings.json` file with your prefered editor.
+Open the `runtipi/state/settings.json` file with your preferred editor.
 Your settings file will look something like this:
 
 ```json
 {
   "dnsIp": "9.9.9.9",
-  "internalIp": "10.10.10.5",
+  "listenIp": "10.10.10.5",
   "postgresPort": 5432,
   "appsRepoUrl": "https://github.com/runtipi/runtipi-appstore",
   "domain": "example.com",
-  "appDataPath": "/home/runtipi/runtipi/",
+  "appDataPath": "/home/runtipi/runtipi",
   "localDomain": "tipi.lan",
   "demoMode": false,
   "guestDashboard": false,
   "allowAutoThemes": true,
-  "allowErrorMonitoring": true,
+  "allowErrorMonitoring": false,
   "persistTraefikConfig": false
 }
 ```
 
 Here you need to change the `"persistTraefikConfig"` from `false` to `true`.
 
-Now Runtipi will keep your custom traefik config on start, you can always change it back to `true` to reset your changes. So now that our config is persistent we
-can safely make our changes by opening the `traefik/traefik.yml` file and changing this:
+Now Runtipi will keep your custom traefik config on start. Change it back to `false` if you want Runtipi to restore the default files on the next restart. So now that our config is persistent we can safely make our changes by opening `traefik/traefik.yml` and changing this:
 
 ```yaml
 log:

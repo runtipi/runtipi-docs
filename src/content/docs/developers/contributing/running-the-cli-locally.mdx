@@ -4,29 +4,16 @@
 
 During development it is useful to be able to run the cli locally to test any changes you make.
 
-## Requirements
+The CLI is maintained in a separate repository and is not part of this monorepo.
 
-- Rust needs to be installed
-- Git needs to be installed
+## Source code
 
-## Running the cli
-
-You firstly need to clone the cli repository. This can be done with this command:
+Clone the CLI repository first:
 
 ```bash
 git clone https://github.com/runtipi/cli
 ```
 
-Then you can run the cli with this command:
+## Build and run
 
-```bash
-cargo run
-```
-
-If you need to build the cli you can do so with this command:
-
-```bash
-cargo build
-```
-
-If everything succeeds the cli should be located in `target/debug/runtipi-cli`.
+Follow the build and run instructions from the CLI repository itself, because the toolchain and commands can change independently from the main `runtipi` codebase.

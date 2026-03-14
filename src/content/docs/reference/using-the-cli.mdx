@@ -1,4 +1,9 @@
-import { Callout } from "nextra/components";
+import { Callout, Cards } from "nextra/components";
+import {
+  ArrowPathIcon,
+  WrenchIcon,
+  ShieldExclamationIcon,
+} from "@heroicons/react/24/outline";
 
 # CLI reference
 
@@ -11,7 +16,8 @@ The Runtipi CLI is a command-line tool for managing your Runtipi instance. Use i
 ```
 
 <Callout type="info">
-Most commands require `sudo` privileges to manage file permissions and Docker containers. Running without `sudo` may result in permission errors.
+  Most commands require `sudo` privileges to manage file permissions and Docker
+  containers. Running without `sudo` may result in permission errors.
 </Callout>
 
 ## Global options
@@ -42,13 +48,19 @@ sudo ./runtipi-cli stop
 
 ### `restart`
 
-Restart Runtipi services.
+Stop and start Runtipi services.
 
 ```bash
 sudo ./runtipi-cli restart [--env-file <path>] [--no-permissions]
 ```
 
-This command checks permissions, copies files, and generates configuration without starting Docker containers.
+### `prepare`
+
+Prepare the environment without starting containers. Checks permissions, copies files, and generates configuration.
+
+```bash
+sudo ./runtipi-cli prepare [--env-file <path>] [--no-permissions]
+```
 
 ### `update`
 
@@ -69,7 +81,8 @@ sudo ./runtipi-cli update v2.0.7
 ```
 
 <Callout type="warning">
-Downgrading to previous versions may break your installation. Always backup before downgrading.
+  Downgrading to previous versions may break your installation. Always backup
+  before downgrading.
 </Callout>
 
 ## Utility commands
@@ -131,6 +144,7 @@ Start a specific app.
 ```
 
 **Example:**
+
 ```bash
 ./runtipi-cli app start code-server:migrated
 ```
@@ -141,14 +155,6 @@ Stop a running app.
 
 ```bash
 ./runtipi-cli app stop <app-id>:<store>
-```
-
-### `app restart`
-
-Restart an app.
-
-```bash
-./runtipi-cli app restart <app-id>:<store>
 ```
 
 ### `app start-all`
@@ -184,7 +190,8 @@ Reset an app to its initial state.
 ```
 
 <Callout type="warning">
-This permanently deletes all app data and settings. Backup important data first.
+  This permanently deletes all app data and settings. Backup important data
+  first.
 </Callout>
 
 ## Backup & restore
@@ -206,6 +213,7 @@ Restore an app from a backup file.
 ```
 
 **Example:**
+
 ```bash
 ./runtipi-cli app restore code-server:migrated backup-20241026-120000.tar.gz
 ```
@@ -255,6 +263,7 @@ Add a new app store.
 ```
 
 **Example:**
+
 ```bash
 ./runtipi-cli appstore add my-store https://github.com/user/my-appstore
 ```
@@ -267,9 +276,6 @@ Remove an app store.
 ./runtipi-cli appstore remove <name>
 ```
 
-import { Cards } from "nextra/components";
-import { ArrowPathIcon, WrenchIcon, ShieldExclamationIcon } from "@heroicons/react/24/outline";
-
 <Cards>
   <Cards.Card
     icon={<ArrowPathIcon />}
@@ -279,7 +285,7 @@ import { ArrowPathIcon, WrenchIcon, ShieldExclamationIcon } from "@heroicons/rea
   <Cards.Card
     icon={<WrenchIcon />}
     title="Environment Variables"
-    href="/docs/getting-started/custom-environment-variables"
+    href="/docs/guides/custom-environment-variables"
   />
   <Cards.Card
     icon={<ShieldExclamationIcon />}

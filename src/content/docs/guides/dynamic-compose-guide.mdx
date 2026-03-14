@@ -1,17 +1,238 @@
 import { Steps, Callout, Cards } from "nextra/components";
 import { JsonSchemaValidator, DockerComposeConverter } from "@/app/components";
 import { toJsonSchema, dynamicComposeSchema } from "@runtipi/common/schemas";
-import { BookOpenIcon, CodeBracketIcon, PlusCircleIcon } from "@heroicons/react/24/outline";
+import {
+  BookOpenIcon,
+  CodeBracketIcon,
+  PlusCircleIcon,
+} from "@heroicons/react/24/outline";
 
 # Creating a dynamic compose file
 
-In Runtipi version `v3.2.0` we added dynamic compose, a simplified and custom version of the `docker-compose.yml` file that allows for more control on how apps get deployed. For example, you can choose to only use the reverse proxy or only use ports. It also allows extra features like multiple appstores.
+Dynamic compose is Runtipi's app definition format for describing services, ports, volumes, and routing metadata. Apps are defined using a standard `docker-compose.yml` file with `x-runtipi` metadata.
+
+Here is a minimal `docker-compose.yml` for a simple Nginx app:
+
+```yaml
+services:
+  nginx:
+    image: nginx:1.25.3
+    x-runtipi:
+      is_main: true
+      internal_port: 80
+
+x-runtipi:
+  schema_version: 2
+```
+
+And that's it — with just a few lines of config you can deploy an Nginx app with automatic Traefik routing.
+
+## Creating your first app
+
+<Steps>
+
+### Create the docker-compose.yml
+
+Create a `docker-compose.yml` file in your app folder. Start with the top-level `x-runtipi` metadata and an empty `services` block:
+
+```yaml
+services:
+  # services go here
+
+x-runtipi:
+  schema_version: 2
+```
+
+The `schema_version` must be `2`. Make sure `dynamic_config` is set to `true` in your app's `config.json`.
+
+### Add a service
+
+Add your first service with a Docker image:
+
+```yaml
+services:
+  myapp:
+    image: myapp:latest
+
+x-runtipi:
+  schema_version: 2
+```
+
+### Expose the web UI
+
+If your service exposes a web UI, mark it as the main service with its port. Runtipi will automatically configure Traefik routing for this service:
+
+```yaml
+services:
+  myapp:
+    image: myapp:latest
+    x-runtipi:
+      is_main: true
+      internal_port: 80
+
+x-runtipi:
+  schema_version: 2
+```
+
+### Add volumes
+
+Persist app data using standard Docker Compose volume syntax. Use `${APP_DATA_DIR}` for app-specific storage:
+
+```yaml
+services:
+  myapp:
+    image: myapp:latest
+    volumes:
+      - ${APP_DATA_DIR}/data:/data
+    x-runtipi:
+      is_main: true
+      internal_port: 80
+
+x-runtipi:
+  schema_version: 2
+```
+
+### Add environment variables
+
+Use standard Docker Compose environment variable syntax. You can reference variables from the app's `config.json` form fields:
+
+```yaml
+services:
+  myapp:
+    image: myapp:latest
+    volumes:
+      - ${APP_DATA_DIR}/data:/data
+    environment:
+      - FOO=bar
+      - PASSWORD=${MYAPP_PASSWORD}
+    x-runtipi:
+      is_main: true
+      internal_port: 80
+
+x-runtipi:
+  schema_version: 2
+```
+
+### Add extra ports
+
+For additional ports beyond the main web UI port (which Traefik handles), expose them directly:
+
+```yaml
+services:
+  myapp:
+    image: myapp:latest
+    volumes:
+      - ${APP_DATA_DIR}/data:/data
+    environment:
+      - FOO=bar
+      - PASSWORD=${MYAPP_PASSWORD}
+    ports:
+      - "8080:8080/tcp"
+      - "25565:25565/udp"
+    x-runtipi:
+      is_main: true
+      internal_port: 80
+
+x-runtipi:
+  schema_version: 2
+```
+
+### Add a healthcheck
+
+Add container health monitoring using standard Docker Compose syntax:
+
+```yaml
+services:
+  myapp:
+    image: myapp:latest
+    volumes:
+      - ${APP_DATA_DIR}/data:/data
+    environment:
+      - FOO=bar
+      - PASSWORD=${MYAPP_PASSWORD}
+    ports:
+      - "8080:8080/tcp"
+      - "25565:25565/udp"
+    healthcheck:
+      test: curl --fail http://localhost || exit 1
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    x-runtipi:
+      is_main: true
+      internal_port: 80
+
+x-runtipi:
+  schema_version: 2
+```
+
+### Add dependencies
+
+If your app needs other services (like a database), add them and use `depends_on`:
+
+```yaml
+services:
+  myapp:
+    image: myapp:latest
+    volumes:
+      - ${APP_DATA_DIR}/data:/data
+    environment:
+      - FOO=bar
+      - PASSWORD=${MYAPP_PASSWORD}
+      - DATABASE_URL=postgresql://postgres:${MYAPP_DB_PASS}@myapp-db:5432/myapp
+    ports:
+      - "8080:8080/tcp"
+    healthcheck:
+      test: curl --fail http://localhost || exit 1
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    depends_on:
+      myapp-db:
+        condition: service_healthy
+    x-runtipi:
+      is_main: true
+      internal_port: 80
+
+  myapp-db:
+    image: postgres:16
+    volumes:
+      - ${APP_DATA_DIR}/db:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=${MYAPP_DB_PASS}
+    healthcheck:
+      test: pg_isready -U postgres
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+x-runtipi:
+  schema_version: 2
+```
+
+### Additional options
+
+Since this is standard Docker Compose, you can use any Docker Compose option: `command`, `entrypoint`, `network_mode`, `cap_add`, `deploy`, `logging`, `devices`, and more. See the [Dynamic Compose Reference](/docs/reference/dynamic-compose) for Runtipi-specific options and the [Docker Compose documentation](https://docs.docker.com/reference/compose-file/) for all available options.
+
+</Steps>
 
 <Callout type="info">
-  This guide covers **Schema Version 2**, the current and recommended version. If you're upgrading from an older version, see the [migration section](#migrating-from-schema-v1-to-v2) below.
+  For a complete reference of all `x-runtipi` metadata options and architecture
+  overrides, see the [Dynamic Compose
+  Reference](/docs/reference/dynamic-compose).
 </Callout>
 
-Here is an example `docker-compose.json` file for a simple app like Nginx:
+---
+
+## Legacy JSON Format
+
+<Callout type="warning">
+  The section below covers the legacy `docker-compose.json` format. This format
+  is still supported for backward compatibility, but **new apps should use
+  `docker-compose.yml`** with `x-runtipi` metadata as shown above.
+</Callout>
+
+The legacy format uses a custom JSON structure. Here is the same Nginx example in JSON:
 
 ```json
 {
@@ -27,13 +248,11 @@ Here is an example `docker-compose.json` file for a simple app like Nginx:
 }
 ```
 
-And that's it, with just a few lines of config you can deploy an nginx app.
-
-## Migrating from Schema v1 to v2
+### Migrating from Schema v1 to v2
 
 Schema version 2 introduces important structural changes to improve consistency and type safety. Here are the key differences:
 
-### Required `schemaVersion` field
+#### Required `schemaVersion` field
 
 All dynamic compose files must now include the `schemaVersion` field set to `2`:
 
@@ -44,9 +263,10 @@ All dynamic compose files must now include the `schemaVersion` field set to `2`:
 }
 ```
 
-### Environment variables structure change
+#### Environment variables structure change
 
 **v1 format (object):**
+
 ```json
 {
   "environment": {
@@ -57,6 +277,7 @@ All dynamic compose files must now include the `schemaVersion` field set to `2`:
 ```
 
 **v2 format (array of key-value pairs):**
+
 ```json
 {
   "environment": [
@@ -72,361 +293,24 @@ All dynamic compose files must now include the `schemaVersion` field set to `2`:
 }
 ```
 
-
-### Automatic migration
+#### Automatic migration
 
 Runtipi automatically migrates v1 schemas to v2 format when loading apps. However, it's recommended to update your `docker-compose.json` files manually to take advantage of the improved validation and error messages.
 
-## Creating your first dynamic compose file
+### Legacy JSON Validator
 
-Let's see how easy it is to create the `docker-compose.json` file.
-
-<Steps>
-
-### Creating the file and enabling dynamic compose
-
-First create the `docker-compose.json` next to the `docker-compose.yml` file in your app folder. Then edit the app's `config.json` and add this configuration line at the end:
-
-```json
-"dynamic_config": true
-```
-
-### Defining the services
-
-Now add the `schemaVersion` field and your `services` array which defines all your services:
-
-```json
-{
-  "schemaVersion": 2,
-  "services": []
-}
-```
-
-The `schemaVersion` field indicates which version of the dynamic compose schema you're using (always use `2`). The `services` key is the same as in the `docker-compose.yml`. Inside this array you can add multiple apps.
-
-### Adding a service
-
-Let's add a service called `myapp`:
-
-```json
-{
-  "schemaVersion": 2,
-  "services": [
-    {
-      "name": "myapp"
-    }
-  ]
-}
-```
-
-The `name` key defines both the service name and container name.
-
-### Adding an image
-
-Add your Docker image. For this example we'll use `myapp:latest`:
-
-```json
-{
-  "schemaVersion": 2,
-  "services": [
-    {
-      "name": "app",
-      "image": "myapp:latest"
-    }
-  ]
-}
-```
-
-### Exposing the UI
-
-If your service exposes a web UI, add the port and main service configuration:
-
-```json
-{
-  "schemaVersion": 2,
-  "services": [
-    {
-      "name": "myapp",
-      "image": "myapp:latest",
-      "internalPort": 80,
-      "isMain": true
-    }
-  ]
-}
-```
-
-The `internalPort` specifies your app's port, and `isMain` indicates where the traefik labels should go. Traefik labels should always be on the part of the app that exposes the UI.
-
-### Adding volumes
-
-To store app data, you can bind mount directories. For example, to mount `${APP_DATA_DIR}/data/myapp` to `/data` with read-write permissions:
-
-```json
-{
-  "schemaVersion": 2,
-  "services": [
-    {
-      "name": "myapp",
-      "image": "myapp:latest",
-      "internalPort": 80,
-      "isMain": true,
-      "volumes": [
-        {
-          "hostPath": "${APP_DATA_DIR}/data/myapp",
-          "containerPath": "/data",
-          "readOnly": false
-        }
-      ]
-    }
-  ]
-}
-```
-
-The `volumes` key is an array where you can define multiple volume mounts.
-
-### Adding environment variables
-
-Environment variables in schema v2 use an array format with `key` and `value` pairs:
-
-```json
-{
-  "schemaVersion": 2,
-  "services": [
-    {
-      "name": "myapp",
-      "image": "myapp:latest",
-      "internalPort": 80,
-      "isMain": true,
-      "volumes": [
-        {
-          "hostPath": "${APP_DATA_DIR}/data/myapp",
-          "containerPath": "/data",
-          "readOnly": false
-        }
-      ],
-      "environment": [
-        {
-          "key": "FOO",
-          "value": "bar"
-        },
-        {
-          "key": "PASSWORD",
-          "value": "${MYAPP_PASSWORD}"
-        }
-      ]
-    }
-  ]
-}
-```
-
-You can add as many environment variables as needed and use values from form fields as you normally would. Note that `value` can be a string, number, or boolean.
-
-### Adding multiple ports
-
-Many apps require multiple ports for features like APIs or setup UIs. Add additional ports like this:
-
-```json
-{
-  "schemaVersion": 2,
-  "services": [
-    {
-      "name": "myapp",
-      "image": "myapp:latest",
-      "internalPort": 80,
-      "isMain": true,
-      "volumes": [
-        {
-          "hostPath": "${APP_DATA_DIR}/data/myapp",
-          "containerPath": "/data",
-          "readOnly": false
-        }
-      ],
-      "environment": [
-        {
-          "key": "FOO",
-          "value": "bar"
-        },
-        {
-          "key": "PASSWORD",
-          "value": "${MYAPP_PASSWORD}"
-        }
-      ],
-      "addPorts": [
-        {
-          "containerPort": 8080,
-          "hostPort": 8080,
-          "tcp": true
-        },
-        {
-          "containerPort": 25565,
-          "hostPort": 25565,
-          "udp": true
-        }
-      ]
-    }
-  ]
-}
-```
-
-Create an `addPorts` array and define your container and host ports as **numbers** (not strings). Specify if the port is UDP or TCP - if not defined, TCP is assumed. For ports that need both TCP and UDP:
-
-```json
-"addPorts": [
-  {
-    "containerPort": 8080,
-    "hostPort": 8080,
-    "tcp": true
-  },
-  {
-    "containerPort": 8080,
-    "hostPort": 8080,
-    "udp": true
-  }
-]
-```
-
-### Adding a healthcheck
-
-Add container health monitoring with a healthcheck:
-
-```json
-{
-  "schemaVersion": 2,
-  "services": [
-    {
-      "name": "myapp",
-      "image": "myapp:latest",
-      "internalPort": 80,
-      "isMain": true,
-      "volumes": [
-        {
-          "hostPath": "${APP_DATA_DIR}/data/myapp",
-          "containerPath": "/data",
-          "readOnly": false
-        }
-      ],
-      "environment": [
-        {
-          "key": "FOO",
-          "value": "bar"
-        },
-        {
-          "key": "PASSWORD",
-          "value": "${MYAPP_PASSWORD}"
-        }
-      ],
-      "addPorts": [
-        {
-          "containerPort": 8080,
-          "hostPort": 8080,
-          "tcp": true
-        },
-        {
-          "containerPort": 25565,
-          "hostPort": 25565,
-          "udp": true
-        }
-      ],
-      "healthCheck": {
-        "test": "curl --fail http://localhost || exit 1",
-        "retries": 3,
-        "interval": "30s",
-        "timeout": "10s"
-      }
-    }
-  ]
-}
-```
-
-### Adding dependencies
-
-If your service depends on other services (like a database), add the `dependsOn` key:
-
-```json
-{
-  "schemaVersion": 2,
-  "services": [
-    {
-      "name": "myapp",
-      "image": "myapp:latest",
-      "internalPort": 80,
-      "isMain": true,
-      "volumes": [
-        {
-          "hostPath": "${APP_DATA_DIR}/data/myapp",
-          "containerPath": "/data",
-          "readOnly": false
-        }
-      ],
-      "environment": [
-        {
-          "key": "FOO",
-          "value": "bar"
-        },
-        {
-          "key": "PASSWORD",
-          "value": "${MYAPP_PASSWORD}"
-        }
-      ],
-      "addPorts": [
-        {
-          "containerPort": 8080,
-          "hostPort": 8080,
-          "tcp": true
-        },
-        {
-          "containerPort": 25565,
-          "hostPort": 25565,
-          "udp": true
-        }
-      ],
-      "healthCheck": {
-        "test": "curl --fail http://localhost || exit 1",
-        "retries": 3,
-        "interval": "30s",
-        "timeout": "10s"
-      },
-      "dependsOn": {
-        "service1": {
-          "condition": "service_healthy"
-        }
-      }
-    }
-  ]
-}
-```
-
-For simple dependencies without conditions, you can use the shorter array format:
-
-```json
-"dependsOn": ["service1", "service2"]
-```
-
-### Other configuration options
-
-For additional configuration options like custom commands, network modes, resource limits, and more, see the [Dynamic Compose Reference](/docs/reference/dynamic-compose) documentation.
-
-</Steps>
-
-## Try it out
-
-You can validate your dynamic compose configuration using the validator below:
+You can validate legacy JSON configurations using the validator below:
 
 <JsonSchemaValidator
   schema={toJsonSchema(dynamicComposeSchema)}
-  placeholder="Paste your dynamic compose configuration here to validate it..."
+  placeholder="Paste your legacy docker-compose.json configuration here to validate it..."
 />
 
-<Callout type="info">
-  For a complete reference of all available configuration options, see the
-  [Dynamic Compose Reference](/docs/reference/dynamic-compose) documentation.
-</Callout>
+### Docker Compose to Legacy JSON Converter
 
-## Docker Compose to Dynamic Config Converter
+Converting an existing `docker-compose.yml` file to the legacy JSON format:
 
-Converting an existing `docker-compose.yml` file to Runtipi's dynamic compose format can be time-consuming and error-prone. We've created a tool to help you automatically convert your Docker Compose files to the dynamic compose format.
-
-<DockerComposeConverter placeholder="Paste your docker-compose.yml content here to convert it to dynamic compose format..." />
+<DockerComposeConverter placeholder="Paste your docker-compose.yml content here to convert it to the legacy JSON format..." />
 
 <Callout type="warning">
   The converter works for most cases, but please review the converted

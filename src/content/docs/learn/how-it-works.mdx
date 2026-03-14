@@ -1,4 +1,4 @@
-import { Callout } from "nextra/components";
+import { Callout, FileTree } from "nextra/components";
 
 # How Runtipi works
 
@@ -8,62 +8,59 @@ Understanding how Runtipi works will help you make the most of it and troublesho
 
 Runtipi is a layer on top of Docker that simplifies self-hosting. Think of it as the "App Store" experience for your server but instead of apps running on your phone, they run in isolated containers on your server.
 
-```
-┌─────────────────────────────────────────┐
-│         Your web browser                │
-└─────────────┬───────────────────────────┘
-              │ Access via HTTP/HTTPS
-┌─────────────▼───────────────────────────┐
-│     Runtipi dashboard (web UI)          │
-│  (Shows apps, manages installations)    │
-└─────────────┬───────────────────────────┘
-              │ Controls
-┌─────────────▼───────────────────────────┐
-│      Runtipi backend & CLI              │
-│  (Processes requests, manages Docker)   │
-└─────────────┬───────────────────────────┘
-              │ Commands
-┌─────────────▼───────────────────────────┐
-│          Docker engine                  │
-│  (Runs containers, manages networking)  │
-└─────────────┬───────────────────────────┘
-              │ Runs
-┌─────────────▼───────────────────────────┐
-│      Your apps (Containers)             │
-│   Nextcloud | File Browser | etc.       │
-└─────────────────────────────────────────┘
+```mermaid
+graph TD
+    A["Your web browser"] -- "Access via HTTP/HTTPS" --> B
+    B["Runtipi dashboard (web UI)\nShows apps, manages installations"] -- "Controls" --> C
+    C["Runtipi backend & CLI\nProcesses requests, manages Docker"] -- "Commands" --> D
+    D["Docker engine\nRuns containers, manages networking"] -- "Runs" --> E
+    E["Your apps (Containers)\nNextcloud | File Browser | etc."]
 ```
 
 ## Key components
 
 ### 1. Runtipi dashboard
+
 The web interface you interact with. It's a React application that runs in a Docker container and communicates with the backend to:
+
 - Display available apps
 - Show app status (running, stopped, installing)
 - Let you configure app settings
 - Manage system settings
 
 ### 2. Runtipi CLI
+
 A command-line tool (`runtipi-cli`) for administrative tasks:
+
 - Starting/stopping Runtipi
 - Updating to newer versions
 - Managing backups
 - Debugging issues
 
+The CLI itself lives in a separate repository, while the running instance is managed by the backend in this codebase.
+
 ### 3. App Store
+
 A repository (separate from Runtipi itself) containing app definitions. Each app has:
+
 - `config.json`: Metadata, requirements, and exposed settings
-- `docker-compose.json`: Container configuration
+- `docker-compose.yml`: Preferred container configuration source with `x-runtipi` metadata
 - Additional files: logos, descriptions, documentation
 
+Legacy `docker-compose.json` app definitions are still supported and converted automatically.
+
 ### 4. Traefik (reverse proxy)
+
 Handles all incoming web traffic and routes it to the right app. It also:
+
 - Generates SSL certificates automatically
 - Handles domain routing
 - Manages internal networking between containers
 
 ### 5. PostgreSQL database
+
 Stores Runtipi's configuration:
+
 - User accounts
 - App installations and settings
 - System configuration
@@ -73,9 +70,9 @@ Stores Runtipi's configuration:
 
 When you click "Install" on an app, here's what happens:
 
-1. **Download**: Runtipi downloads the app definition from the App Store repository and stores it on your server
-2. **Configuration**: Your settings are merged with the app's default configuration
-3. **Compose generation**: A Docker compose file is generated with your specific settings
+1. **Download**: Runtipi pulls the app definition from the configured app store and copies it into the installed apps directory
+2. **Configuration**: Runtipi generates the system `.env`, then merges your app settings into an app-specific `app.env`
+3. **Compose generation**: A `docker-compose.generated.yml` file is produced for that app
 4. **Container pull**: Docker downloads the app's container image(s)
 5. **Start**: The app container starts running
 6. **Network setup**: Traefik reads the labels set in the compose file and configures routing
@@ -121,27 +118,28 @@ sequenceDiagram
     Traefik-->>Browser: Return response
 ```
 
-
 ## File Structure
 
 Runtipi stores everything in its installation directory (where you ran the install script):
 
-```
-runtipi/
-├── runtipi-cli           # CLI executable
-├── app-data/             # App data (your files, databases, etc.)
-│   ├── nextcloud/
-│   ├── filebrowser/
-│   └── ...
-├── apps/                 # App definitions and generated compose files
-├── state/                # Runtipi's internal state
-├── traefik/              # Reverse proxy configuration
-├── user-config/          # Your custom configurations
-└── docker-compose.yml    # Main Runtipi services
-```
+<FileTree>
+  <FileTree.Folder name="runtipi" defaultOpen>
+    <FileTree.File name="runtipi-cli" />
+    <FileTree.File name=".env" />
+    <FileTree.File name="docker-compose.yml" />
+    <FileTree.Folder name="app-data" />
+    <FileTree.Folder name="apps" />
+    <FileTree.Folder name="backups" />
+    <FileTree.Folder name="repos" />
+    <FileTree.Folder name="state" />
+    <FileTree.Folder name="traefik" />
+    <FileTree.Folder name="user-config" />
+  </FileTree.Folder>
+</FileTree>
 
 <Callout type="info">
-  **Important**: The `app-data` directory contains all your app data. Back this up regularly!
+  **Important**: The `app-data` directory contains all your app data. Back this
+  up regularly!
 </Callout>
 
 ## What makes Runtipi different?
@@ -154,5 +152,7 @@ runtipi/
 - **Beginner-friendly**: Abstracts docker and networking complexity
 
 <Callout>
-  Runtipi doesn't lock you in. All apps are standard Docker containers. You can export the compose files and run them independently if needed. All the generated files are stored in the `apps/` directory.
+  Runtipi doesn't lock you in. All apps are standard Docker containers. You can
+  export the compose files and run them independently if needed. All the
+  generated files are stored in the `apps/` directory.
 </Callout>

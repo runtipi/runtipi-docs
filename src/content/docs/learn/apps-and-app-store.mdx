@@ -1,4 +1,4 @@
-import { Callout } from "nextra/components";
+import { Callout, FileTree } from "nextra/components";
 
 # Apps & the App Store
 
@@ -9,6 +9,7 @@ Understanding how Runtipi apps work will help you make the most of the platform 
 A Runtipi app is a pre-configured Docker container (or set of containers) that can be installed with one click. Think of it like an app on your smartphone, but running on your server instead.
 
 Each app includes:
+
 - **The software itself** (e.g., Nextcloud, Jellyfin, etc.)
 - **Pre-configured settings** opinionated, that work out of the box
 - **Automatic networking** via Traefik
@@ -26,24 +27,27 @@ You can see this as a marketplace of blueprints for self-hosted applications tha
 
 An App Store is actually a separate git repository: [`runtipi/runtipi-appstore`](https://github.com/runtipi/runtipi-appstore)
 
-When you browse apps in Runtipi, it's pulling the list from this repository.
+When you browse apps in Runtipi, it loads apps from one or more configured app store repositories. Each app is uniquely identified by its app ID plus the store slug.
 
 ## App Architecture
 
 Every app in the store has this structure:
 
-```
-app-name/
-├── config.json          # App metadata and configuration options
-├── docker-compose.json  # Container configuration
-├── metadata/
-│   ├── logo.jpg        # App icon
-└── └── description.md  # Long description
-```
+<FileTree>
+  <FileTree.Folder name="app-name" defaultOpen>
+    <FileTree.File name="config.json" />
+    <FileTree.File name="docker-compose.yml" />
+    <FileTree.Folder name="metadata" defaultOpen>
+      <FileTree.File name="logo.jpg" />
+      <FileTree.File name="description.md" />
+    </FileTree.Folder>
+  </FileTree.Folder>
+</FileTree>
 
 ### config.json
 
 Defines the app's:
+
 - **Name and description**
 - **Version**
 - **Configurable options** (shown in the UI)
@@ -68,70 +72,83 @@ For more options, check out the full specs [config.json](/docs/reference/config-
 }
 ```
 
+### docker-compose.yml
 
-
-### docker-compose.json
-
-Defines the actual Docker container(s) to run the app. This is similar to a standard `docker-compose.yml` file but uses JSON format and supports template variables for dynamic configuration.
+Defines the actual Docker container(s) to run the app. Runtipi uses a standard Compose-like YAML file with `x-runtipi` metadata for routing and app-specific behavior.
 
 ```yaml
-{
-  "schemaVersion": 2,
-  "$schema": "https://schemas.runtipi.io/v2/dynamic-compose.json",
-  "services": [
-    {
-      "name": "nginx",
-      "image": "nginx:1.29.2",
-      "isMain": true,
-      "internalPort": 80
-    }
-  ]
-}
+services:
+  nginx:
+    image: nginx:1.29.2
+    x-runtipi:
+      is_main: true
+      internal_port: 80
+
+x-runtipi:
+  schema_version: 2
 ```
 
-For a full reference, see [docker-compose.json](/docs/reference/dynamic-compose)
+<Callout type="info">
+  Legacy `docker-compose.json` files are still supported and converted
+  automatically, but new apps should use `docker-compose.yml`.
+</Callout>
+
+For a full reference of `x-runtipi` options, see the [Dynamic Compose Reference](/docs/reference/dynamic-compose).
 
 ## App lifecycle
 
 ### Running
+
 - App runs continuously in the background
-- Data is persisted to `app-data/repo-name/app-name/`
+- Data is persisted to `app-data/<store-slug>/<app-name>/`
 - You can start, stop, or restart anytime
 - Logs are available for debugging
 
 ### Updates
+
 - When the app store has a new version, Runtipi notifies you
 - You can update with one click
 - Data and config are preserved during updates
 - Rollback to a backup if needed
 
 ### Uninstallation
+
 - Runtipi stops the containers
 - Container images are removed
 - **Your data gets deleted** in `app-data/`
 
 <Callout type="warning">
-  Uninstalling an app deletes all its data permanently. Make sure to back up anything important before uninstalling! Backups are not deleted during uninstallation.
+  Uninstalling an app deletes all its data permanently. Make sure to back up
+  anything important before uninstalling! Backups are not deleted during
+  uninstallation.
 </Callout>
 
 ## App data & persistence
 
 All app data is stored in the `app-data/` directory in your Runtipi installation:
 
-```
-runtipi/
-└── app-data/
-    ├── nextcloud/
-    │   ├── data/          # Your files
-    │   ├── config/        # App configuration
-    │   └── database/      # SQLite or other data
-    ├── jellyfin/
-    │   ├── media/         # Your movies/music
-    │   └── config/
-    └── ...
-```
+<FileTree>
+  <FileTree.Folder name="runtipi" defaultOpen>
+    <FileTree.Folder name="app-data" defaultOpen>
+      <FileTree.Folder name="migrated" defaultOpen>
+        <FileTree.Folder name="nextcloud" defaultOpen>
+          <FileTree.Folder name="data" />
+          <FileTree.Folder name="config" />
+          <FileTree.Folder name="database" />
+        </FileTree.Folder>
+      </FileTree.Folder>
+      <FileTree.Folder name="my-store" defaultOpen>
+        <FileTree.Folder name="jellyfin" defaultOpen>
+          <FileTree.Folder name="media" />
+          <FileTree.Folder name="config" />
+        </FileTree.Folder>
+      </FileTree.Folder>
+    </FileTree.Folder>
+  </FileTree.Folder>
+</FileTree>
 
 **Key Points:**
+
 - This directory survives app restarts and updates
 - **Back this up regularly** - it's your actual data
 - Can be very large (depending on apps)
@@ -142,14 +159,17 @@ runtipi/
 Not all apps work on all processor architectures:
 
 ### x86_64 / amd64
+
 - Most common for desktops and servers
 - Most apps supported
 
 ### ARM64
+
 - Raspberry Pi 4/5, some SBCs
 - Many apps supported
 - Some apps unavailable (Runtipi hides them automatically)
 
 <Callout type="info">
-  Runtipi automatically detects your architecture and only shows compatible apps.
+  Runtipi automatically detects your architecture and only shows compatible
+  apps.
 </Callout>

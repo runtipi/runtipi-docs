@@ -2,6 +2,686 @@
 
 In this document, we will keep track of all release notes of Runtipi.
 
+## 4.8.1
+
+> **Warning**: This release contains security fixes, please update as soon as possible.
+
+This release focuses on important security improvements across different areas and fixing a recent [security advisory](https://github.com/runtipi/runtipi/security/advisories/GHSA-v6gf-frxm-567w)
+
+- App Throttling: Added rate limiting to authentication endpoints to prevent brute-force attacks. Login and TOTP verification endpoints are now limited to 10 requests per minute. Additionally, TOTP attempts are limited to 5 failures before the session is invalidated, improving security against automated attacks.
+- App store deletion now properly validates that the store exists before attempting deletion
+- Protected Certificate Endpoint: The self-signed certificate download endpoint now requires authentication, preventing unauthorized access to local SSL certificates. If you share a dashboard with other users, you now have to share the certificate with them manually.
+- App Store Slug Validation: Added proper validation for app store slugs to ensure only valid characters
+- Limit the guest dashboard app payload to the strict minimum and avoid sending the app custom config which is not useful to the guest user
+
+## 4.8.0
+
+This release addresses a security report by hardening the reset-password flow. The process is now only done through the CLI without having to set the new password through the UI. This removes the window in which someone else on the network could fill in the new password before the user which requested it. Thanks @fy0lai for the report.
+
+- Any app from an app-store can now be fully customized through the UI
+- Fix a translation issue in the login page @Mouette03
+- Improve accessibility across UI components @Onigam
+
+## 4.7.2
+
+This release addresses a critical security vulnerability involving unauthenticated path traversal and potential Remote Code Execution (RCE). We strongly recommend all users update their installations immediately.
+
+A vulnerability was identified where the user config controller lacked proper authentication and input sanitization. This allowed an unauthenticated remote attacker to perform a path traversal attack using the :urn parameter.
+
+All the code paths that were using user provided values have been hardened to be properly sanitized.
+
+Related security advisory: https://github.com/runtipi/runtipi/security/advisories/GHSA-mwg8-x997-cqw6
+
+## 4.7.1
+
+**Fixes**
+
+- Fix a regression causing UDP port to not be correctly added in the generated compose file
+
+## 4.7.0
+
+An important security patch is included in this release. The flaw allows an authenticated user to execute arbitrary system commands on the host server by injecting shell metacharacters into backup filenames. For more details see the linked [security advisory](https://github.com/runtipi/runtipi/security/advisories/GHSA-vrgf-rcj5-6gv9). We recommend everyone to upgrade to the latest version.
+
+**New features**
+
+- Runtipi now supports native `docker-compose.yml` syntax for custom apps. Alongside the existing docker compose json format, users can now define their apps in a docker-compose.yml file by including the `x-runtipi` meta tags to define the app behavior
+- New setting to manually disable the force pull for each application
+- In the "Files" tab of an app, where the user can configure their custom configs the main docker-compose.yml file is now visible as well as the app.env
+
+**Improvements**
+
+- The OTP input is now auto focused when the page loads
+- During an app update, the compose file is not shown in the diff viewer if it didn't change
+- Add support for cachyos in the install script
+- The generated compose will not include an extra network if the stack is only composed of 1 service
+
+**Fixes**
+
+- App logs are now correctly escaping XML tags. This was previously allowing an app to display HTML formatted text in the logs
+- Properly sanitize backup filenames during upload to prevent authenticated RCE vulnerability
+
+## 4.6.5
+
+**Fixes**
+
+- Update traefik to v3.6.1. This fixes an upstream issue that was preventing the use of latest Docker v29
+
+## 4.6.4
+
+**Fixes**
+
+- Fixed how timestamps are stored in the database. This will resolve issues that could arise when the server timezone is not in sync with the database one
+
+**Improvements**
+
+- New translations in various languages
+
+## 4.6.3
+
+**Fixes**
+
+- Fix missing translations in the new batch action features
+- Fix broken link for Crowdin
+
+## 4.6.2
+
+**Fixes**
+
+- Fix an issue making the apps look uninstalled when they were stopped
+
+## 4.6.1
+
+**Fixes**
+
+- Fix the JSON editor in custom app form, not being always enabled when the JSON is valid
+
+## 4.6.0
+
+**New features**
+
+- Add the ability to ignore an update for an app. The update alert will be shut down and the app won't update when running update-all or using the CLI
+- Add a new action bar in the apps section of the dashboard. Quickly perform bulk actions like stop all running, start all stopped or restart all.
+
+**Improvements**
+
+- Runtipi will now periodically sync all app statues with the docker engine. This improves the accuracy of the app status displayed in the dashboard and allows to get out of stuck states.
+- Re-run app-data permissions check after running docker command
+- New value in `app.env` `APP_IMAGE_TAG`
+
+**Technical**
+
+- Fix e2e test for backup & restore @gurvanhenry
+
+## 4.5.5
+
+**Fixes**
+
+- Correctly wait for the queue to be up before running before initializing the server
+- Migrate from Bun to Node.js as a server runtime. This will unlock some users with older CPUs
+
+## 4.5.3
+
+**Fixes**
+
+- Remove health check from `runtipi-queue` as it was preventing some users to start runtipi
+
+## 4.5.2
+
+**Fixes**
+
+- Prevent installing or updating apps that have an incompatible schema
+- Re-run the permission changes on app-data folder after the docker compose command
+
+**Improvements**
+
+- Switch from rabbitmq to lavinmq to be able to use healthchecks on the container again
+
+## 4.5.1
+
+**Fixes**
+
+- Fix to allow ports to be described as strings. This allows dynamic values with env variables or port ranges.
+
+## 4.5.0
+
+**New features**
+
+- Users can now create fully custom apps. Click the new "Add custom app" tile on the Apps page to create an app from scratch without relying on an app store. You can configure mounted volumes, mapped ports, environment variables, and more.
+- Users can now set the maximum number of backups globally (Advanced Settings) or on a per-app basis. Runtipi will keep only up to the configured number of backups.
+- Users can now upload backups directly through the UI to restore an app later.
+- When updating an app, you will be shown a diff to compare changes and decide whether to update.
+- compose.json now supports docker bind mount configs
+
+**Improvements**
+
+- When an update is available, release notes for all skipped versions will be shown.
+- Various UI fixes and improvements
+
+**Technical**
+
+- Bump docker compose version to 2.40.0
+- Bump traefik to 3.5.3
+- Migrate server runtime from Node to Bun
+
+## 4.4.0
+
+**New features**
+
+- Added a new dev debug panel. Triggered by pressing the keys "D + E + V" simultaneously in development mode
+- New per app env variables: `APP_EXPOSED_DOMAIN` and `APP_LOCAL_DOMAIN`
+- New CLI appstore commands, use with `./runtipi-cli appstore` @AlphaRyz3
+
+**Fixes**
+
+- If an app gets deleted from the store, the frontend will load the files from the installed version
+- Fix header logo to link back to `/dashboard` instead of a blank page
+
+**Improvements**
+
+- Redesign of the app details page to give more space and hide secondary commands in a sub-menu
+- CLI will now wait for backup actions to complete before succeeding the command
+- The worker can now perform up to 3 docker compose commands in parallel speeding up bulk operations
+- Give apps a fixed network name instead of default docker naming
+- Increase the network pools from 254 to 32,375 to rule out any edge case where the user has many networks created on their machine
+
+**Technical**
+
+- Update traefik version to v3.5
+- Update docker compose version to v2.39.2
+- Updated translations in various languages
+
+## 4.3.0
+
+**New features**
+
+- You can now edit your custom user-configs and app.env directly from the Runtipi UI
+- Add DNS property to `docker-compose.json`
+
+**Improvements**
+
+- CLI will now wait for app action to complete before succeeding the command
+- Add a button to show password input in install form
+- Improve logging for errors
+
+## 4.2.1
+
+**Fixes**
+
+- Custom port and ssl port where not correctly picked up from user config
+- When custom ssl port is configured, runtipi now opens app on the correct domain with custom port
+
+## 4.2.0
+
+**New features**
+
+- Add a button to generate a free random port in app install form
+
+**Improvements**
+
+- Start all apps only in case of new runtipi version update
+- Apps are not pulled in case of a `startAll` event
+- CLI has been rewritten to Go for smaller binary size and easier cross platform compilation
+
+**Fixes**
+
+- Default values where not picked up during app installation
+- Preserve file permissions during backup
+- Correctly delete `app-data` dir after uninstall
+- Set the app stores git as safe.directory to avoid dubious ownership error
+
+## 4.1.1
+
+**Improvements**
+
+- Remove CPU intensive healthcheck on rabbitmq container
+
+**Fixes**
+
+- Fix theme base and theme primary color not saved across restarts
+
+## 4.1.0
+
+**Features**
+
+- Customize your runtipi dashboard by changing the base theme and the primary color
+- Add a button to download the self-signed certificate from the guest dashboard
+- Include app's `user-config` in app backups
+- Allow custom local subdomain for each app
+- Allow overrides by architecture in docker-compose.json
+- Links can now be displayed on guest dashboard
+
+**Improvements**
+
+- After updating app settings, an indicator will be displayed if the app needs a restart
+
+**Fixes**
+
+- Fix network overlapping IPs by looking at docker networks directly instead of using the database as source of truth
+- Fix repo pulling issue when origin cannot be detected automatically
+
+## 4.0.3
+
+**Fixes**
+
+- Assign a dedicated subnet for each new network to avoid conflict in IP addresses when the user runs more than 15 apps
+- Refactor repo cloning service to avoid and clean git zombie processes
+
+## 4.0.2
+
+**Fixes**
+
+- Fixed duplicate health check start policy preventing stack to start
+
+## 4.0.1
+
+Bug fix release.
+
+## 4.0.0
+
+This is a breaking change release. Please read the [migration guide](https://runtipi.io/docs/reference/breaking-updates#update-from-3xx-to-400) before updating
+as you will need to perform some manual steps.
+
+**New features**
+
+- Multiple app store support: Add your own repositories or community-created app stores
+- SSL certificates are now automatically re-created when expired
+
+**Improvements**
+
+- Moved the runtipi-queue to its own container for increased reliability
+- Improved PWA (Progressive Web App) user experience
+- Added local domain to guest dashboard for easier app access
+- Multi-network support for more complex app setups and increased security
+- Better category selection with ability to clear filters
+- Apps automatically start on system boot if they were previously running
+
+**Fixes**
+
+- Fixed timezone selector width
+- Fixed scrolling issues on guest dashboard
+
+## 3.10.0
+
+**Features**
+
+- Added a settings option to change log level. This lets users enter debug mode and have more logs
+- Added a new option for dynamic compose: `extraLabels` to add custom labels to a container with variable interpolation
+- Added the new options for volumes in dynamic compose: `shared` and `private` that respectively add the labels `:z` and `:Z` to the bind mount
+- Added the possibility to enable experimental flags from the `settings.json` file
+- Allow custom forward auth url in settings.json. Opening the system to other auth systems
+
+**Fixes**
+
+- Properly render `sysctls` options in the generated compose
+
+## 3.9.4
+
+**Fixes**
+
+- Fix login issue when the runtipi domain doesn't use a standard TLD
+
+## 3.9.3
+
+**Fixes**
+
+- Fix login issue with domain names on [Public Suffix](https://publicsuffix.org/) list
+
+## 3.9.2
+
+**Fixes**
+
+- Fix login issue with invalid cookie domain
+- Fix guest dashboard "open with local domain" & scrolling issue
+- Fix advanced settings not correctly saving values
+
+## 3.9.1
+
+**Fixes**
+
+- Remove extra /app-data suffix in advanced settings `appDataPath`
+
+## 3.9.0
+
+**New features**
+
+- Protect your exposed apps with authentication using runtipi login screen
+- Add advanced features in the settings UI
+- Show local domain open option in guest dashboard
+- Add `sysctls` option in dynamic config & allow `core` & `memlock` in `ulimits`
+- Add clear option in app store category selector
+
+**Fixes**
+
+- Make language setting stick for 365 days
+
+**Improvements**
+
+- Use the docker `--pull always` flag only for apps that are not on a pinned version
+- Regenerate a new certificate for local domain when the current one is about to expire
+
+## 3.8.4
+
+**Fixes**
+
+- Automatically reconnect to queue when failure happens
+
+**Improvements**
+
+- Stream docker-compose output to runtipi's logs for easier debugging
+
+**Technical**
+
+- Fix sourcemaps upload to Sentry
+- Switch from ncc to esbuild for server bundle
+
+## 3.8.3
+
+**Fixes**
+
+- Uses default network interface to detect internal_ip instead of the first valid one
+
+**Improvements**
+
+- Remove web sockets communications in favor of Server-Sent Events for increased stability
+- Add more useful logging
+- Improve translations
+- Log docker errors in the browser console
+
+## 3.8.2
+
+**Fixes**
+
+- Fetch latest version in the background to not block the initial app rendering
+- Allow ports to be defined as strings in `docker-compose.json`
+
+**Improvements**
+
+- Improve logs structure and verbosity
+
+## 3.8.1
+
+**Fixes**
+
+- Allow apps to have no port
+- Docker-compose.json deploy schema was wrong
+- Default boolean values to `false` in install form instead of `undefined`
+- (CLI) Add new `version` command to print the installed Runtipi version
+
+## 3.8.0
+
+**Features**
+
+- Extended the docker-compose.json specs to support more docker-compose options
+- [CLI] Add new `version` command to print the installed Runtipi version
+
+**Improvements**
+
+- Cap the line number in `.log.history` files to max 10k lines and avoid ever-growing log files
+
+**Technical**
+
+- Update traefik to version 3.2
+- Update docker-compose to version 2.32.1
+
+## 3.7.5
+
+**Fixes**
+
+- A concurrency issue in the queue was making all the events stuck and timeout until restarting the instance
+- An error handling issue was stopping the auto pulling of the app store from working
+
+## 3.7.4
+
+**Fixes**
+
+- Missing traefik labels for apps generated with new JSON format
+
+## 3.7.3
+
+Bug fix release.
+
+## 3.7.2
+
+**Fixes**
+
+- Fix a bug that would try to set response headers after the response was sent
+- Add back legacy db migrations in case a user updates by jumping versions
+
+**Improvements**
+
+- Add the ability to control timeouts in `settings.json`
+- Improve error handling in the backend
+
+## 3.7.1
+
+**Fixes**
+
+- Issue when saving settings, the system would stack `/app-data` folders in `settings.json`
+- Wait for rabbitmq to be fully started before running the server
+- Fix dashboard error when the server cannot retrieve the system load
+- Fix issue in response headers when returning app images
+- Allow number type as an environment value (docker-compose.json)
+- Improve frontend re-renders by selecting theming state values directly
+- Fix timezone issue when updating a link on the dashboard
+
+## 3.7.0
+
+Runtipi has gone through an entire rewrite from Next.js and a node-based side worker to a Nest.js backend and a plain React SPA. This rewrite re-thinks the backend architecture to enable us to move faster from now on and implement more ambitious features the community requests.
+
+This is a minor update as no breaking change was introduced during this re-write and everything is backward compatible.
+
+## 3.6.4
+
+**Fixes**
+
+- Don't try to use dynamic compose config if app has `dynamic_config` set to `false`
+- Port not open by default with dynamic compose apps
+
+**Improvements**
+
+- Improve Portuguese translations
+
+## 3.6.3
+
+**Improvements**
+
+- Updated translations in various languages
+
+**Fixes**
+
+- Fix Size Mismatch issue when backing up app
+
+## 3.6.2
+
+**Improvements**
+
+- Add more options for `docker-compose.json`
+- Updated translations in various languages
+
+**Technical**
+
+- Upgrade to traefik v3.1.4
+- Upgrade compose plugin to v2.29.7
+
+## 3.6.1
+
+**New features**
+
+- Allow to set custom LOG_LEVEL in user .env
+
+**Fixes**
+
+- App status not correctly set when action fail
+- Some app backups failing silently and crashing the system
+- App store too many file opened in the backend
+- Add missing translated strings in the frontend
+
+**Technical**
+
+- Upgrade compose plugin to v2.29.2
+
+## 3.6.0
+
+**New features**
+
+- New button in settings to force pull the app store repo instead of waiting 30 min
+
+**Improvements**
+
+- Sort backup list newest -> oldest
+- Add support for base64 random values
+
+**Fixes**
+
+- When changing local domain, previous certificate was not cleaned up correctly preventing to re-generate it when switching back to the previous domain
+
+## 3.5.3
+
+**Improvements**
+
+- Add a "new" badge in the app-store to recently added apps @sergi0g
+- Add support for colors in log terminal
+
+**Technical**
+
+- Add support for docker-compose.arm64.json files @steveiliop56
+- Remove prettier and eslint in favor of biome.js @meienberger
+- Isolate redis cache in its own package @meienberger
+
+## 3.5.2
+
+**Improvements**
+
+- Disabled app backups in demo mode
+- Disable error reports when the issue is due to a custom user config
+
+**Technical**
+
+- Isolate db client in its own package
+- Move to biome.js for linting and formatting
+
+## 3.5.1
+
+**Fixes**
+
+- Fixed a bug causing app backups to crash when some files were bigger than 2 GiB
+
+**Features**
+
+- Users can now chose to skip making a backup during an app update
+
+## 3.5.0
+
+**Features**
+
+- You can now backup apps and restore from a previous state at any time from the app page. Auto backups will be performed on app update to protect against occasional broken updates.
+- Timezone can now be configured from the settings page
+- Add new language, Ukrainian
+
+## 3.4.1
+
+**Features**
+
+- Add a new language, Portuguese Brazilian @gabrielfariasnunes
+- Logs settings (follow, wrap lines) are now persisted across page refreshes
+
+**Fixes**
+
+- Logs terminal not respecting max lines set by the user
+- WebSocket not working in an exposed domain setup
+
+## 3.4.0
+
+**Features**
+
+- You can now view any app logs directly in the dashboard @MontejoJorge
+- View runtipi logs directly in the dashboard @steveiliop56
+
+**Improvements**
+
+- Auto forward ports in codespaces @MontejoJorge
+- Include `addPorts` and `readOnly` options in `docker-compose.json` @steveiliop56
+
+## 3.3.2
+
+**Fixes**
+
+- Fix regex in the install script to support distributions having `/etc/upstream-release` as a directory. @hex-developer
+
+**Improvements**
+
+- Copy `tabler.min.js` at build time to the `public` folder to avoid relying on a CDN at runtime
+- Update traefik to v3.0
+
+## 3.3.0
+
+**New features**
+
+- Apps can now require a minimum runtipi version before being installed/updated
+- Add a warning when running on a VPS with open ports
+- Password reset requests are now expiring after 15 minutes
+
+**Improvements**
+
+- Split install form into multiple sections for readability
+- Improve CLI error handling
+
+**Technical**
+
+- Moved to Vitest Test runner
+- Improved app-store page loading speed by reducing the payload
+- Update traefik to v3.0
+- Disable app-store repository pulling during development
+
+## 3.2.0
+
+**New features**
+
+- Added restart functionality in app details view
+- Apps can now generate docker-compose files on demand and specific to the user config, omitting useless labels and increasing base security. Eg: Port opening can now be disabled during app installation (This is pending an app store migration and will gradually be available for all apps)
+- Users can now customize the location of all mapped folders through custom environment variables. See documentation
+
+**Improvements**
+
+- The app store page has now an infinite scroll functionality instead of a "load more" button
+- `settings.json` file now allows string values for `port` and `sslPort`
+- Print dashboard URL after resetting password in CLI
+- Improve error handling and printed messages in CLI
+
+**Chore**
+
+- Update docker-compose to v2.27.0
+- Renamed `storagePath` setting to `appDataPath` for consistency. (Backwards compatible)
+
+## 3.1.3
+
+**Fixes**
+
+- Fix missing $PWD variable in `docker-compose.yml`
+
+## 3.1.2
+
+**Fixes**
+
+- Add missing traefik labels for exposing dashboard
+
+## 3.1.1
+
+**Improvements**
+
+- Merge worker and dashboard in a single `runtipi` docker image @steveiliop56 @meienberger
+
+## 3.1.0
+
+**Features**
+
+- Create a new smart search and paginate the app-store results @meienberger
+
+**Fixes**
+
+- Fix the field type in install form @I-Need-C8H10N4O2
+- Fix select fields not populated with their value when updating app settings @MontejoJorge
+
 ## 3.0.3
 
 **Fixes**
@@ -31,7 +711,7 @@ as you will need to perform some manual steps.
 
 **Improvements**
 
-- The CLI has been rewritten in Rust. This will make the CLI faster, smaller and more reliable. You can see the new CLI [repository here](https://github.com/runtipi/cli) @meienberger @steveiliop56
+- The CLI has been rewritten as a native binary. This will make the CLI faster, smaller and more reliable. You can see the new CLI [repository here](https://github.com/runtipi/cli) @meienberger @steveiliop56
 - Release assets are now distributed as a compressed tarball. This will make the download faster and smaller @meienberger
 - The worker now exposes an authenticated REST API @steveiliop56
 - Added support for Manjaro in the install script @iajrz
@@ -159,7 +839,7 @@ as you will need to perform some manual steps.
 
 ## 2.0.6
 
-mprovements\*\*
+**Improvements**
 
 - Migrated repos from a personal account to a new organization account
 - Refactored all pages to use Next's implementation of React Server Components
@@ -194,21 +874,9 @@ mprovements\*\*
 
 ## 2.0.2
 
-**New features**
-
-- You can now specify a different port for Postgres #918 @steveiliop56
-- You can now reset an app directly from its settings. No need to stop, uninstall, and re-install again. #922 @cchalop1
-- Tipi now automatically starts on system boot. No need to setup a systemd service anymore. #919 @meienberger
-
-**Improvements**
-
-- Tipi works now fully rootless thanks to work done to dockerize the worker previously running on the host system. Tipi is now fully Docker-based and can be run in any environment that can run Docker. #919 @meienberger @steveiliop56
-- After an update, apps are now restarting again if it was running before update. @cchalop1 closes #906
-- (DEV) - When testing an app store repo, it is now possible to directly include the URL with the branch name in the settings and that branch will be checked out. #949 @0livier
-
 **Fixes**
 
-- A bug was making app installs fail silently and mark the app as "running" while it was not. #919 @meienberger
+- Fixed permissions issue from the rootless mode introduced in 2.0.0
 
 ## 2.0.1
 
