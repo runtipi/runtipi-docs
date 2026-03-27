@@ -28,7 +28,7 @@ import GridPattern from "../GridPattern";
 export default async function Home() {
   return (
     <>
-      <div className="mx-auto flex w-auto flex-col justify-center px-4 pt-16 pb-8 sm:pt-24 md:flex-row lg:max-w-7xl lg:px-8">
+      <div className="mx-auto flex w-full flex-col justify-center px-4 pt-16 pb-8 sm:pt-24 md:flex-row lg:max-w-7xl lg:px-8">
         <div className="flex w-full flex-col items-center justify-between md:mr-4">
           <div>
             <h1 className="mx-auto max-w-5xl text-center text-6xl leading-none font-extrabold tracking-tighter text-black sm:text-7xl dark:text-white">
