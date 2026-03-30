@@ -49,7 +49,7 @@ A: Generally no, but check the [release notes](/docs/reference/release-notes) fo
 
 A: Make sure you're running with sudo:
 ```bash
-sudo curl -L https://setup.runtipi.io | sudo bash
+curl -L https://setup.runtipi.io | sudo bash
 ```
 
 ---
@@ -62,7 +62,7 @@ A: Yes, just cd to that directory before running the install script.
 
 **Q: Can I install apps that aren't in the App Store?**
 
-A: You can create your own app through the web UI or use one of the [community app store](https://github.com/runtipi/runtipi/discussions/categories/app-stores) repositories
+A: You can create your own app through the web UI or use one of the [community app store](https://github.com/runtipi/runtipi/discussions/categories/app-stores) repositories.
 
 ---
 
@@ -74,7 +74,7 @@ A: All app data is in `app-data/[store-slug]/[app-name]/` in your Runtipi direct
 
 ### Networking questions
 
-**Q: Can I use Runtipi behind another reverse proxy like NPM?**
+**Q: Can I use Runtipi behind another reverse proxy like Nginx Proxy Manager?**
 
 A: Yes, but it's complex. Runtipi uses Traefik internally. You'd need to configure your external proxy to forward to Runtipi's Traefik and customize your settings to free up ports.
 
