@@ -258,10 +258,10 @@ Then we can add our crontab line, in this example we will backup our apps every 
 0 3 1 * * /path/to/runtipi/scripts/backup-apps.sh monthly
 ```
 
-Make sure that the cron service is enabled.
+Make sure that the cron service is enabled and running.
 
 ```bash
-sudo systemctl enable cron.service
+sudo systemctl enable --now cron.service
 ```
 
 After adding our line we can save and exit and that's it! Now your apps will backup automatically!
