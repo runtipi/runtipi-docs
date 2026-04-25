@@ -295,11 +295,17 @@ services:
   myapp:
     image: myapp:latest
     labels:
+      # Enable gzip compression
       - "traefik.http.middlewares.{{RUNTIPI_APP_ID}}-compress.compress=true"
+      # Add XSS protection header
       - "traefik.http.middlewares.{{RUNTIPI_APP_ID}}-headers.headers.browserXssFilter=true"
+      # Force HSTS header even over HTTP
       - "traefik.http.middlewares.{{RUNTIPI_APP_ID}}-headers.headers.forceSTSHeader=true"
+      # Deny iframe embedding (clickjacking protection)
       - "traefik.http.middlewares.{{RUNTIPI_APP_ID}}-headers.headers.frameDeny=true"
+      # HSTS max-age: 1 year
       - "traefik.http.middlewares.{{RUNTIPI_APP_ID}}-headers.headers.stsSeconds=31536000"
+      # Attach both middlewares to the auto-generated router
       - "traefik.http.routers.{{RUNTIPI_APP_ID}}.middlewares={{RUNTIPI_APP_ID}}-compress,{{RUNTIPI_APP_ID}}-headers"
     x-runtipi:
       is_main: true
