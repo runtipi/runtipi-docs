@@ -281,7 +281,7 @@ Runtipi auto-generates all standard Traefik routing labels for the main service.
 
 ### `{{RUNTIPI_APP_ID}}` Placeholder
 
-Use `{{RUNTIPI_APP_ID}}` wherever you need the full app identifier. Runtipi's template engine substitutes this with `{app-id}-{store-id}` (e.g. `freshrss-oidc-falkheiland`) before passing the compose file to Docker. This matches the name used in all auto-generated Traefik labels, so you can reference the auto-generated router from your custom middleware.
+Use `{{RUNTIPI_APP_ID}}` wherever you need the full app identifier. Runtipi's template engine substitutes this with `{app-id}-{store-slug}` (e.g. `myapp-migrated`) before passing the compose file to Docker. This matches the name used in all auto-generated Traefik labels, so you can reference the auto-generated router from your custom middleware.
 
 <Callout type="warning">
   Do not use `${APP_ID}` in Traefik label keys or values — it is not resolved by
