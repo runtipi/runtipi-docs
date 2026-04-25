@@ -275,6 +275,42 @@ x-runtipi:
   schema_version: 2
 ```
 
+## Custom Traefik Labels
+
+Runtipi auto-generates all standard Traefik routing labels for the main service. You do **not** need to add them manually. When you need non-standard Traefik configuration — such as custom middlewares — add extra `labels:` to the main service.
+
+### `{{RUNTIPI_APP_ID}}` Placeholder
+
+Use `{{RUNTIPI_APP_ID}}` wherever you need the full app identifier. Runtipi's template engine substitutes this with `{app-id}-{store-id}` (e.g. `freshrss-oidc-falkheiland`) before passing the compose file to Docker. This matches the name used in all auto-generated Traefik labels, so you can reference the auto-generated router from your custom middleware.
+
+<Callout type="warning">
+  Do not use `${APP_ID}` in Traefik label keys or values — it is not resolved by
+  Runtipi's template engine and will remain as a literal string.
+</Callout>
+
+### Example: Security Header Middlewares
+
+```yaml
+services:
+  myapp:
+    image: myapp:latest
+    labels:
+      - "traefik.http.middlewares.{{RUNTIPI_APP_ID}}-compress.compress=true"
+      - "traefik.http.middlewares.{{RUNTIPI_APP_ID}}-headers.headers.browserXssFilter=true"
+      - "traefik.http.middlewares.{{RUNTIPI_APP_ID}}-headers.headers.forceSTSHeader=true"
+      - "traefik.http.middlewares.{{RUNTIPI_APP_ID}}-headers.headers.frameDeny=true"
+      - "traefik.http.middlewares.{{RUNTIPI_APP_ID}}-headers.headers.stsSeconds=31536000"
+      - "traefik.http.routers.{{RUNTIPI_APP_ID}}.middlewares={{RUNTIPI_APP_ID}}-compress,{{RUNTIPI_APP_ID}}-headers"
+    x-runtipi:
+      is_main: true
+      internal_port: 8080
+
+x-runtipi:
+  schema_version: 2
+```
+
+The last label attaches your custom middlewares to the auto-generated `{{RUNTIPI_APP_ID}}` router. Any additional middleware names you reference must also be defined as labels on the same service.
+
 ---
 
 ## Legacy JSON Format (`docker-compose.json`)
