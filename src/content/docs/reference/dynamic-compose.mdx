@@ -68,6 +68,23 @@ services:
       internal_port: 8080
 ```
 
+## Runtipi Variables
+
+Runtipi injects the following variables at runtime. You can reference them anywhere in your `docker-compose.yml`:
+
+| Variable              | Description                                                                 |
+| --------------------- | --------------------------------------------------------------------------- |
+| `${APP_DATA_DIR}`     | Absolute path to the app's persistent data directory on the host            |
+| `${APP_DOMAIN}`       | The domain or `host:port` the app is served on                              |
+| `${APP_PORT}`         | The host port mapped to the main service's `internal_port`                  |
+| `${APP_PROTOCOL}`     | `http` or `https` depending on whether the app is exposed with TLS          |
+| `${APP_ID}`           | The app identifier (e.g. `freshrss-oidc`) — not resolved in Traefik labels, use `{{RUNTIPI_APP_ID}}` there |
+| `${TZ}`               | The system timezone (e.g. `Europe/Berlin`)                                  |
+| `${RUNTIPI_MEDIA_DIR}`| Shared media directory path (e.g. for music, movies, photos)                |
+| `${UID}` / `${GID}`  | User and group ID of the Runtipi process                                    |
+
+Variables defined in the app's `config.json` `form_fields` are also available using their `env_variable` name.
+
 ## Standard Docker Compose Features
 
 Everything else in your `docker-compose.yml` uses **standard Docker Compose syntax**. You don't need to learn any custom format for volumes, environment variables, ports, healthchecks, etc. Here are some commonly used options:
@@ -100,7 +117,7 @@ You can reference variables defined in the app's `config.json` form fields using
 
 ### Ports
 
-For additional ports beyond the main `internal_port` (which is handled by Traefik), expose them directly:
+Runtipi automatically maps `${APP_PORT}` to the main service's `internal_port` — you do not need to define this mapping yourself. For **additional** ports beyond the main one, expose them directly:
 
 ```yaml
 services:
@@ -143,6 +160,36 @@ services:
       timeout: 5s
       retries: 5
 ```
+
+### Multi-Service Networking
+
+Runtipi automatically connects the **main service** to the shared `tipi_main_network` (used by Traefik for routing). Non-main services are isolated by default.
+
+Use `add_to_main_network: true` in a service's `x-runtipi` metadata when a non-main service also needs to be reachable via that network — for example, a reverse-proxy or bouncer that Traefik must forward requests to:
+
+```yaml
+services:
+  app:
+    image: myapp:latest
+    x-runtipi:
+      is_main: true
+      internal_port: 8080
+
+  app-bouncer:
+    image: myapp-bouncer:latest
+    environment:
+      - BOUNCER_API_KEY=${MYAPP_BOUNCER_API_KEY}
+      - AGENT_HOST=app:8080
+    depends_on:
+      - app
+    x-runtipi:
+      add_to_main_network: true
+
+x-runtipi:
+  schema_version: 2
+```
+
+Without `add_to_main_network: true`, Traefik cannot reach `app-bouncer` and requests routed through it will fail.
 
 ### Resource Limits
 
