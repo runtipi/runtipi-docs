@@ -2,7 +2,7 @@ export default {
   overview: {
     title: "Overview",
   },
-  "###": {
+  "NETWORKING": {
     type: "separator",
     title: "Networking",
   },
@@ -16,12 +16,12 @@ export default {
     title: "Local SSL certificates",
   },
   "dns-challenge-cloudflare": {
-    title: "DNS challenge (Cloudflare)",
+    title: "HTTPS with Let's Encrypt",
   },
   "linking-a-domain-to-your-dashboard": {
     title: "Custom domain for dashboard",
   },
-  "--- Customization": {
+  "CUSTOMIZATION": {
     type: "separator",
     title: "Customization",
   },
@@ -37,7 +37,7 @@ export default {
   "custom-environment-variables": {
     title: "Custom environment variables",
   },
-  "--- Backup & Maintenance": {
+  "BACKUP & MAINTENANCE": {
     type: "separator",
     title: "Backup & maintenance",
   },
@@ -45,12 +45,15 @@ export default {
     title: "Backup and restore",
   },
   "auto-backup-apps": {
-    title: "Auto-backup with cron",
+    title: "Automatic app backup with cron",
   },
   "auto-update-with-cron": {
-    title: "Auto-update with cron",
+    title: "Automatically update Runtipi with cron",
   },
-  "--- Advanced": {
+  "uninstalling": {
+    title: "Uninstalling Runtipi",
+  },
+  "ADVANCED": {
     type: "separator",
     title: "Advanced",
   },
@@ -59,8 +62,5 @@ export default {
   },
   "dynamic-compose-guide": {
     title: "Dynamic compose files",
-  },
-  uninstalling: {
-    title: "Uninstalling Runtipi",
-  },
+  }
 };
