@@ -1,27 +1,34 @@
 import { Steps, Callout } from "nextra/components";
 import Image from "next/image";
 
-# Setup a DNS challenge with Cloudflare
+# Set up SSL with Let's Encrypt
 
 ## Overview
 
-In this guide, we will show you how to set up your Runtipi instance with a dns challenge and cloudflare. By default Runtipi uses an http challenge to obtain ssl certificates requiring you to expose the dashboard to the internet which is a very
-bad security practice. With a DNS challenge you can get trusted ssl certificates without needing to expose anything to the internet.
+If you access your Runtipi instance via an insecure network (such as the public internet) it is vital to protect your communications with the server with HTTPS. It's also a good security practice even for a "secure" network (for example your home network). Thankfully, certificate authorities like Let's Encrypt have made the process easy and free, via a protocol named ACME.
+
+There are a variety of ways to get SSL certificates for your domains, but one of the easiest is setting up a DNS Challenge with Cloudflare. In this setup, Cloudflare hosts the DNS records for your domain and Let's Encrypt verifies you own it by asking your ACME client (the traefik reverse proxy Runtipi uses) to add some secret values there. Then it issues certificates for you.
+
+If you want to use another DNS provider, you'll have to make minor adjustments to this guide (you'll be changing the environment variables). Refer to https://go-acme.github.io/lego/dns/ for the required variables.
+
+<Callout>
+  Using an HTTP challenge (not mentioned in this guide) is highly discouraged since it requires you to expose the Runtipi dashboard to the public internet. The DNS challenge avoids that and is the recommended way to verify your domain.
+</Callout>
 
 ## Requirements
 
 - A Runtipi instance
-- A domain name connected to cloudflare
+- A domain name connected to Cloudflare
 
 ## Setting up the DNS challenge
 
-So let's get started setting up the DNS challenge.
+Let's get started setting up the DNS challenge.
 
 <Steps>
 
 ### Set up the DNS records
 
-To begin with we need to set up two DNS records in our cloudflare dashboard, one should look like this:
+To begin with, we need to set up two DNS records in our Cloudflare dashboard. One should look like this:
 
 <br />
 <Image
@@ -31,7 +38,7 @@ To begin with we need to set up two DNS records in our cloudflare dashboard, one
   height={565}
 />
 
-And the other one should look like this:
+And the other should look like this:
 
 <br />
 <Image
@@ -42,18 +49,20 @@ And the other one should look like this:
 />
 
 <Callout>
-  Make sure to replace `10.0.0.15` with the IP address of your Runtipi server.
+  Make sure to replace `10.0.0.15` with the IP address of your Runtipi server. Depending on where you'll be accessing the server from, this could be the VPS' public IP or an internal static IP you've set.
 </Callout>
+
+These DNS records aren't strictly necessary for the DNS challenge. If your server is only on a local network with your own DNS, you could set them there instead. You may also want to consider setting these records up for dynamic DNS in case your server's IP address is not static.
 
 ### Obtain your API key
 
-Now we need to get the api key that traefik is going to use to get the certificates. In order to do that go to [this](https://dash.cloudflare.com/profile/api-tokens) page
-of the cloudflare dashboard and click `Create token`. Then select the `Edit zone DNS` template. The only thing you need to do is select your domain in
-the `Zone Resources` section. Finally click `Continue to summary` and then `Create token`, make sure to save that token since you can only view it once.
+Now we need to get the Cloudflare API key that Traefik is going to use in order to add the DNS records required for verification. In order to do that go to the [API token management](https://dash.cloudflare.com/profile/api-tokens) page
+in the cloudflare dashboard and click `Create token`. Then select the `Edit zone DNS` template. The only thing you need to do is select your domain in
+the `Zone Resources` section. Finally, click `Continue to summary` and then `Create token`, make sure to temporarily save that token somewhere since you can only view it once. If you lose it, delete the token and create a new one.
 
-### Create the custom compose file
+### Edit the custom compose file
 
-We need to give the token to traefik in order to do that we need to create a custom compose with the following contents:
+We now need to configure Traefik to use the new token. In order to do that we need to create a custom compose in `runtipi/user-config/tipi-compose.yml` with the following contents:
 
 ```yaml
 services:
@@ -62,16 +71,18 @@ services:
       - CF_DNS_API_TOKEN=yourtoken
 ```
 
-Make sure to replace the `yourtoken` part with the actual token you got in the previous step.
+If you already have a custom compose file, merge this snippet into there.
+
+Make sure to replace `yourtoken` with the actual token you got in the previous step. After saving the file you don't need to hold onto the token anymore.
 
 <Callout>
-  If you don't know how to create a custom compose file you can check the guide
+  For more information about the custom compose, refer to the guide
   [here](/docs/guides/customize-compose-and-traefik).
 </Callout>
 
-### Edit the traefik config
+### Edit the Traefik config
 
-Now it is time to edit the traefik config. You need to replace this part:
+Now it is time to edit the Traefik config located at `Runtipi/traefik/traefik.yml`. You need to replace this part:
 
 ```yaml
 certificatesResolvers:
@@ -83,7 +94,7 @@ certificatesResolvers:
         entryPoint: web
 ```
 
-To this:
+With this:
 
 ```yaml
 certificatesResolvers:
@@ -92,27 +103,27 @@ certificatesResolvers:
       email: email@example.com
       storage: /shared/acme.json
       dnsChallenge:
-        provider: cloudflare
-        delayBeforeCheck: 0
+        provider: cloudflare # You can change your provider here, refer to the respective Traefik documentation
+        delayBeforeCheck: 10 # Wait 10 seconds before checking to ensure the records have propagated. This could take anywhere between seconds and a full day depending on your provider, you may have to adjust it. 
 ```
 
-Make sure to replace the `email@example.com` with your actual email address so Let's Encrypt can notify you if something is wrong.
+Don't forget to replace `email@example.com` with your actual email address so Let's Encrypt can notify you if they notice something is wrong with your setup.
 
 <Callout>
-  Make sure that you have enabled the option to persist the traefik config. If
-  you are not sure how to do it check the guide
-  [here](/docs/guides/customize-compose-and-traefik).
+  Normally the Traefik configuration is regenerated when restarting Runtipi. Make sure that you have enabled the option to persist it to avoid losing it. Check the guide
+  [here](/docs/guides/customize-compose-and-traefik) if you haven't already configured it.
 </Callout>
 
 ### Restart Runtipi and test
 
-Finally we need to restart Runtipi with this command:
+Finally, restart Runtipi with this command:
 
 ```bash
 sudo ./runtipi-cli restart
 ```
 
-After that you can go to your Runtipi dashboard and try to expose an app, after you expose it traefik should automatically obtain
-an ssl certificate from Let's Encrypt, be patient though, it may take up to 2 minutes to complete.
+After that you can visit your Runtipi dashboard and try to expose an app with your external domain (or the local one if you've configured it as the local domain). After you expose it, Traefik should automatically obtain an SSL certificate from Let's Encrypt. Note that this may take a while to complete (usually around 2 minutes, but don't be surprised if it needs more).
 
 </Steps>
+
+If you're having a hard time setting it up, feel free to [open a discussion on GitHub](https://github.com/runtipi/runtipi/discussions/new?category=q-a), ask us in [the Discord server](https://discord.gg/Bu9qEPnHsc) or make a new [forum post](https://forums.runtipi.io/)!
