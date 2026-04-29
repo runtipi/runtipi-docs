@@ -73,6 +73,62 @@ You should now see the tunnel running in the dashboard.
 Alternatively you can use the Cloudflare Tunnels app in the app store. Just install it, open the dashboard and copy paste the `cloudflared`
 command that Cloudflare gave you (make sure to remove the `sudo` command).
 
+### Trust the tunnel proxy headers
+
+When Runtipi is behind Cloudflare Tunnel, Traefik must trust the `cloudflared` connector before it accepts forwarded headers like `X-Forwarded-Host` and `X-Forwarded-Proto`. If Traefik does not trust the connector, actions such as starting, stopping, or updating apps from the dashboard can fail with `Invalid request origin`.
+
+Add the connector IP address or CIDR to `runtipi/state/settings.json`:
+
+```json
+{
+  "trustedProxyIps": "172.18.0.5/32"
+}
+```
+
+Then restart Runtipi.
+
+<Callout type="warning">
+  Use the IP address of the proxy or tunnel connector as seen by Traefik, not
+  your browser IP and not Cloudflare's public edge IP ranges.
+</Callout>
+
+If `cloudflared` is running as a Docker container on the `runtipi_tipi_main_network`, list the containers on that network:
+
+```bash
+docker ps --filter network=runtipi_tipi_main_network --format "table {{.Names}}\t{{.Networks}}"
+```
+
+Then inspect the connector container:
+
+```bash
+docker inspect -f '{{with index .NetworkSettings.Networks "runtipi_tipi_main_network"}}{{.IPAddress}}{{end}}' <cloudflared-container-name>
+```
+
+If the connector is not running as a Docker container on the Runtipi network, use Traefik access logs to find the source address Traefik receives:
+
+1. Open `runtipi/traefik/traefik.yml`.
+2. Add JSON access logs:
+
+```yaml
+accessLog:
+  format: json
+```
+
+3. Restart only Traefik:
+
+```bash
+docker restart runtipi-reverse-proxy
+```
+
+4. Reproduce the `Invalid request origin` error once.
+5. Check the Traefik logs and look for `ClientAddr`:
+
+```bash
+docker logs runtipi-reverse-proxy --tail 100
+```
+
+Use the IP part of `ClientAddr` as the value for `trustedProxyIps`, usually with a `/32` suffix for a single IPv4 address.
+
 ### Add a Public hostname to your tunnel
 
 Select your newly created tunnel, **configure** and click on the **Public hostname** tab.
