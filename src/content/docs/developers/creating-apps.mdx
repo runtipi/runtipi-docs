@@ -16,6 +16,7 @@ A step-by-step guide to build, test, and submit an app.
 - Start from a minimal `docker-compose.yml` for your service(s)
 - Use `x-runtipi.is_main` and `x-runtipi.internal_port` for the main web service instead of writing Traefik labels by hand
 - Map persistent data to a volume
+- If you need to build an image locally, use Docker Compose `build` with an explicit local `image` tag and `pull_policy: build`
 
 ## 3) Define `config.json`
 
