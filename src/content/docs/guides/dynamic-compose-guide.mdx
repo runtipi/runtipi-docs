@@ -58,6 +58,40 @@ x-runtipi:
   schema_version: 2
 ```
 
+### Build a local image
+
+If your app needs to build its own Docker image, use standard Docker Compose
+`build` syntax together with a local image tag and `pull_policy: build`:
+
+```yaml
+services:
+  myapp:
+    image: myapp:local
+    pull_policy: build
+    build:
+      context: ./data
+    x-runtipi:
+      is_main: true
+      internal_port: 80
+
+x-runtipi:
+  schema_version: 2
+```
+
+The `build.context` path is resolved by Docker Compose relative to the app's
+`docker-compose.yml` file. For example:
+
+```text
+myapp/
+  docker-compose.yml
+  data/
+    Dockerfile
+    src/
+```
+
+Keep the `image` field when using local builds. The local tag gives Docker
+Compose and Runtipi a stable name for the built image.
+
 ### Expose the web UI
 
 If your service exposes a web UI, mark it as the main service with its port. Runtipi will automatically configure Traefik routing for this service:

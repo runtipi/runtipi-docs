@@ -34,6 +34,7 @@ You can change the default settings by creating a `settings.json` file in `runti
 | `allowErrorMonitoring`        | Whether the app will send anonymous crash reports to the Runtipi developers | `boolean` | `false`                                       |
 | `allowAutoThemes`             | Enables thematically changing the dashboard based on the time of the year   | `boolean` | `true`                                        |
 | `persistTraefikConfig`        | Do not replace the Traefik config on every restart of Runtipi               | `boolean` | `false`                                       |
+| `trustedProxyIps`             | Comma-separated proxy IPs or CIDRs Traefik should trust for forwarded headers | `string`  | empty                                         |
 | `eventsTimeout`               | The time in minutes to wait for an action to complete before timing out     | `integer` | `5`                                           |
 | `advancedSettings`            | Show advanced settings in the dashboard                                     | `boolean` | `false`                                       |
 | `forwardAuthUrl`              | Override the Traefik forward-auth endpoint                                  | `string`  | `http://runtipi:3000/api/auth/traefik`        |

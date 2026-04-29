@@ -115,6 +115,30 @@ services:
 
 You can reference variables defined in the app's `config.json` form fields using `${VARIABLE_NAME}`.
 
+### Local Image Builds
+
+Runtipi supports Docker Compose local builds when the service keeps an explicit
+local image tag:
+
+```yaml
+services:
+  app:
+    image: app:local
+    pull_policy: build
+    build:
+      context: ./data
+    x-runtipi:
+      is_main: true
+      internal_port: 80
+
+x-runtipi:
+  schema_version: 2
+```
+
+`build.context` is resolved relative to the app's `docker-compose.yml` file.
+Use `pull_policy: build` when you want Docker Compose to build the local image
+instead of trying to pull it from a registry.
+
 ### Ports
 
 Runtipi automatically maps `${APP_PORT}` to the main service's `internal_port` — you do not need to define this mapping yourself. For **additional** ports beyond the main one, expose them directly:
