@@ -80,6 +80,68 @@ A: Yes, but it's complex. Runtipi uses Traefik internally. You'd need to configu
 
 ---
 
+## Dashboard behind a reverse proxy or tunnel
+
+This section applies when you access the Runtipi dashboard itself through Cloudflare Tunnel or another reverse proxy. Normal exposed app traffic is not affected by the dashboard origin check.
+
+If authenticated dashboard actions such as starting, stopping, or updating apps fail with `Invalid request origin`, Traefik may not trust the proxy that forwards the request. Traefik must trust that proxy before it accepts forwarded headers like `X-Forwarded-Host` and `X-Forwarded-Proto`.
+
+Add the proxy IP address or CIDR to `runtipi/state/settings.json`:
+
+```json
+{
+  "trustedProxyIps": "172.18.0.5/32"
+}
+```
+
+Then restart Runtipi.
+
+<Callout type="warning">
+  Use the IP address of the proxy or tunnel connector as seen by Traefik, not
+  your browser IP and not Cloudflare's public edge IP ranges.
+</Callout>
+
+### Find the proxy IP
+
+If the proxy is running as a Docker container on the `runtipi_tipi_main_network`, list the containers on that network:
+
+```bash
+docker ps --filter network=runtipi_tipi_main_network --format "table {{.Names}}\t{{.Networks}}"
+```
+
+Then inspect the proxy container:
+
+```bash
+docker inspect -f '{{with index .NetworkSettings.Networks "runtipi_tipi_main_network"}}{{.IPAddress}}{{end}}' <proxy-container-name>
+```
+
+If the proxy is not running as a Docker container on the Runtipi network, use Traefik access logs to find the source address Traefik receives:
+
+1. Open `runtipi/traefik/traefik.yml`.
+2. Add JSON access logs:
+
+```yaml
+accessLog:
+  format: json
+```
+
+3. Restart only Traefik:
+
+```bash
+docker restart runtipi-reverse-proxy
+```
+
+4. Reproduce the `Invalid request origin` error once.
+5. Check the Traefik logs and look for `ClientAddr`:
+
+```bash
+docker logs runtipi-reverse-proxy --tail 100
+```
+
+Use the IP part of `ClientAddr` as the value for `trustedProxyIps`, usually with a `/32` suffix for a single IPv4 address.
+
+---
+
 ### Security questions
 
 **Q: Is it safe to expose Runtipi to the internet?**
