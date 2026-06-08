@@ -335,6 +335,10 @@ Use `{{RUNTIPI_APP_ID}}` wherever you need the full app identifier. Runtipi's te
   Runtipi's template engine and will remain as a literal string.
 </Callout>
 
+<Callout type="warning">
+  Do not use `${RUNTIPI_APP_ID}` in your `user-config` files — it is only resolved by Runtipi’s template engine during custom app creation.
+</Callout>
+
 ### Example: Security Header Middlewares
 
 ```yaml
