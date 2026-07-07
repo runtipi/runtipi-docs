@@ -7,7 +7,6 @@ import { GeistSans } from "geist/font/sans";
 import "nextra-theme-docs/style.css";
 import "./globals.css";
 import { Head } from "./components/Head";
-import { ChatBubbleLeftRightIcon } from "@heroicons/react/24/solid";
 
 export const metadata: Metadata = {
   title: "Runtipi",
@@ -27,14 +26,6 @@ const navbar = (
     projectLink="https://github.com/runtipi/runtipi"
     chatLink="https://discord.gg/Bu9qEPnHsc"
   >
-    <a
-      className="x:focus-visible:nextra-focus"
-      href="https://forums.runtipi.io"
-      target="_blank"
-      rel="noreferrer"
-    >
-      <ChatBubbleLeftRightIcon className="size-6" />
-    </a>
     <ThemeSwitch lite className="cursor-pointer" />
   </Navbar>
 );
@@ -74,7 +65,7 @@ export default async function RootLayout({
           pageMap={await getPageMap()}
           footer={footer}
           feedback={{
-            content: "Need help? Visit our forums",
+            content: "Need help? Join our Discord",
           }}
           docsRepositoryBase="https://github.com/runtipi/runtipi-docs/blob/main"
         >

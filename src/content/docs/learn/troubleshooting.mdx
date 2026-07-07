@@ -1,12 +1,18 @@
 import { Cards, Callout } from "nextra/components";
-import { WrenchIcon, ExclamationTriangleIcon, QuestionMarkCircleIcon, ChatBubbleLeftRightIcon } from "@heroicons/react/24/outline";
+import {
+  WrenchIcon,
+  ExclamationTriangleIcon,
+  QuestionMarkCircleIcon,
+  ChatBubbleLeftRightIcon,
+} from "@heroicons/react/24/outline";
 
 # Troubleshooting
 
 Having issues with Runtipi? This section will help you diagnose and fix common problems.
 
 <Callout emoji="💡">
-  Most issues can be resolved by checking logs. Use `docker compose logs` in the runtipi folder to see what's happening.
+  Most issues can be resolved by checking logs. Use `docker compose logs` in the
+  runtipi folder to see what's happening.
 </Callout>
 
 ## Frequently Asked Questions (FAQ)
@@ -48,6 +54,7 @@ A: Generally no, but check the [release notes](/docs/reference/release-notes) fo
 **Q: "Permission denied" errors during installation**
 
 A: Make sure you're running with sudo:
+
 ```bash
 curl -L https://setup.runtipi.io | sudo bash
 ```
@@ -147,6 +154,7 @@ Use the IP part of `ClientAddr` as the value for `trustedProxyIps`, usually with
 **Q: Is it safe to expose Runtipi to the internet?**
 
 A: Only with proper security measures:
+
 - Strong passwords (20+ characters)
 - HTTPS/SSL enabled
 - Firewall configured
@@ -166,12 +174,15 @@ A: It's possible but requires extra security setup. See [VPS Security](/docs/sec
 **Q: Runtipi uses too much disk space**
 
 A: Check app data sizes:
+
 ```bash
 du -sh app-data/*
 ```
+
 Large apps (media servers, cloud storage) can use hundreds of GB. Clean up unused data or add more storage.
 
 Check if you have anything in the `backups` folder:
+
 ```bash
 du -sh backups/
 ```
@@ -181,9 +192,11 @@ du -sh backups/
 **Q: Runtipi is using too much RAM/CPU**
 
 A: Check which apps are consuming resources:
+
 ```bash
 docker stats
 ```
+
 Some apps (media transcoding, databases) are resource-intensive. Consider upgrading hardware or stopping unused apps.
 
 ---
@@ -191,22 +204,18 @@ Some apps (media transcoding, databases) are resource-intensive. Consider upgrad
 **Q: "Port already in use" error**
 
 A: Another service is using that port. Find it:
+
 ```bash
 sudo netstat -tulpn | grep :PORT
 ```
-Either stop that service or change the app's port in settings.
 
+Either stop that service or change the app's port in settings.
 
 ## Getting Help
 
 If you can't find a solution here:
 
 <Cards>
-  <Cards.Card
-    icon={<ChatBubbleLeftRightIcon />}
-    title="Community forums"
-    href="https://forums.runtipi.io"
-  />
   <Cards.Card
     icon={<ChatBubbleLeftRightIcon />}
     title="Discord server"
@@ -222,6 +231,7 @@ If you can't find a solution here:
 ### When Asking for Help
 
 Please include:
+
 - Runtipi version: `sudo ./runtipi-cli version`
 - Operating system and version
 - Docker version: `docker version`
