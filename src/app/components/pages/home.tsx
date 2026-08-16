@@ -150,7 +150,7 @@ export default async function Home() {
         <p className="mt-4 px-8 text-center text-gray-600 dark:text-gray-300">
           Their contributions help us maintain and improve our project.
         </p>
-        <div className="m-8 grid place-items-stretch gap-8">
+        <div className="m-8 grid place-items-stretch gap-8 lg:grid-cols-2">
           <a
             href="https://coderabbit.ai?utm_source=runtipi&utm_campaign=website"
             target="_blank"
@@ -168,6 +168,32 @@ export default async function Home() {
                 alt="CodeRabbit logo"
                 width="200"
                 className="mx-auto mt-4"
+              />
+            </Card>
+          </a>
+          <a
+            href="https://www.testmu.ai/?utm_source=runtipi&utm_medium=sponsor"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <Card title="" footer={<p>testmu.ai</p>}>
+              <div>
+                <h3 className="text-center text-xl font-bold text-neutral-800 underline dark:text-neutral-200">
+                  TestMu AI
+                </h3>
+                <p className="text-center text-gray-600 dark:text-gray-300">
+                  Full-stack Agentic AI Quality Engineering
+                </p>
+              </div>
+              <img
+                src="/images/sponsors/testmu-ai.svg"
+                alt="TestMu AI logo"
+                className="mx-auto mt-4 w-full dark:hidden"
+              />
+              <img
+                src="/images/sponsors/testmu-ai-white.svg"
+                alt="TestMu AI logo"
+                className="mx-auto mt-4 hidden w-full dark:block"
               />
             </Card>
           </a>
