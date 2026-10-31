@@ -7,15 +7,19 @@ Required Runtipi version: `>= 1.5.0`
 
 ## Introduction
 
-With Runtipi you can access your dashboard and apps locally using a secure connection. When installing runtipi, a self-signed SSL certificate is generated for you.
+With Runtipi you can access your dashboard and apps locally using a secure connection. Runtipi creates a local certificate authority (CA) and a separate server certificate covering your local domain and its wildcard subdomains.
 
 The default domain for the certificate is `tipi.lan`. You can change this domain in the settings page of the dashboard. Or by giving the `localDomain` value in your `settings.json` file.
 See the [custom settings](/docs/guides/custom-settings) section for more information.
 
 ## Trusting the certificate
 
-To be able to use the certificate, you need to trust it. This is done by adding the certificate to your operating system's trust store.
+Trust the root CA certificate downloaded from the dashboard by adding it to your operating system's trust store. The root is stored as `data/traefik/tls/ca.pem`; do not import the server certificate (`cert.pem`) or share either private key.
 First you need to export the certificate from the Runtipi dashboard. You can do this by clicking the `Download certificate` button in the settings page of the dashboard. (below the `Local domain` input field)
+
+Runtipi checks certificates at startup. Server certificates last at most one year and never outlive their root. Renewing a server certificate or changing the local domain preserves the root. Upgrades also preserve a valid legacy CA, so existing client trust continues to work.
+
+A new root normally lasts ten years. If a root is invalid, its key is missing or mismatched, or it has less than one day remaining, Runtipi replaces it and logs a warning. Download and trust the replacement root on every client; trust cannot carry over from an expired or replaced root. Restart Runtipi before a server certificate expires to renew it.
 
 ### Windows
 
