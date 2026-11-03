@@ -6,7 +6,13 @@ import { Callout } from "nextra/components";
   For security reasons, it is highly discouraged to expose your dashboard to the
   internet. We recommend you to [expose only individual
   apps](/docs/guides/expose-your-apps). And follow this guide only if you have a
-  particular use case (e.g. a demo instance of runtipi)
+  particular use case that requires public access to your dashboard.
+
+  Demo mode does not make a publicly accessible dashboard safe for untrusted users.
+  Users may bypass its restrictions, including creating custom apps with root
+  access to the host. Read the [demo mode security
+  limitations](/docs/guides/custom-settings#demo-mode-security-limitations) before
+  sharing access.
 </Callout>
 
 If you want to link a domain to your dashboard, you can do so by providing the `domain` option in your dashboard settings or with the `settings.json` file.

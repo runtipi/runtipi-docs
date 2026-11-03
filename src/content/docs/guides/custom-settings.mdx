@@ -29,7 +29,7 @@ You can change the default settings by creating a `settings.json` file in `runti
 | `localDomain`                 | The domain name to use for local services                                   | `string`  | `tipi.lan`                                    |
 | `appsRepoUrl`                 | The URL to the apps repository                                              | `string`  | `https://github.com/runtipi/runtipi-appstore` |
 | `postgresPort`                | The port to use for the postgres database                                   | `integer` | `5432`                                        |
-| `demoMode`                    | Start Runtipi in demo mode                                                  | `boolean` | `false`                                       |
+| `demoMode`                    | Enable demo restrictions. See [security limitations](#demo-mode-security-limitations). | `boolean` | `false`                              |
 | `guestDashboard`              | Allow guest access to the dashboard                                         | `boolean` | `false`                                       |
 | `allowErrorMonitoring`        | Whether the app will send anonymous crash reports to the Runtipi developers | `boolean` | `false`                                       |
 | `allowAutoThemes`             | Enables thematically changing the dashboard based on the time of the year   | `boolean` | `true`                                        |
@@ -44,3 +44,14 @@ You can change the default settings by creating a `settings.json` file in `runti
 | `themeBase`                   | Dashboard base theme                                                        | `string`  | `gray`                                        |
 | `themeColor`                  | Dashboard accent color                                                      | `string`  | `blue`                                        |
 | `experimental_insecureCookie` | Disable secure cookie handling for debugging only                           | `boolean` | `false`                                       |
+
+## Demo mode security limitations
+
+<Callout type="warning">
+  Demo mode does not guarantee security or provide isolation from the host. A demo
+  user may still find ways around its restrictions, including creating custom apps
+  with root access to the host. Do not rely on `demoMode` to protect your server or
+  data from untrusted users.
+</Callout>
+
+Only share demo access with people you trust with administrative access to the host. If you run a demo instance, use a separate, disposable host with no sensitive data or access to your private network.
