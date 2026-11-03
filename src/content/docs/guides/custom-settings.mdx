@@ -40,6 +40,7 @@ You can change the default settings by creating a `settings.json` file in `runti
 | `forwardAuthUrl`              | Override the Traefik forward-auth endpoint                                  | `string`  | `http://runtipi:3000/api/auth/traefik`        |
 | `logLevel`                    | Backend log level                                                           | `string`  | `info`                                        |
 | `maxBackups`                  | Maximum number of backups to keep per app                                   | `integer` | `0`                                           |
+| `sessionMaxAgeInDays`         | Session lifetime in days after the last activity                            | `integer` | `7`                                           |
 | `timeZone`                    | Timezone used by Runtipi and many apps                                      | `string`  | system timezone                               |
 | `themeBase`                   | Dashboard base theme                                                        | `string`  | `gray`                                        |
 | `themeColor`                  | Dashboard accent color                                                      | `string`  | `blue`                                        |
